@@ -1,0 +1,120 @@
+* {
+
+}
+
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.header-layout {
+    padding-top: 5rem;
+    max-height: 40rem;
+    background-color: #DECFCF;
+    font-family: font-family: Lato, Helvetica, sans-serif;
+    border-radius: 0;
+    border: none;
+}
+
+.header-layout h3 {
+    padding-top: 10rem;
+    color: #F73434;
+    font-weight: bold;
+    text-align: center;
+}
+
+.header-layout h1 {
+    color: #000000;
+    font-weight: bold;
+    padding-bottom: 10rem;
+    text-align: center;
+    font-size: 5rem;
+}
+
+.navbar {
+    background-color: #DECFCF;
+}
+
+.nav {
+    position: absolute;
+    right: 0;
+    padding-top: 2rem;
+}
+
+.logo-brand {
+    position: absolute;
+    left: 2rem;
+    max-width: 10rem;
+    padding-top: 2rem;
+}
+
+.nav, navbar-collapse figure {
+    display: inline-block;
+}
+
+.nav li a {
+    color: #BD5A37;
+    font-weight: 600;
+}
+
+.letra-puntos {
+    position: relative;
+    left: 65%;
+    bottom: 35rem;
+    min-width: 10rem;
+}
+
+footer {
+    background-color: #47525E;
+    margin: auto 0;
+    max-height: 50rem;
+}
+
+footer figure img {
+    max-width: 10rem;
+}
+
+footer figure {
+    position: relative;
+    bottom: 18rem;
+    left: 2rem;
+}
+
+footer figure, .footer-nav {
+    display: inline-block;
+}
+
+.footer-nav {
+    padding: 4rem;
+    margin-left: 10rem;
+}
+
+footer p {
+    text-align: right;
+    color: aliceblue;
+    padding: 4rem;
+    padding-top: 0;
+    font-weight: bold;
+    font-size: 1.8rem
+}
+
+.footer-nav li {
+    list-style: none;
+}
+
+.footer-nav li a {
+    color: aliceblue;
+}
+
+.footer-nav li a:hover {
+    color: #F13300;
+    text-decoration: none;
+}
+
+.footer-nav li a::after {
+    content: '\A';
+    white-space: pre;
+}
+
+

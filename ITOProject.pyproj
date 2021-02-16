@@ -5,6 +5,7 @@
     <Name>ITOProject</Name>
     <RootNamespace>ITOProject</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <TestFramework>Pytest</TestFramework>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -50,12 +51,18 @@
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
     <Folder Include="app\static\app\fonts\" />
+    <Folder Include="app\static\app\img\" />
+    <Folder Include="app\static\app\css\" />
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="ITOProject\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\css\style.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="app\static\app\img\logo.png" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
