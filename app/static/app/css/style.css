@@ -1,3 +1,6 @@
+{
+    % load staticfiles %
+}
 * {
 
 }
@@ -12,7 +15,7 @@ body {
     padding-top: 5rem;
     max-height: 40rem;
     background-color: #DECFCF;
-    font-family: font-family: Lato, Helvetica, sans-serif;
+    font-family: Lato, Helvetica, sans-serif;
     border-radius: 0;
     border: none;
 }
@@ -62,7 +65,8 @@ body {
     position: relative;
     left: 65%;
     bottom: 35rem;
-    min-width: 10rem;
+    min-height: 10rem;
+    max-width: 10rem;
 }
 
 footer {
@@ -116,5 +120,162 @@ footer p {
     content: '\A';
     white-space: pre;
 }
+
+/*.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}*/
+
+.section-home_img {
+    padding: 5rem;
+    margin: 5rem;
+    background-color: #DECFCF;
+    border: 2px solid #AB9A9A;
+    border-radius: 10px;
+}
+
+.home-img {
+    border: 2px solid #E35A2A;
+    border-radius: 10px;
+    margin: 3rem;
+}
+
+.col-md-6 .text-description {
+    padding-left: 10rem;
+    padding-right: 10rem;
+    text-align: justify;
+    font-size: 2rem;
+    font-family: 'Raleway', sans-serif;
+}
+
+.col-md-6 .title-description {
+    padding-left: 10rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    color: #C70000;
+    padding-bottom: 2rem;
+    margin-top: 15rem;
+}
+
+.title-page {
+    text-transform: uppercase;
+    color: aliceblue;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    text-align: center;
+    background-color: #980F11;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.message {
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 5rem;
+}
+
+.img-portrait {
+    display: block;
+    margin: auto;
+}
+
+.h1-person_name {
+    text-align: center;
+    color: #651111;
+    font-weight: bold;
+    font-family: Montserrat, Helvetica, sans-serif;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.p-person_description {
+    text-align: center;
+    color: #D22326;
+    margin-bottom: 5rem;
+}
+
+.row {
+    margin-right: 0px;
+}
+
+.field-form label, .field-form select {
+    display: inline-block;
+}
+
+.field-form label, .field-form input {
+    display: inline-block;
+}
+
+.field-form label {
+    min-width: 25rem;
+    margin-right: 5rem;
+    text-align: right;
+}
+
+.field-form {
+    margin-bottom: 5rem;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 5rem;
+    font-family: Montserrat, Helvetica, sans-serif;
+    font-weight: bold;
+    color: #491818;
+}
+
+/*Formulario generatereport.html, Agregar Actividades
+*/
+
+.form-section {
+    background-color: #D14648;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    width: 130rem;
+    text-align: center;
+    justify-content: center;
+    display: inline-block;
+}
+
+.form-section .form-report label {
+    color: aliceblue;
+}
+
+.form-section .form-control {
+    width: 6rem;
+}
+
+.form-report .form-control {
+    display: inline-block;
+}
+
+.row {
+    margin: 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-report {
+    text-align:center;
+}
+
+.separator {
+    margin: 0 auto;
+    height: 0.4rem;
+    border-radius: 5rem;
+    width: 90%;
+    background-color: #980F11;
+}
+
+.subsection-title {
+    text-align: center;
+    margin-bottom: 5rem;
+    font-family: Montserrat, Helvetica, sans-serif;
+    font-weight: bold;
+    color: #974040;
+}
+
 
 

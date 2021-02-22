@@ -1,14 +1,18 @@
-﻿<!DOCTYPE html>
+﻿{% load staticfiles %}
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} - My Django Application</title>
-    {% load staticfiles %}
+    <title> {{ title }} - ITO Project</title>
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/css/style.css' %}"/>
     <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -29,10 +33,10 @@
 
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'home' %}">Inicio</a></li>
-                    <li><a href="{% url 'about' %}">Registro de Informe</a></li>
-                    <li><a href="{% url 'contact' %}">Cargar</a></li>
+                    <li><a href="{% url 'generatereport' %}">Registro de Informe</a></li>
+                    <li><a href="#">Cargar</a></li>
                     <li><a href="#">Consulta</a></li>
-                    <li><a href="#">Contacto</a></li>
+                    <li><a href="{% url 'contact' %}">Contacto</a></li>
                     <li><a href="#">Cerrar Sesión</a></li>
                 </ul>
 
@@ -49,7 +53,8 @@
     </div>
 
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </main> 
         
     <footer>

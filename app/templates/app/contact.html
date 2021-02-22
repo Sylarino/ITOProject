@@ -1,20 +1,32 @@
 {% extends "app/layout.html" %}
-
+{% load staticfiles %}
 {% block content %}
 
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
+<h2 class="title-page">{{ title }}</h2>
+<h3 class="message">{{ message }}</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
-
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<div class="row">
+    <div class="col-md-4">
+        <figure>
+            <img class="img-portrait" src="{% static 'app\img\isabel.png' %}"/>
+        </figure>
+        <h1 class="h1-person_name">Isabel Maria <br /> Peñailillo Pailamilla</h1>
+        <p class="p-person_description">Jefa Área Informática Metaproject <br /> ipeñailillo@metaproject.cl <br /> +56 3 </p>
+    </div>
+    <div class="col-md-4">
+        <figure>
+            <img class="img-portrait" src="{% static 'app\img\nixon.png' %}"/>
+        </figure>
+        <h1 class="h1-person_name">Nixon David <br /> Monge Calle</h1>
+        <p class="p-person_description">Encargado Área Informática Metaproject <br /> nmonge@metaproject.cl <br /> +56 2 2350 9900 </p>
+    </div>
+    <div class="col-md-4">
+        <figure>
+            <img class="img-portrait" src="{% static 'app\img\sebastian.png' %}"/>
+        </figure>
+        <h1 class="h1-person_name">Sebastián Nicolás <br /> Pavez Altamirano</h1>
+        <p class="p-person_description">Desarrollador <br /> spavez@metaproject.cl <br /> +56 2 2350 9905</p>
+    </div>
+</div>
 
 {% endblock %}

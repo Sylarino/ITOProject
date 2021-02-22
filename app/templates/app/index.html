@@ -1,26 +1,19 @@
-{% extends "app/layout.html" %}
-
+{% extends 'app/layout.html' %}
+{% load staticfiles %}
 {% block content %}
-
-<div class="row">
-    <div class="col-md-6">
-        <h2>Getting started</h2>
-        <p>
-            ITO PROJECT es un lugar para administrar las tareas o actividades diarias
-            relacionadas a proyectos mineros o relacionados que continuamente
-            se llevan a cabo en la empresa Metaproject.
-            Entre las opciones que la plataforma lleva a cabo, se encuentran el registro
-            de informes diarios acerca de la actividad, b�squeda detallada de las
-            actividades
-        </p>
-        <p><a class="btn btn-default" href="https://djangobook.com/django-tutorials/">Learn more &raquo;</a></p>
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="title-description">BIENVENIDOS <br /> A ITO PROJECT</h2>
+            <p class="text-description">
+                ITO Project es un lugar para administrar las diversas tareas o actividades llevadas a cabo en proyectos de carácter minero en su gran mayoría. La plataforma cuenta con diferentes opciones, tales como el ingreso diario de la actividad a través de un registro detallado de la actividad. También la visualización de las actividades, ya sea de forma detallada o simple.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <section class="section-home_img">
+                <figure>
+                    <img class="home-img center" src="{% static 'app\img\lugar.jpg' %}"/>
+                </figure>
+            </section>
+        </div>
     </div>
-    <div class="col-md-6">
-        <h2>Get more libraries</h2>
-        <p>The Python Package Index is a repository of software for the Python programming language.</p>
-        <p><a class="btn btn-default" href="https://pypi.org/">Learn more &raquo;</a></p>
-    </div>
-
-</div>
-
 {% endblock %}

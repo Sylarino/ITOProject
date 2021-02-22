@@ -13,8 +13,8 @@ def home(request):
         request,
         'app/index.html',
         {
-            'title':'Home Page',
-            #'year':datetime.now().year,
+            'title':'Inicio',
+            'year':datetime.now().year,
         }
     )
 
@@ -25,8 +25,8 @@ def contact(request):
         request,
         'app/contact.html',
         {
-            'title':'Contact',
-            'message':'Your contact page.',
+            'title':'Contacto',
+            'message':'Contactanos en caso de cualquier consulta acerca de la plataforma o para notificar algúna observación.',
             'year':datetime.now().year,
         }
     )
@@ -40,6 +40,17 @@ def about(request):
         {
             'title':'About',
             'message':'Your application description page.',
+            'year':datetime.now().year,
+        }
+    )
+
+def createreport(request):
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/generatereport.html',
+        {
+            'title':'Registro de Informe Diario',
             'year':datetime.now().year,
         }
     )
