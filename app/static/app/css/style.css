@@ -277,5 +277,40 @@ footer p {
     color: #974040;
 }
 
+.bar-enterprise {
+    height: 10rem;
+    background-color: #980F11;
+    margin-bottom: 10rem;
+    position: relative;
+}
+
+.radio-box {
+    width: 25rem;
+    background-color: #980F11;
+    border-radius: 1rem;
+    padding-bottom: 2rem;
+    position: relative;
+    left: 40%;
+    bottom: 40%;
+}
+
+.form-check-label, 
+.radio-box .subsection-title {
+    color: aliceblue;
+}
+
+.radio-box ul li {
+    list-style: none;
+}
+
+.radio-box .subsection-title {
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.bar-results {
+    margin-top: 10rem;
+}
+
 
 

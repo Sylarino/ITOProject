@@ -63,6 +63,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="app\static\app\img\logo.png" />
+    <Content Include="app\static\app\scripts\javascript.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="app\templates\app\generatereport.html">
       <SubType>Code</SubType>
     </Content>
