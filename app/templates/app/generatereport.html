@@ -75,7 +75,7 @@
                 <label>Referencias Registradas:</label>
             </div>
 
-            <table class="table">
+            <table class="table table-load">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -129,42 +129,46 @@
             </div>
         </div>
 
-        <div class="form-section row">
-            <div class="col-md-2 form-report">
-                <label>Cantidad Real:</label>
-                <input class="form-control" />
+        <section class="row-section">
+            <div class="form-section">
+                <div class="col-lg-2 form-report">
+                    <label>Cantidad Real:</label>
+                    <input class="form-control" />
+                </div>
+                <div class="col-lg-2 form-report">
+                    <label>Unidad:</label>
+                    <input class="form-control" />
+                </div>
+                <div class="col-lg-2 form-report">
+                    <label>Total Estimado:</label>
+                    <input class="form-control" />
+                </div>
+                <div class="col-lg-2 form-report">
+                    <label>Referencia Diaria: </label>
+                    <input class="form-control" />
+                </div>
+                <div class="col-lg-2 form-report">
+                    <label>Total Acumulado:</label>
+                    <input class="form-control" />
+                </div>
             </div>
-            <div class="col-md-2 form-report">
-                <label>Unidad:</label>
-                <input class="form-control" />
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Total Estimado:</label>
-                <input class="form-control" />
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Referencia Diaria: </label>
-                <input class="form-control" />
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Total Acumulado:</label>
-                <input class="form-control" />
-            </div>
-        </div>
+        </section>
 
-        <div class="col-md-4 form-report">
-            <label>Cumplimiento:</label>
-            <select class="form-control">
-                <option>Si o No</option>
-            </select>
-        </div>
+        <section class="section-md-field">
+            <div class="col-md-4 form-report">
+                <label>Cumplimiento:</label>
+                <select class="form-control">
+                    <option>Si o No</option>
+                </select>
+            </div>
 
-        <div class="col-md-4 form-report">
-            <label>Causa de NO Cumplimiento:</label>
-            <select class="form-control">
-                <option>Seleccione Causa</option>
-            </select>
-        </div>
+            <div class="col-md-4 form-report">
+                <label>Causa de NO Cumplimiento:</label>
+                <select class="form-control">
+                    <option>Seleccione Causa</option>
+                </select>
+            </div>
+        </section>
 
         <div class="col-md-4 form-report">
             <label>Detalle:</label>
@@ -173,7 +177,9 @@
 
     </div>
 
-    <input class="btn btn-danger" type="button" value="Agregar"/>
+    <div class="btn-save">
+        <input class="btn btn-danger" type="button" value="Agregar"/>
+    </div>
 
     <div class="separator"></div>
 
@@ -195,42 +201,47 @@
             </div>
         </div>
 
-        <div class="form-section row">
-            <div class="col-md-2 form-report">
-                <label>Cantidad Real:</label>
-                <input class="form-control" />
+        <section class="row-section">
+            <div class="form-section">
+                <div class="col-md-2 form-report">
+                    <label>Cantidad Real:</label>
+                    <input class="form-control" />
+                </div>
+                <div class="col-md-2 form-report">
+                    <label>Unidad:</label>
+                    <input class="form-control" />
+                </div>
+                <div class="col-md-2 form-report">
+                    <label>Total Estimado:</label>
+                    <input class="form-control" />
+                </div>
+                <div class="col-md-2 form-report">
+                    <label>Referencia Diaria: </label>
+                    <input class="form-control" />
+                </div>
+                <div class="col-md-2 form-report">
+                    <label>Total Acumulado:</label>
+                    <input class="form-control" />
+                </div>
             </div>
-            <div class="col-md-2 form-report">
-                <label>Unidad:</label>
-                <input class="form-control" />
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Total Estimado:</label>
-                <input class="form-control" />
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Referencia Diaria: </label>
-                <input class="form-control" />
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Total Acumulado:</label>
-                <input class="form-control" />
-            </div>
-        </div>
+        </section>
 
-        <div class="col-md-4 form-report">
-            <label>Cumplimiento:</label>
-            <select class="form-control">
-                <option>Si o No</option>
-            </select>
-        </div>
 
-        <div class="col-md-4 form-report">
-            <label>Causa de NO Cumplimiento:</label>
-            <select class="form-control">
-                <option>Seleccione Causa</option>
-            </select>
-        </div>
+        <section class="section-md-field">
+            <div class="col-md-4 form-report">
+                <label>Cumplimiento:</label>
+                <select class="form-control">
+                    <option>Si o No</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 form-report">
+                <label>Causa de NO Cumplimiento:</label>
+                <select class="form-control">
+                    <option>Seleccione Causa</option>
+                </select>
+            </div>
+        </section>
 
         <div class="col-md-4 form-report">
             <label>Detalle:</label>
@@ -239,11 +250,13 @@
 
     </div>
 
-    <input class="btn btn-danger" type="button" value="Agregar"/>
+    <div class="btn-save">
+        <input class="btn btn-danger" type="button" value="Agregar"/>
+    </div>
 
     <div class="separator"></div>
 
-    <table class="table">
+    <table class="table table-load">
         <thead>
             <tr>
                 <th scope="col">N°</th>
@@ -330,25 +343,27 @@
             <label>Nombre <br /> Equipo: </label>
             <input class="form-control"/>
         </div>
-        <div class="col-md-2 form-report">
-            <label>Cantidad: </label>
-            <input class="form-control"/>
-        </div>
-        <div class="col-md-2 form-report">
-            <label>Dotación <br/> Directa: </label>
-            <input class="form-control"/>
-        </div>
-        <div class="col-md-2 form-report">
-            <label>Dotación <br /> Referencial: </label>
-            <input class="form-control"/>
-        </div>
-        <div class="col-md-2 form-report">
-            <label>Dotación <br /> Indirecta: </label>
-            <input class="form-control"/>
-        </div>
+        <section class="section-md-field">
+            <div class="col-md-2 form-report">
+                <label>Cantidad <br /> de Equipos:</label>
+                <input class="form-control"/>
+            </div>
+            <div class="col-md-2 form-report">
+                <label>Dotación <br/> Directa: </label>
+                <input class="form-control"/>
+            </div>
+            <div class="col-md-2 form-report">
+                <label>Dotación <br /> Referencial: </label>
+                <input class="form-control"/>
+            </div>
+            <div class="col-md-2 form-report">
+                <label>Dotación <br /> Indirecta: </label>
+                <input class="form-control"/>
+            </div>
+        </section>
     </div>
 
-    <table class="table">
+    <table class="table table-load">
         <thead>
             <tr>
                 <th scope="col">N°</th>
@@ -420,14 +435,14 @@
     <div class="row">
         <div class="col-md-6 form-report">
             <h4 class="subsection-title"> DESVIACIONES DETECTADAS</h4>
-            <textarea class="form-control">
+            <textarea class="form-control medium-text">
                 
             </textarea>
         </div>
 
         <div class="col-md-6 form-report">
             <h4 class="subsection-title"> PLAN DE ACCIÓN</h4>
-            <textarea class="form-control">
+            <textarea class="form-control medium-text">
 
             </textarea>
         </div>
@@ -447,7 +462,7 @@
 
             <div class="field-form">
                 <label>Detalle de Imagen:</label>
-                <textarea class="form-control">
+                <textarea class="form-control medium-text">
 
                 </textarea>
             </div>
@@ -466,13 +481,13 @@
 
     <div class="separator"></div>
     <h4 class="subsection-title">OBSERVACIÓN</h4>
-    <textarea class="form-control"></textarea>
+    <textarea class="form-control large-text"></textarea>
 
     {#Formulario Final, Vista Previa de la Inspección Diaria#} 
     <h2 class="title-page">{{ title }}</h2>
     <h3 class="section-title">GUARDAR INFORME</h3>
 
-    <table class="table">
+    <table class="table table-load">
         <thead>
             <tr>
                 <th scope="col">N°</th>
@@ -486,7 +501,6 @@
                 <th scope="col">Equipo</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">Dot. Directa</th>
-
             </tr>
         </thead>
         <tbody>
@@ -619,11 +633,12 @@
 
     </section>
 
-    <div class="row">
-        <input class="btn btn-danger" value="Guardar y Descargar"/>
+    <div class="btn-save">
+        <input class="btn btn-danger" type="button" value="Guardar y Descargar"/>
     </div>
 
 
     <script src="{% static 'app/scripts/javascript.js' %}"></script>
 </form>
+
 {% endblock %}

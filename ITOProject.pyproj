@@ -69,6 +69,12 @@
     <Content Include="app\templates\app\generatereport.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="app\templates\app\loadfiles.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="app\templates\app\searchactivities.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

@@ -169,6 +169,19 @@ footer p {
     padding-bottom: 1rem;
 }
 
+.title-name {
+    text-transform: uppercase;
+    color: aliceblue;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    text-align: center;
+    background-color: #BC1416;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 2rem;
+    margin-top: 0.1rem;
+}
+
 .message {
     text-align: center;
     font-family: 'Raleway', sans-serif;
@@ -233,10 +246,50 @@ footer p {
     background-color: #D14648;
     padding-bottom: 2rem;
     padding-top: 2rem;
-    width: 130rem;
+    min-width: 120rem;
     text-align: center;
     justify-content: center;
     display: inline-block;
+    padding: 2rem 2% 2rem 2%;
+}
+
+.row-section {
+    margin: 2% 5% 2% 5%;
+}
+
+.form-section .form-report {
+    display: inline-block;
+    margin: 0 auto;
+    width: 20%;
+}
+
+.section-md-field 
+.form-report 
+select {
+    width: 30%;
+}
+
+.section-md-field 
+.form-report 
+input {
+    width: 30%;
+}
+
+.btn-save {
+    padding: 1% 40% 1% 40%;
+}
+
+.form-load .btn-save{
+    padding: 1% 36% 1% 36%;
+}
+
+.form-load .btn-save input {
+    min-width: 40rem;
+    padding-left: 1rem;
+}
+
+.btn-save .btn {
+    width: 20rem;
 }
 
 .form-section .form-report label {
@@ -312,5 +365,109 @@ footer p {
     margin-top: 10rem;
 }
 
+.form-report .medium-text {
+    width: 50rem;
+    height: 20rem;
+}
 
+.field-form .medium-text {
+    width: 28rem;
+    height: 20rem;
+}
 
+.large-text {
+    width: 500rem;
+    height: 100rem;
+    margin-left: 10%;
+    margin-right:10%;
+}
+
+.img-submit {
+    width: 250px;
+    height: 250px;
+    margin: 1rem;
+}
+
+.form-load 
+.row 
+.form-report {
+    margin-left: 0%;
+    display: inline-block;
+}
+
+/*
+    Búsqueda de actividades 
+*/
+
+.form-search-act .btn-save {
+    display: inline-block;
+}
+
+.form-search-act table, 
+.table-load
+{
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90%;
+}
+
+h5 {
+    justify-content: center;
+    text-align:center;
+    margin-top: 4rem;
+}
+
+/*Formulario login 
+*/
+
+.login-box {
+    background-color: #DECFCF;
+    max-width: 100rem;
+    border-radius: 6px;
+    text-align: center;
+    margin: 0% 30% 0% 32%;
+}
+
+.login-box .row .col-md-8 {
+    margin: 15% 15% 15% 15%;
+}
+
+.form-horizontal 
+.form-group 
+label {
+    margin-left: 0rem;
+    width: 10rem;
+    padding-right: 10%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.form-horizontal
+.form-group
+.form-control {
+    min-width: 31rem;
+}
+
+.form-horizontal
+.form-group
+div
+.btn {
+    margin-left: 0;
+}
+
+.form-load 
+.row
+.form-report
+.field-form
+select {
+    width: 16rem;
+}
+
+.form-load
+.row
+.form-report
+.field-form {
+    width: 80rem;
+    padding-left: 0;
+    margin-left: 55%;
+}

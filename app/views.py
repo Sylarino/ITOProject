@@ -5,6 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     """Renders the home page."""
@@ -44,6 +45,7 @@ def about(request):
         }
     )
 
+@login_required(login_url="login")
 def createreport(request):
     assert isinstance(request, HttpRequest)
     return render(
@@ -51,6 +53,30 @@ def createreport(request):
         'app/generatereport.html',
         {
             'title':'Registro de Informe Diario',
+            'year':datetime.now().year,
+        }
+    )
+
+@login_required(login_url="login")
+def searchactivities(request):
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/searchactivities.html',
+        {
+            'title':'Búsqueda de Actividades y Subactividades',
+            'year':datetime.now().year,
+        }
+    )
+
+@login_required(login_url="login")
+def loadfiles(request):
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/loadfiles.html',
+        {
+            'title':'Cargar Datos',
             'year':datetime.now().year,
         }
     )

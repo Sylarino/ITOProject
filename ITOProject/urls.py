@@ -14,6 +14,8 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
     path('generatereport/', views.createreport, name='generatereport'),
+    path('loadfiles/', views.loadfiles, name='loadfiles'),
+    path('searchactivities/', views.searchactivities, name='searchactivities'),
     path('login/',
          LoginView.as_view
          (
@@ -21,7 +23,7 @@ urlpatterns = [
              authentication_form=forms.BootstrapAuthenticationForm,
              extra_context=
              {
-                 'title': 'Log in',
+                 'title': 'Inicio de Sesión',
                  'year' : datetime.now().year,
              }
          ),

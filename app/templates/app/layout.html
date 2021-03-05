@@ -13,6 +13,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.14.1/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -26,21 +28,22 @@
                 </button>
             </div>
             <div class="navbar-collapse collapse">
-
                 <figure>
                     <img class="logo-brand" src="{% static 'app\img\logo.png' %}"/>
                 </figure>
 
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'home' %}">Inicio</a></li>
+                    {% if user.is_authenticated %}
                     <li><a href="{% url 'generatereport' %}">Registro de Informe</a></li>
-                    <li><a href="#">Cargar</a></li>
-                    <li><a href="#">Consulta</a></li>
+                    <li><a href="{% url 'loadfiles' %}">Cargar</a></li>
+                    <li><a href="{% url 'searchactivities' %}">Consulta</a></li>
+                    <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                    {% endif %}
                     <li><a href="{% url 'contact' %}">Contacto</a></li>
-                    <li><a href="#">Cerrar Sesión</a></li>
                 </ul>
-
-                {#{% include 'app/loginpartial.html' %}#}
             </div>
         </div>
         <header class="header-layout">
@@ -63,11 +66,16 @@
         </figure>
         <ul class="footer-nav">
             <li><a href="{% url 'home' %}">Inicio</a></li><br />
-            <li><a href="{% url 'about' %}">Registro de Informe</a></li><br />
-            <li><a href="{% url 'contact' %}">Cargar</a></li><br />
-            <li><a href="#">Consulta</a></li><br />
-            <li><a href="#">Contacto</a></li><br />
-            <li><a href="#">Sitio Oficial</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'generatereport' %}">Registro de Informe</a></li><br />
+            <li><a href="{% url 'searchactivities' %}">Consulta</a></li><br />
+            <li><a href="{% url 'loadfiles' %}">Cargar</a></li><br />
+            <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li><br />
+            {% else %}
+            <li><a href="{% url 'login' %}">Inciar Sesión</a></li><br />
+            {% endif %}
+            <li><a href="{% url 'contact' %}">Consulta</a></li><br />
+            <li><a href="https://www.metaproject.cl/">Sitio Oficial</a></li>
         </ul>
         <p>&copy; {{ year }} - Todos los derechos reservados</p>
     </footer>
@@ -76,6 +84,7 @@
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
+
 {% block scripts %}{% endblock %}
 
 </body>
