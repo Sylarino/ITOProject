@@ -384,12 +384,18 @@ input {
 
 .img-submit {
     width: 250px;
-    height: 250px;
+    height: auto;
     margin: 1rem;
 }
 
-.form-load 
-.row 
+.lab-img-sub {
+    width: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.form-load
+.row
 .form-report {
     margin-left: 0%;
     display: inline-block;
