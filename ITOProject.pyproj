@@ -64,6 +64,11 @@
     <Folder Include="app\static\app\img\" />
     <Folder Include="app\static\app\css\" />
     <Folder Include="app\static\app\scripts\" />
+    <Folder Include="app\static\app\scripts\jquery_chained-2.x\" />
+    <Folder Include="app\static\app\scripts\jquery_chained-2.x\test\" />
+    <Folder Include="app\static\app\scripts\jquery_chained-2.x\test\spec\" />
+    <Folder Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\" />
+    <Folder Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="ITOProject\" />
@@ -81,6 +86,38 @@
     <Content Include="app\static\app\scripts\javascript.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\.gitignore" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\.jshintrc" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\.travis.yml" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\bower.json" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\chained.jquery.json" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\CONTRIBUTING.md" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\demo.html" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\Gruntfile.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\jquery.chained.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\jquery.chained.min.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\jquery.chained.remote.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\jquery.chained.remote.min.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\json.php" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\package.json" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\README.md" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\json.php" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\SpecRunner.html" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\spec\ChainedRemoteSpec.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\spec\ChainedSpec.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\spec\SpecHelper.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\jasmine-html.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\jasmine.css" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\jasmine.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\MIT.LICENSE" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-jquery.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-zepto.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jquery-1.12.4.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jquery-2.2.4.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jquery-3.2.1.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\sinon-1.8.2.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\zepto-1.0.1.js" />
+    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\zepto-selector.js" />
     <Content Include="app\templates\app\loadfiles.html">
       <SubType>Code</SubType>
     </Content>

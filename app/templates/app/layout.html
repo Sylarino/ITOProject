@@ -79,14 +79,17 @@
         </ul>
 
         <p>&copy; {{ year }} - Todos los derechos reservados</p>
-    </footer>
 
+    </footer>
     
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
-
-{% block scripts %}{% endblock %}
+        {#Script del chained#}
+    <script src="{% static 'app/scripts/jquery_chained-2.x/jquery.chained.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    {% block scripts %}{% endblock %}
 
 </body>
 </html>
+

@@ -11,7 +11,7 @@
             
             <div class="field-form">
                 <label>N° de API:</label>
-                <select class="form-control" required>
+                <select name="api" id="api_antgen_id" class="form-control" required>
                     <option disabled selected>Seleccione API</option>
                     {% for api in apis %}
                     <option id="{{api.id}}">{{ api.project_name }}</option>
@@ -21,11 +21,12 @@
 
             <div class="field-form">
                 <label>N° de Contrato:</label>
-                <select class="form-control" required>
+                <select class="form-control" id="contr_antgen_id" required>
                     <option disabled selected>Seleccione N° de Contrato</option>
                     {% for contract in contracts %}
-                    {% if api. %}
-                    <option id="{{contract.id}}">{{ contract.contract_number }}</option>
+                        <option id="{{ contract.id }}" data-chained="{{api.api.id}}">
+                            {{ contract.contract_number }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
@@ -488,6 +489,13 @@
 
 
     <script src="{% static 'app/scripts/javascript.js' %}"></script>
+
+    <script>
+        $(function() {
+            $("#contr_antgen_id").chained("#api_antgen_id");
+        });
+    </script>
+
 </form>
 
 {% endblock %}
