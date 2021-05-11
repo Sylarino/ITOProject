@@ -45,14 +45,4 @@ def about(request):
         }
     )
 
-@login_required(login_url="login")
-def loadfiles(request):
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/loadfiles.html',
-        {
-            'title':'Cargar Datos',
-            'year':datetime.now().year,
-        }
-    )
+

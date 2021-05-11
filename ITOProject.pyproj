@@ -4,7 +4,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>ITOProject</Name>
     <RootNamespace>ITOProject</RootNamespace>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>Workspace|Workspace|env1</InterpreterId>
     <TestFramework>Pytest</TestFramework>
   </PropertyGroup>
   <PropertyGroup>
@@ -37,7 +37,6 @@
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
-    <Compile Include="app\migrations\__init__.py" />
     <Compile Include="manage.py" />
     <Compile Include="ITOProject\__init__.py" />
     <Compile Include="ITOProject\settings.py" />
@@ -45,7 +44,6 @@
     <Compile Include="ITOProject\wsgi.py" />
     <Compile Include="report\admin.py" />
     <Compile Include="report\apps.py" />
-    <Compile Include="report\migrations\__init__.py" />
     <Compile Include="report\models.py" />
     <Compile Include="report\tests.py" />
     <Compile Include="report\urls.py">
@@ -56,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
-    <Folder Include="app\migrations\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
@@ -64,16 +61,11 @@
     <Folder Include="app\static\app\img\" />
     <Folder Include="app\static\app\css\" />
     <Folder Include="app\static\app\scripts\" />
-    <Folder Include="app\static\app\scripts\jquery_chained-2.x\" />
-    <Folder Include="app\static\app\scripts\jquery_chained-2.x\test\" />
-    <Folder Include="app\static\app\scripts\jquery_chained-2.x\test\spec\" />
-    <Folder Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\" />
-    <Folder Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="ITOProject\" />
+    <Folder Include="media\" />
     <Folder Include="report\" />
-    <Folder Include="report\migrations\" />
     <Folder Include="report\templates\" />
     <Folder Include="report\templates\form-report\" />
     <Folder Include="report\templates\report\" />
@@ -86,42 +78,11 @@
     <Content Include="app\static\app\scripts\javascript.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\.gitignore" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\.jshintrc" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\.travis.yml" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\bower.json" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\chained.jquery.json" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\CONTRIBUTING.md" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\demo.html" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\Gruntfile.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\jquery.chained.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\jquery.chained.min.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\jquery.chained.remote.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\jquery.chained.remote.min.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\json.php" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\package.json" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\README.md" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\json.php" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\SpecRunner.html" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\spec\ChainedRemoteSpec.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\spec\ChainedSpec.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\spec\SpecHelper.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\jasmine-html.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\jasmine.css" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\jasmine.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-1.3.1\MIT.LICENSE" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-jquery.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jasmine-zepto.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jquery-1.12.4.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jquery-2.2.4.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\jquery-3.2.1.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\sinon-1.8.2.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\zepto-1.0.1.js" />
-    <Content Include="app\static\app\scripts\jquery_chained-2.x\test\vendor\zepto-selector.js" />
-    <Content Include="app\templates\app\loadfiles.html">
-      <SubType>Code</SubType>
-    </Content>
+    <Content Include="app\static\app\scripts\jquery.chained.min.js" />
+    <Content Include="app\static\app\scripts\loadfiles.js" />
+    <Content Include="app\static\app\scripts\searchactivities.js" />
     <Content Include="report\templates\form-report\generatereport.html" />
+    <Content Include="report\templates\form-report\loadfiles.html" />
     <Content Include="report\templates\form-report\searchactivities.html" />
     <Content Include="report\templates\report\index.html" />
     <Content Include="requirements.txt" />
@@ -170,6 +131,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Workspace|Workspace|env1" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

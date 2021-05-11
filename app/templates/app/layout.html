@@ -14,7 +14,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/xlsx@0.14.1/dist/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/file-saverjs@1.3.6/FileSaver.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/tableexport@5.2.0/dist/js/tableexport.min.js"></script>
+    {#select 2 script#} 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {#<script src="{% static 'app/scripts/javascript.js' %}"></script>#}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
 </head>
 
 <body>
@@ -82,13 +91,12 @@
 
     </footer>
     
+    {% block scripts %}
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
-        {#Script del chained#}
-    <script src="{% static 'app/scripts/jquery_chained-2.x/jquery.chained.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    {% block scripts %}{% endblock %}
+
+    {% endblock %}
 
 </body>
 </html>

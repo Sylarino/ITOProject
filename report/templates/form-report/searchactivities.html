@@ -8,8 +8,21 @@
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label>Proyecto:</label>
-                <select class="form-control">
-                    <option>Seleccione Proyecto</option>
+                <select name="api" id="api_antgen_id" class="form-control" required>
+                    <option id="0" disabled selected>Seleccione API</option>
+                    {% for api in apis %}
+                    <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label>Contrato:</label>
+                <select name="contract" class="form-control" id="contr_antgen_id" required>
+                    <option id="0" disabled selected>Seleccione Proyecto</option>
+
                 </select>
             </div>
         </div>
@@ -17,17 +30,31 @@
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label>Actividad:</label>
-                <select class="form-control">
-                    <option>Seleccione Proyecto</option>
+                <select name="select-act-ap" id="select-act-ap" class="form-control" required>
+                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    
                 </select>
             </div>
         </div>
 
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Cumplimiento:</label>
-                <select class="form-control">
-                    <option>Seleccione Proyecto</option>
+                <label>Sub Actividad:</label>
+                <select name="select-sub-ap" id="select-sub-ap" class="form-control">
+                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label>Conformidad:</label>
+                <select id="select-confor" class="form-control">
+                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    {% for nonconformity in nonconformities %}
+                    <option id="{{nonconformity.id}}" value="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -35,34 +62,52 @@
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label>Tipo de SubActividad:</label>
-                <select class="form-control">
-                    <option>Seleccione Proyecto</option>
+                <select id="select-tip-act" class="form-control">
+                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    {% for activitytype in activitytypes %}
+                    <option id="{{activitytype.id}}" value="{{activitytype.id}}">{{activitytype.activity_type_name}}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
 
-        <div class="col-md-3 form-report">
+        <!--
+         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label>Historico:</label>
                 <select class="form-control">
-                    <option>Seleccione Proyecto</option>
+                    <option id="0">Seleccione Proyecto</option>
                 </select>
             </div>
         </div>
+        -->
 
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label>Seguimiento:</label>
-                <select class="form-control">
-                    <option>Seleccione Proyecto</option>
+                <select id="select-seguimiento" class="form-control">
+                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    {% for follow in followings %}
+                    <option id="{{follow.id}}">{{follow.following_name}}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
 
-        <table class="table">
+        <div class="btn-save">
+            <input id="btn-buscar" class="btn btn-danger" type="button" value="Buscar"/>
+        </div>
+
+        <div class="btn-save">
+            <input id="btn-recargar" class="btn btn-danger" type="button" value="Limpiar"/>
+        </div>
+
+        <table id="selectactivities" class="table">
             <thead>
                 <tr>
-                    <th scope="col">ID</th>
+                    <th scope="col">API</th>
+                    <th scope="col">Contrato</th>
+                    <th scope="col">N de Contrato</th>
                     <th scope="col">Nombre Actividad</th>
                     <th scope="col">Nombre SubActividad</th>
                     <th scope="col">Total a Cumplir</th>
@@ -73,127 +118,20 @@
                     <th scope="col">Observaciones</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">4</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">5</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">6</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">7</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">8</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">9</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">10</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+            <tbody id="table-actividad">
+
             </tbody>
         </table>
 
         <div class="btn-save">
-            <input class="btn btn-danger" type="button" value="Modificar"/>
-        </div>
-
-        <div class="btn-save">
             <input class="btn btn-danger" type="button" value="Eliminar"/>
         </div>
+
+        <div id="export" class="btn-save">
+
+        </div>
     </div>
+
+    <script src="{% static 'app/scripts/searchactivities.js' %}"></script>
 </form>
 {% endblock %}

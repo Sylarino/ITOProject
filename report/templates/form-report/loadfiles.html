@@ -1,0 +1,34 @@
+{% extends "app/layout.html" %}
+{% load staticfiles %}
+{% block content %}
+<form class="form-load" action="">
+    <h2 class="title-page">{{ title }}</h2>
+
+    <h5>Para cargar datos, subir el excel que los contiene. <br />
+        Antes de cargar, verificar que los datos subidos esten correctamente estructurados.</h5>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.14.1/dist/xlsx.full.min.js"></script>
+
+    <div id="wrapper" class="btn-save">
+        <input id="input-excel" class="btn btn-danger" value="Subir Excel" type="file"/>
+    </div>
+
+   <div class="row">
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label>Tabla:</label>
+                <select class="form-control">
+                    <option>Seleccione Tabla</option>
+                </select>
+            </div>
+        </div>
+   </div>
+   <table id="table-load" class="table table-load">
+
+    </table>
+
+   <script src="{% static 'app/scripts/loadfiles.js' %}"></script>
+
+</form>
+{% endblock %}

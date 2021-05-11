@@ -12,10 +12,10 @@ class HistoricalAdmin(admin.ModelAdmin):
         obj.save()
 
 class ImageAdmin(admin.ModelAdmin):
-    readonly_fields = ('created_at')   
+    readonly_fields = ('created_at',)   
     
 # Register your models here.
-admin.site.register(Image)
+admin.site.register(Image, ImageAdmin)
 admin.site.register(Following)
 admin.site.register(Precondition)
 admin.site.register(Reference)
@@ -26,6 +26,9 @@ admin.site.register(API)
 admin.site.register(Contract)
 admin.site.register(Activity)
 admin.site.register(SubActivity)
-admin.site.register(Historical)
+admin.site.register(Historical, HistoricalAdmin)
 admin.site.register(HistoricalReference)
 admin.site.register(ActivityType)
+admin.site.register(Equipment)
+admin.site.register(EquipmentAmount)
+admin.site.register(Report)
