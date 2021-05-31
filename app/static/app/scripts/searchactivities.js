@@ -145,14 +145,14 @@ $('input[id="btn-buscar"]').on('click', function () {
         data: { 'listar[]': JSON.stringify(datos), csrfmiddlewaretoken: '{{ csrf_token }}' },
         url: "/busquedaactividades",
         dataType: 'json',
-    }).done(function (data) {
+    }).done(function (search) {
 
 
         inc = 0;
 
-        if (!data.hasOwnProperty('error')) {
+        if (!search.hasOwnProperty('error')) {
 
-            $.each(data, function (key, value) {
+            $.each(search, function (key, value) {
                 var tr = document.createElement("tr");
                 var td0 = document.createElement("td");
                 var td01 = document.createElement("td");
@@ -211,23 +211,24 @@ $('input[id="btn-buscar"]').on('click', function () {
                 tr.appendChild(td7);
                 tr.appendChild(td8);
             });
-            if (data.length < 1) {
+            if (search.length < 1) {
                 //window.alert('No se encontraron datos, intente nuevamente.');
                 swal("Oops!", "No se encontraron datos, intente nuevamente.", "error");
             }
 
             var divexport = document.getElementById('export');
-            var exportar = document.createElement('input');
+            var exportar = document.createElement('a');
             exportar.className = 'btn btn-danger';
             exportar.type = 'button';
-            exportar.value = 'Exportar a Excel';
+            exportar.textContent = 'Exportar a Excel';
             exportar.id = 'exportarexcel';
+            exportar.href = 'downloadexcelsearch/excelconfiltro';
             divexport.appendChild(exportar);
 
             return false;
         }
 
-        message_error(data.error);
+        message_error(search.error);
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(textStatus + ': ' + errorThrown);
     }).always(function (data) {
@@ -244,18 +245,18 @@ $('input[id="btn-recargar"]').on('click', function () {
 
 
 //Evento al hacer click en exportar excel.
-$('main').on('click', "#exportarexcel", function () {
+//$('main').on('click', "#exportarexcel", function () {
 
-    const tabla = document.querySelector("#selectactivities");
-    const fecha = new Date();
-    let tableExport = new TableExport(tabla, {
-        exportButtons: false, // No queremos botones
-        filename: "busqueda-(" + fecha.getDate() + "/" + fecha.getMonth() + "/" + fecha.getFullYear() + ")", //Nombre del archivo de Excel
-        sheetname: "Búsqueda (ITO Project)", //Título de la hoja
-    });
-    let datos = tableExport.getExportData();
-    debugger;
+//    const tabla = document.querySelector("#selectactivities");
+//    const fecha = new Date();
+//    let tableExport = new TableExport(tabla, {
+//        exportButtons: false, // No queremos botones
+//        filename: "busqueda-(" + fecha.getDate() + "/" + fecha.getMonth() + "/" + fecha.getFullYear() + ")", //Nombre del archivo de Excel
+//        sheetname: "Búsqueda (ITO Project)", //Título de la hoja
+//    });
+//    let datos = tableExport.getExportData();
+//    debugger;
 
-    let preferenciasDocumento = datos.selectactivities.xlsx;
-    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
-});
+//    let preferenciasDocumento = datos.selectactivities.xlsx;
+//    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+//});

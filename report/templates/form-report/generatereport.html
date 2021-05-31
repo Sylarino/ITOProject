@@ -78,11 +78,6 @@
             </div>
 
             <div class="field-form">
-                <label>Fecha de Registro:</label>
-                <input type="date" class="form-control" required/>
-            </div>
-
-            <div class="field-form">
                 <label>Referencias Registradas:</label>
             </div>
 
@@ -100,8 +95,8 @@
 
         </div>
     </div>
-
     <h2 class="title-page">{{ title }}</h2>
+
     {#Formulario Control de Avance por Actividad (Programada y No Programada)#}
     <div class="row">
 
@@ -396,7 +391,7 @@
         <div class="col-md-6 form-report">
             <div class="field-form">
                 <label>Sub Actividad:</label>
-                <select class="form-control">
+                <select id="select-sub-img" class="form-control" required>
                     <option id="subact-img" disabled selected>Seleccione Sub Actividad</option>
                     {% for subactivity in subactivities %}
                     <option id="{{subactivity.id}}">{{subactivity.subactivity_name}}</option>

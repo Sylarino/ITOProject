@@ -3,6 +3,7 @@
 i = 0;
 var dataimg = {};
 var obsimg = {};
+var idsubimg = {};
 
 document.getElementById("file").onchange = function(e) {
     // Creamos el objeto de la clase FileReader
@@ -20,9 +21,13 @@ document.getElementById("file").onchange = function(e) {
         image = document.createElement('img');
         but = document.createElement('input');
         det = document.getElementById('det-img');
-        label = document.createElement('p')
+        sub = document.getElementById('select-sub-img');
 
-        label.setAttribute("class","lab-img-sub")
+        label = document.createElement('p')
+        label_subactividad = document.createElement('label')
+
+        label.setAttribute("class", "lab-img-sub")
+        label_subactividad.setAttribute("id", sub.options[sub.selectedIndex].id)
         div.setAttribute("id", "div_" + i);
         but.setAttribute("class", "btn btn-danger");
         but.setAttribute("value", "Borrar");
@@ -30,16 +35,18 @@ document.getElementById("file").onchange = function(e) {
         image.setAttribute("id", "img_" + i);
         image.setAttribute("class", "img-submit");
         label.textContent = det.value;
+        label_subactividad.textContent = sub.options[sub.selectedIndex].value;
 
         obsimg[i] = label.textContent;
-
+        idsubimg[i] = sub.options[sub.selectedIndex].id;
         image.src = reader.result;
 
         //preview.innerHTML = '';
         preview.append(div);
         div.append(image);
         div.insertBefore(but, image);
-        div.appendChild(label);
+        div.appendChild(label_subactividad);
+        div.appendChild(label)
 
         but.onclick = function () {
             var ultimo = document.getElementById("div_" + i);
@@ -48,12 +55,13 @@ document.getElementById("file").onchange = function(e) {
             i = i - 1;
             dataimg[i].remove();
             obsimg[i].remove();
+            idsubimg[i].remove();
 
-            return dataimg, obsimg;
+            return dataimg, obsimg, idsubimg;
         }
     };
 
-    return dataimg, obsimg;
+    return dataimg, obsimg, idsubimg;
 
 };
 
@@ -778,14 +786,16 @@ $('input[id="btn-save_report"]').on('click', function () {
 
     for (var key in dataimg) {
         form_data.append('image', dataimg[key]);
-        console.log(form_data.get('image'))
     }
 
     for (var i in obsimg) {
         form_data.append('observation', obsimg[i]);
-        console.log(form_data.get('observation'))
     }
 
+    for (var subi in idsubimg) {
+        form_data.append('image_subactivity', idsubimg[subi]);
+    }
+    
     //Conexion a traves de ajax
     $.ajax({
         url: 'savereport/',
@@ -809,12 +819,20 @@ $('input[id="btn-save_report"]').on('click', function () {
         processData: false,
         dataType: 'json',
     }).done(function (data) {
+
         if (data.submitted == 1) {
+
+            refresh = 0;
+
             swal("Guardado", "Reporte N°" + data.id_report + " agregado satisfactoriamente", "success", {
                 buttons: {
                     acept: {
                         text: "Aceptar",
                         value: "acept"
+                    },
+                    download: {
+                        text: "Descargar PDF",
+                        value: "download"
                     }
                 },
             }).then((value) => {
@@ -822,8 +840,18 @@ $('input[id="btn-save_report"]').on('click', function () {
                     case "acept":
                         window.location.reload();
                         window.scrollTo(0, 0);
+
+                    case "download":
+                        document.location.href = "/createpdf";
+                        refresh = 1;
+
                 }
             });
+
+            if (refresh == 1) {
+                window.location.reload();
+                window.scrollTo(0, 0);
+            };
         //    
         }
         else {

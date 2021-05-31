@@ -1,7 +1,9 @@
 {% extends "app/layout.html" %}
 {% load staticfiles %}
 {% block content %}
-<form class="form-load" action="">
+<form enctype="multipart/form-data" class="form-load" action="{% url 'readexcel' %}" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
     <h2 class="title-page">{{ title }}</h2>
 
     <h5>Para cargar datos, subir el excel que los contiene. <br />
@@ -11,7 +13,11 @@
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.14.1/dist/xlsx.full.min.js"></script>
 
     <div id="wrapper" class="btn-save">
-        <input id="input-excel" class="btn btn-danger" value="Subir Excel" type="file"/>
+        <input type="file" name="file" class="btn btn-danger" value="Adjuntar Excel"/> 
+    </div>
+
+    <div id="wrapper" class="btn-save">
+        <input class="btn btn-danger" value="Leer Excel" type="submit"/> 
     </div>
 
    <div class="row">

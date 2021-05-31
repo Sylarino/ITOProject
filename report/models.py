@@ -202,6 +202,7 @@ class Report(models.Model):
 
 
 class Historical(models.Model):
+
     inspection_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Inspección")
     subactivity_no_program = models.CharField(max_length=200, blank=True, verbose_name="Nombre de SubActividad No Programada", default="")
     real_amount = models.DecimalField(max_length=100, max_digits=10, decimal_places=3, verbose_name="Cantidad Real")
@@ -229,6 +230,7 @@ class Historical(models.Model):
         return str(self.inspection_date)
 
 class EquipmentAmount(models.Model):
+
     equipment_amount = models.IntegerField(verbose_name="Cantidad de Equipos")
     direct_endowment = models.IntegerField(verbose_name="Dotación Directa")
     direct_reference = models.IntegerField(verbose_name="Dotacion Referencial")
@@ -236,6 +238,8 @@ class EquipmentAmount(models.Model):
 
     activity = models.ForeignKey(Activity, verbose_name="Actividad", on_delete=models.CASCADE, default="")
     equipment = models.ForeignKey(Equipment, verbose_name="Equipo", on_delete=models.CASCADE)
+    #Nuevo
+    report = models.ForeignKey(Report, verbose_name="Reporte", on_delete=models.CASCADE)
 
     class Meta: 
         verbose_name = 'Cantidad de Equipo'
@@ -263,6 +267,8 @@ class ReportImage(models.Model):
     #Llaves
     report = models.ForeignKey(Report, verbose_name="Reporte", on_delete=models.CASCADE)
     image = models.ForeignKey(Image, verbose_name="Image", on_delete=models.CASCADE)
+    #Nuevo
+    subactivity = models.ForeignKey(SubActivity, verbose_name="SubActividad", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Reporte de Imagen'
@@ -270,3 +276,29 @@ class ReportImage(models.Model):
 
     def __str__(self):
         return str(self.report)
+
+class PDFFile(models.Model):
+
+    upload = models.FileField(default='null', verbose_name="PDF", upload_to='pdf_reports')
+    pdf_register = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro de PDF")
+
+    class Meta:
+        verbose_name = 'PDF'
+        verbose_name_plural = 'Archivos PDF'
+
+    def __str__(self):
+        return str(self.pdf_register)
+
+class PDFReport(models.Model):
+
+    inspection_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro de PDF")
+    #Llaves
+    report = models.ForeignKey(Report, verbose_name="Reporte", on_delete=models.CASCADE)
+    pdffile = models.ForeignKey(PDFFile, verbose_name="Archivo PDF", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Reporte de Archivo PDF'
+        verbose_name_plural = 'Reportes de Archivos PDF'
+
+    def __str__(self):
+        return str(self.inspection_date)

@@ -10,4 +10,7 @@ urlpatterns = [
     path('generatereport/savereport/', views.savereport, name='savereport'),
     path('generatereport/saveimage/', views.savereport, name='saveimage'),
     path('busquedaactividades/', views.busquedaactividades, name='busquedaactividades'),
+    path('searchactivities/downloadexcelsearch/<str:id>', views.downloadexcelsearch, name='downloadexcelsearch'),
+    path('createpdf/', views.create_pdf, name='createpdf'),
+    path('readexcel/', views.readexcel, name='readexcel'),
 ]
