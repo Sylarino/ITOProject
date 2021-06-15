@@ -1,7 +1,9 @@
 {% extends "app/layout.html" %}
 {% load staticfiles %}
 {% block content %}
-<form enctype="multipart/form-data" class="form-load" action="{% url 'readexcel' %}" method="POST">
+<form enctype="multipart/form-data" class="form-load" >
+
+
     {% csrf_token %}
     {{form.as_p}}
     <h2 class="title-page">{{ title }}</h2>
@@ -9,8 +11,7 @@
     <h5>Para cargar datos, subir el excel que los contiene. <br />
         Antes de cargar, verificar que los datos subidos esten correctamente estructurados.</h5>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/xlsx@0.14.1/dist/xlsx.full.min.js"></script>
+
 
     <div id="wrapper" class="btn-save">
         <input type="file" name="file" class="btn btn-danger" value="Adjuntar Excel"/> 
@@ -20,6 +21,7 @@
         <input class="btn btn-danger" value="Leer Excel" type="submit"/> 
     </div>
 
+   <!--
    <div class="row">
         <div class="col-md-3 form-report">
             <div class="field-form">
@@ -30,10 +32,32 @@
             </div>
         </div>
    </div>
-   <table id="table-load" class="table table-load">
+   -->
+    <div class="col-md-12 hidden table-load-cont" id="divTabla">
+        <table id="table-load" class="table table-load">
+            <thead>
+                <tr>
+                    <th>Contrato</th>
+                    <th>Actividad</th>
+                    <th>Sub Actividad</th>
+                    <th>Dias programado</th>
+                    <th>Fecha inicio programada</th>
+                    <th>Fecha termino Programado</th>
+                    <th>Dias proyectado</th>
+                    <th>Fecha inicio proyectado</th>
+                    <th>Fecha termino proyectado</th>
+                    <th>Total estimado</th>
+                    <th>Referencia diaria</th>
+                    <th>Medida</th>
+                    <th>Observacion</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 
-    </table>
+    <div class="btn-save" id="button_cont">
 
+    </div>
    <script src="{% static 'app/scripts/loadfiles.js' %}"></script>
 
 </form>

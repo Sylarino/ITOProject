@@ -1,4 +1,5 @@
 
+
 //Accion para ejecutar cuando hay un cambio en el select del proyecto
 $(function () {
     $('select[name="api"]').on('change', function () {
@@ -16,7 +17,6 @@ $(function () {
             url: "/buscarcontratos",
             dataType: 'json',
         }).done(function (data) {
-            console.log(data);
             if (!data.hasOwnProperty('error')) {
                 $.each(data, function (key, value) {
                     options += '<option id="' + value.id + '" value="' + value.id + '">' + value.contract_number + '</option>';
@@ -49,7 +49,6 @@ $(function () {
             url: "/buscarcontratos",
             dataType: 'json',
         }).done(function (data) {
-            debugger;
             if (!data.hasOwnProperty('error')) {
 
                 $.each(data, function (key, value) {
@@ -116,6 +115,15 @@ document.getElementById("select-sub-ap").onchange = function (e) {
 //Accion para realizar la búsqueda con los filtros elegidos.
 $('input[id="btn-buscar"]').on('click', function () {
 
+    //var Table = document.getElementById("table-actividad");
+    //Table.innerHTML = "";
+    var exportexist = document.getElementById("export");
+    var exportexcelexist = document.getElementById("exportarexcel");
+
+    if (exportexcelexist != null) {
+        exportexist.removeChild(exportexcelexist);
+    }
+
     var api = document.getElementById("api_antgen_id");
     var contrato = document.getElementById("contr_antgen_id");
     var actividad = document.getElementById("select-act-ap");
@@ -147,94 +155,118 @@ $('input[id="btn-buscar"]').on('click', function () {
         dataType: 'json',
     }).done(function (search) {
 
+        cargarTabla(search);
 
-        inc = 0;
-
-        if (!search.hasOwnProperty('error')) {
-
-            $.each(search, function (key, value) {
-                var tr = document.createElement("tr");
-                var td0 = document.createElement("td");
-                var td01 = document.createElement("td");
-                var td02 = document.createElement("td");
-                var td1 = document.createElement("td");
-                var td2 = document.createElement("td");
-                var td3 = document.createElement("td");
-                var td4 = document.createElement("td");
-                var td5 = document.createElement("td");
-                var td6 = document.createElement("td");
-                var td7 = document.createElement("td");
-                var td8 = document.createElement("td");
-                var tablegen = document.getElementById("table-actividad");
-
-                inc += 1
-
-                td0.id = value.id_api;
-                td01.id = value.id_contrato;
-                td02.id = value.id_contrato;
-                td1.id = value.id_actividad;
-                td2.id = value.id_subactividad;
-                td3.id = "total-estimado";
-                td4.id = value.id_medida;
-                td5.id = "total-acumulado";
-                td6.id = "fecha-inicio";
-                td7.id = "fecha-termino";
-                td8.id = "obs";
-                tr.id = "fila-" + inc;
-
-                td0.textContent = value.api;
-                td01.textContent = value.contrato;
-                td02.textContent = value.contrato_numero;
-                td1.textContent = value.actividad;
-                if (value.id_tipo_sub == 2) {
-                    td2.textContent = value.subactivdad_no_programada + " (No Programada)";
-                } else {
-                    td2.textContent = value.subactividad;
-                }
-                td3.textContent = value.total_estimado;
-                td4.textContent = value.medida;
-                td5.textContent = value.total_acumulado;
-                td6.textContent = value.fecha_inicio;
-                td7.textContent = value.fecha_termino;
-                td8.textContent = value.observaciones;
-
-                tablegen.appendChild(tr);
-                tr.appendChild(td0);
-                tr.appendChild(td01);
-                tr.appendChild(td02);
-                tr.appendChild(td1);
-                tr.appendChild(td2);
-                tr.appendChild(td3);
-                tr.appendChild(td4);
-                tr.appendChild(td5);
-                tr.appendChild(td6);
-                tr.appendChild(td7);
-                tr.appendChild(td8);
-            });
-            if (search.length < 1) {
-                //window.alert('No se encontraron datos, intente nuevamente.');
-                swal("Oops!", "No se encontraron datos, intente nuevamente.", "error");
-            }
-
-            var divexport = document.getElementById('export');
-            var exportar = document.createElement('a');
-            exportar.className = 'btn btn-danger';
-            exportar.type = 'button';
-            exportar.textContent = 'Exportar a Excel';
-            exportar.id = 'exportarexcel';
-            exportar.href = 'downloadexcelsearch/excelconfiltro';
-            divexport.appendChild(exportar);
-
-            return false;
-        }
-
-        message_error(search.error);
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(textStatus + ': ' + errorThrown);
     }).always(function (data) {
 
     });
 });
+
+function cargarTabla(response) {
+
+    console.log(response);
+
+    $("#divTabla").addClass("hidden");
+
+    if (response == null) {
+
+        swal("Oops!", "No se encontraron datos, intente nuevamente.", "warning");
+        return false;
+    }
+    $("#divTabla").removeClass("hidden");
+
+    var tablaActividades = "";
+/*    if (!$.fn.dataTable.fnIsDataTable($('#tableActivities'))) {*/
+    tablaActividades = $('#tableActivities').DataTable({
+        paging: true,
+        destroy: true,
+        searching: false,
+        "language": {
+            "lengthMenu": "Mostrando _MENU_ registros por pagina",
+            "zeroRecords": "No se encontraron resultados",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "infoEmpty": "Sin informacion",
+            "infoFiltered": "(filtrando en _MAX_ registros)",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente",
+                "first": "Primero",
+                "last": "Último"
+            }
+        },
+        "data": response,
+        "columns": [
+            { "data": "subactividad", "name": "Subactividad" },
+            { "data": "reporte", "name": "Reporte" },
+            { "data": "fecha_reporte", "name": "Fecha_reporte" },
+            { "data": "avance_diario", "name": "Avance_diario" },
+            { "data": "medida", "name": "Medida" },
+            { "data": "fecha_inicio", "name": "Fecha_inicio" },
+            { "data": "fecha_termino", "name": "Fecha_termino" },
+            { "data": "dias", "name": "Dias" },
+            { "data": "total_estimado", "name": "Total_estimado" },
+            { "data": "total_acumulado", "name": "Total_acumulado" },
+            { "data": "dias_acumulado", "name": "Dias_acumulado" },
+            { "data": "ref_dia", "name": "Ref_dia" }
+            //{
+            //    "data": "id_historico", "render": function (data, type, full, meta) {
+            //        return '<a onclick="Eliminar(' + data + ');" class="form-control btn-danger"><i class="glyphicon glyphicon-remove"></i></a>';
+            //    }}
+            ,
+        ]
+    });
+
+    var divexport = document.getElementById('export');
+    var exportar = document.createElement('a');
+    exportar.className = 'btn btn-danger';
+    exportar.type = 'button';
+    exportar.textContent = 'Exportar a Excel';
+    exportar.id = 'exportarexcel';
+    exportar.href = 'downloadexcelsearch/excelconfiltro';
+    divexport.appendChild(exportar);
+
+    return false;
+
+    
+}
+
+function Eliminar(id) {
+    Swal.fire({
+        title: '¿Seguro que quieres eliminarlo?',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: `Save`,
+        denyButtonText: `No guardar`,
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            deleteHist(id);
+            $('input[id="btn-buscar"]').click();
+        } else if (result.isDenied) {
+            Swal.fire('Changes are not saved', '', 'info')
+        }
+    })
+
+}
+
+function deleteHist(id) {
+    $.ajax({
+        type: 'POST',
+        data: { 'id': id },
+        url: "deletehistoric/",
+        dataType: 'json',
+    }).done(function (data, search) {
+
+        Swal.fire('Saved!', '', 'success')
+        cargarTabla(search);
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        Swal.fire('Changes are not saved', '', 'info')
+    });
+}
+
 
 //Evento para refrescar pagina
 $('input[id="btn-recargar"]').on('click', function () {

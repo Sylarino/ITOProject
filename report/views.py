@@ -15,7 +15,8 @@ import json
 from django.db.models import Sum
 from openpyxl import Workbook, load_workbook
 from openpyxl.writer.excel import save_virtual_workbook
-from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl.worksheet.table import Table as TableExcel
+from openpyxl.worksheet.table import TableStyleInfo
 import re
 from reportlab.pdfgen import canvas
 from django.conf import settings
@@ -30,7 +31,7 @@ from report.forms import UploadFileForm
 from reportlab.lib.units import cm
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER
-
+from django.core.paginator import Paginator
 # Create your views here.
 
 ###FORMULARIO DE GENERATE REPORT
@@ -121,17 +122,17 @@ def buscarcontratos(request, *args, **kwargs):
                     for i in historical:
                         sum += i.real_amount
 
-                    dias = int(np.busday_count(subactividad[0].start_date,
-                                        subactividad[0].finish_date)) 
-                    if dias == 0:
-                        dias = 1
-                   
+                    dias = subactividad[0].finish_date - subactividad[0].start_date
+                    diaspro = dias.days            
+                    if diaspro == 0:
+                        diaspro = 1
+
                     data.append({'id': subactividad[0].id,
                                  'measure_id': subactividad[0].measureunit.id,
                                  'measure': subactividad[0].measureunit.measure_name,
                                  'average_amount': subactividad[0].average_amount,
                                  'total': sum,
-                                 'ref_day': round(subactividad[0].average_amount/dias
+                                 'ref_day': round(subactividad[0].average_amount/diaspro
                                                 , 2)
                                  })
 
@@ -179,9 +180,8 @@ def savereport(request, *args, **kwargs):
         rpd = request.POST.getlist('reporte[]')
 
 
-        if 'id_report' not in globals():
+        #if 'id_report' not in globals():
 
-            global id_report
 
         if action == 'save_report':
 
@@ -204,12 +204,20 @@ def savereport(request, *args, **kwargs):
                     )
 
                 reporte.save()
-                
+
+                #global id_report
+
                 id_report = reporte.id
                   
             for i in historicaldata:
 
                 subact = SubActivity.objects.get(pk = int(i['id_subactividad']))
+
+                histo = Historical.objects.filter(subactivity = int(i['id_subactividad']))
+                diff = 0
+                for hs in histo:
+                    diff += hs.real_amount
+
                 mea = Measure.objects.get(pk = int(i['id_medida']))
                 noncon = NonConformity.objects.get(pk = int(i['id_conformidad']))
                 spec = Specialty.objects.get(pk = int(i['id_especialidad']))
@@ -231,7 +239,8 @@ def savereport(request, *args, **kwargs):
                     no_program_total = i['total_estimado'],
                     no_program_refday = i['referencia_diaria'],
                     no_program_total_acu = i['total_acumulado'],
-                    activity = activi
+                    activity = activi,
+                    difference = diff
                     )
 
                 historical.save()
@@ -268,8 +277,11 @@ def savereport(request, *args, **kwargs):
             observation = request.POST.getlist('observation')
             subactivity_image = request.POST.getlist('image_subactivity')
 
-            report_id = id_report
-            repor = Report.objects.get(pk = id_report)
+            report_for_id = Report.objects.last()
+
+            id_rep = report_for_id.id
+
+            repor = Report.objects.get(pk = id_rep)
             obser = 0
             
             for i in image:
@@ -293,11 +305,11 @@ def savereport(request, *args, **kwargs):
 
                 obser = obser + 1
 
-            if id_report > 0:
+            if id_rep > 0:
                     
                 data = {
                     'submitted': 1,
-                    'id_report': id_report
+                    'id_report': id_rep
                     }
             else:
                 data = {
@@ -367,6 +379,7 @@ def busquedaactividades(request, *args, **kwargs):
             api = API.objects.get(pk=int(busqueda[0]['id_api']))
 
             for i in busqueda:
+
                 historicos = Historical.objects.filter(activity=int(i['id_actividad'])).values('subactivity',
                                                                                                 'activity', 
                                                                                                 'measure', 
@@ -376,40 +389,75 @@ def busquedaactividades(request, *args, **kwargs):
             #search = []
 
             for i in historicos:
-                historic = Historical.objects.filter(subactivity = int(i['subactivity'])).latest('inspection_date')
+
+                #historic = Historical.objects.filter(subactivity = int(i['subactivity'])).latest('inspection_date')
+                historic = Historical.objects.filter(subactivity = int(i['subactivity']))
+
                 act = Activity.objects.get(id = int(i['activity']))
                 sub = SubActivity.objects.get(id = int(i['subactivity']))
                 acttype = ActivityType.objects.get(id = int(i['activitytype']))
-                noconfor = NonConformity.objects.get(id = int(historic.nonconformity_id))
-                report = Report.objects.get(id = int(historic.report_id))
                 measure = Measure.objects.get(id = int(i['measure']))
-                segui = Following.objects.get(id = int(report.following_id))
+                
+                for historico in historic:
+                        noconfor = NonConformity.objects.get(id = int(historico.nonconformity_id))
+                        report = Report.objects.get(id = int(historico.report_id))
+                        segui = Following.objects.get(id = int(report.following_id))
 
-                search.append({
-                    'id_contrato': contrato.id,
-                    'id_api': api.id,
-                    'contrato': contrato.contract_name, 
-                    'contrato_numero': contrato.contract_number, 
-                    'api': api.api_number,
-                    'id_actividad': i['activity'],
-                    'actividad': act.activity_name,
-                    'id_subactividad': i['subactivity'],
-                    'subactividad': sub.subactivity_name,
-                    'subactivdad_no_programada': i['subactivity_no_program'],
-                    'total_estimado': sub.average_amount,
-                    'id_medida': i['measure'],
-                    'medida': measure.measure_name,
-                    'total_acumulado': i['totalacumulado'],
-                    'fecha_inicio': sub.start_date,
-                    'fecha_termino': sub.finish_date,
-                    'observaciones': report.evidence_obs,
-                    'id_seguimiento': segui.id,
-                    'seguimiento': segui.following_name,
-                    'id_tipo_sub': acttype.id,
-                    'tipo_subactividad': acttype.activity_type_name,
-                    'id_no_conformidad': noconfor.id,
-                    'no_conformidad': noconfor.nonconformity_name
-                    })
+                        dias = sub.finish_date - sub.start_date 
+                        diaspro = dias.days
+                        if diaspro == 0:
+                            diaspro = 1
+
+                        #dias_a = (str(report.inspection_date.day) + "/" + str(report.inspection_date.month) + "/" + str(report.inspection_date.year)) - (str(sub.start_date ) + "/" + str(sub.start_date ) + "/" + str(sub.start_date ))
+                        dias_a = report.inspection_date.date() - sub.start_date
+                        dias_acum = dias_a.days
+
+                        if historico.activitytype.id == 2:
+                            nombre_subactivity = historico.subactivity_no_program + " (No Programada)"
+                            dias_acum = 1
+
+                        else:
+                            nombre_subactivity = sub.subactivity_name
+
+                        if dias_acum < 1:
+                            dias_acum = 1
+
+                        search.append({
+                            'id_historico': historico.id,
+                            'id_contrato': contrato.id,
+                            'id_api': api.id,
+                            'contrato': contrato.contract_name, 
+                            'contrato_numero': contrato.contract_number, 
+                            'api': api.api_number,
+                            'id_actividad': i['activity'],
+                            'reporte': report.id,
+                            'fecha_reporte': str(report.inspection_date.day) + "/"
+                                             + str(report.inspection_date.month) + "/"
+                                             + str(report.inspection_date.year),
+                            'avance_diario': str(historico.real_amount),
+                            'ref_dia': str(round(sub.average_amount/diaspro, 2)),
+                            'dias': diaspro,
+                            'actividad': act.activity_name,
+                            'id_subactividad': i['subactivity'],
+                            'subactividad': nombre_subactivity,
+                            'total_estimado': sub.average_amount,
+                            'id_medida': i['measure'],
+                            'medida': measure.measure_name,
+                            'total_acumulado': historico.difference,
+                            'dias_acumulado': dias_acum,
+                            'fecha_inicio': str(sub.start_date.day) + "/"
+                                     + str(sub.start_date.month) + "/"
+                                     + str(sub.start_date.year),
+                            'fecha_termino': str(sub.finish_date.day) + "/"
+                                     + str(sub.finish_date.month) + "/"
+                                     + str(sub.finish_date.year),
+                            'id_seguimiento': segui.id,
+                            'seguimiento': segui.following_name,
+                            'id_tipo_sub': acttype.id,
+                            'tipo_subactividad': historico.activitytype.activity_type_name,
+                            'id_no_conformidad': noconfor.id,
+                            'no_conformidad': noconfor.nonconformity_name
+                            })
             
             if int(busqueda[0]['id_subactividad']) != 0:
                         
@@ -472,7 +520,13 @@ def busquedaactividades(request, *args, **kwargs):
                         inc += 1
 
     except Exception as e:
-        search['error'] = e
+        respuesta = e
+
+    #paginator = Paginator(search, 10)
+
+    #page = request.GET.get('page')
+    #page_search = paginator.get_page(page)
+
     return JsonResponse(search, safe=False)
 
 #FUNCION PARA AJUSTAR EL ANCHO DE LAS COLUMNAS DE LOS EXCEL
@@ -510,7 +564,7 @@ def transformtotable(headers, infoinserted, excel, name):
     ancho = len(headers) - 1
     largo = len(infoinserted) + 1
 
-    tab = Table(displayName="Table"+ name, ref="A1:"+ alphabet[ancho] + str(largo))
+    tab = TableExcel(displayName="Table"+ name, ref="A1:"+ alphabet[ancho] + str(largo))
 
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
@@ -521,16 +575,31 @@ def transformtotable(headers, infoinserted, excel, name):
 
     return excel
 
+@csrf_exempt
+@login_required(login_url="login")
+def deletehistoric(request, *args, **kwargs):
+
+    try:
+        if request.method == 'POST':
+
+            id_hist = request.POST.get('id')
+
+            Historical.objects.filter(pk=id_hist).delete()
+            
+    except Exception as e:
+        respuesta = e
+            
 #FUNCION PARA DESCARGAR EL EXCEL AL REALIZAR UNA BÚSQUEDA DE ACTIVIDAD Y SUBACTIVIDAD
 @login_required(login_url="login")
 def downloadexcelsearch(request, id):
 
     wb = Workbook()
-    headers = ['ID CONTRATO', 'ID API', 'CONTRATO', 'CONTRATO NUMERO',
-                'API', 'ID ACTIVIDAD', 'ACTIVIDAD', 'ID SUBACTIVIDAD', 
-                'SUBACTIVIDAD', 'SUBACTIVIDAD NO PROGRAMADA', 'TOTAL ESTIMADO',
-                'ID MEDIDA', 'MEDIDA', 'TOTAL ACUMULADO', 'FECHA INICIO', 'FECHA TERMINO',
-                'OBSERVACIONES', 'ID SEGUIMIENTO', 'SEGUIMIENTO', 'ID TIPO SUBACTIVIDAD',
+
+    headers = ['ID HISTORICO','ID CONTRATO', 'ID API', 'CONTRATO', 'CONTRATO NUMERO',
+                'API', 'ID ACTIVIDAD', 'REPORTE', 'FECHA REPORTE', 'AVANCE DIARIO','REFERENCIA DÍA','DÍAS PROGRAMADO','ACTIVIDAD', 'ID SUBACTIVIDAD', 
+                'SUBACTIVIDAD', 'TOTAL PROGRAMADO',
+                'ID MEDIDA', 'MEDIDA', 'AVANCE DIARIO ACUMULADO','AVANCE DÍAS ACUMULADO', 'FECHA INICIO', 'FECHA TERMINO',
+                'ID SEGUIMIENTO', 'SEGUIMIENTO', 'ID TIPO SUBACTIVIDAD',
                 'TIPO SUBACTIVIDAD', 'ID NO CONFORMIDAD', 'NO CONFORMIDAD']
 
     headersequipos = ['NOMBRE DEL EQUIPO', 'CANTIDAD', 'DOTACION DIRECTA', 'DOTACION INDIRECTA', 'DOTACION REFERENCIAL', 'NOMBRE ACTIVIDAD']
@@ -601,8 +670,12 @@ def downloadexcelsearch(request, id):
                     'nombre_subactividad': h.subactivity.subactivity_name,
                     'cantidad_a_realizar': h.subactivity.average_amount,
                     'promedio_hh': h.subactivity.average_hh,
-                    'inicio_subactivity': h.subactivity.start_date,
-                    'termino_subactivity': h.subactivity.finish_date,
+                    'inicio_subactivity': str(h.subactivity.start_date.day) + "/"
+                                     + str(h.subactivity.start_date.month) + "/"
+                                     + str(h.subactivity.start_date.year),
+                    'termino_subactivity': str(h.subactivity.finish_date.day) + "/"
+                                     + str(h.subactivity.finish_date.month) + "/"
+                                     + str(h.subactivity.finish_date.year),
                     'unidad': h.measure.measure_name,
                     #'id_historico': h.id,
                     'cantidad_real': h.real_amount,
@@ -696,6 +769,73 @@ def loadfiles(request):
         }
     )
 
+def logopdf(c, h):
+    url_img = settings.STATIC_ROOT + "/app/img/logo.png" 
+    im_logo = Image(url_img, width=91, height=60)
+    im_logo.drawOn(c, 20, h-68)
+
+
+#Validación de datos correctos en la carga del excel.
+def verifydata(data, name, val, valnum):
+    
+    val = val
+    valnum = valnum
+    real_val = 0
+
+    if valnum == 2:
+
+        real_val = 2
+
+    if data == None or data == "":
+
+        val = val + "El campo " + name + " se encuentra vacío. "
+        valnum = 2
+
+    else: 
+
+        if name == "Número contrato" or name == "Total programado" or name == "Numero de API":
+
+            if str(data).isdigit():
+                valnum = 1
+
+            else:
+                val = val + "El campo " + name + " contiene letras o caracteres que no son númericos. "
+                valnum = 2
+
+        if name == "Referencia Diaria":
+
+            if (type(data) is float) or (type(data) is int):
+
+                valnum = 0
+
+            else:
+
+                val = val + "El campo " + name + " no es númerico o decimal. "
+                valnum = 2
+
+        if name == "Inicio de API" or name == "Termino de API" or name == "Inicio de Contrato" or name == "Termino de Contrato" or name == "Inicio de Actividad" or name == "Termino de Actividad" or name == "Fecha inicio programado" or name == "Fecha termino programado" or name == "Fecha Inicio proyectado" or name == "Fecha termino proyectado":
+
+            if type(data) is datetime:
+
+                valnum = 0
+
+            else:
+
+                val = val + "El campo " + name + " no es un valor de tipo fecha. "
+                valnum = 2
+
+
+
+    if real_val == 2:
+
+        return val, real_val
+
+    else:
+
+        return val, valnum
+
+
+
 #CARGA DE DATOS A TRAVES DE UN EXCEL
 @csrf_exempt
 @login_required(login_url="login")
@@ -704,61 +844,438 @@ def readexcel(request):
         form = UploadFileForm(request.POST, request.FILES)
         rd = form.is_valid() 
         if form.is_valid():
+
             wb = load_workbook(filename=request.FILES['file'].file, data_only=True)
 
             sheet_obj = wb.active
             m_row = sheet_obj.max_row
             
-            actividades = []
             subactividades = []
 
             act_index = 0
+            isub = 0
 
-            for i in range(1, m_row + 1):
+            for i in range(3, m_row + 1):
 
-                if sheet_obj.cell(row = i, column = 4) != None:
+                if (sheet_obj.cell(row = i, column = 1).value != None) or (sheet_obj.cell(row = i, column = 1).value != "NUMERO API"):
 
-                    if sheet_obj.cell(row = i, column = 6) != None:
+                    val_num = 0
+                    validacion = ""
+                    api_val = ""
+                    con_val = ""
+                    act_val = ""
+                    sub_val = ""
 
-                        actividad = sheet_obj.cell(row = i, column = 4)
-                        fecha_inicio = sheet_obj.cell(row = i, column = 6)
-                        fecha_termino = sheet_obj.cell(row = i, column = 7)
-                        total_estimado = sheet_obj.cell(row = i, column = 11)
-                        referencia_diaria = sheet_obj.cell(row = i, column = 13)
-                        medida = sheet_obj.cell(row = i, column = 14)
-                        contrato = sheet_obj.cell(row = i, column = 4)
-                        api = sheet_obj.cell(row = i, column = 4)
+                    numero_api = sheet_obj.cell(row = i, column = 1)
+                    nombre_proyecto = sheet_obj.cell(row = i, column = 2)
+                    inicio_api = sheet_obj.cell(row = i, column = 3)
+                    termino_api = sheet_obj.cell(row = i, column = 4)
+                    contrato = sheet_obj.cell(row = i, column = 5)
+                    numero_contrato = sheet_obj.cell(row = i, column = 6)
+                    empresa = sheet_obj.cell(row = i, column = 7)
+                    jefe = sheet_obj.cell(row = i, column = 8)
+                    correo = sheet_obj.cell(row = i, column = 9)
+                    tel_contacto = sheet_obj.cell(row = i, column = 10)
+                    rut_empresa = sheet_obj.cell(row = i, column = 11)
+                    inicio_contrato = sheet_obj.cell(row = i, column = 12)
+                    termino_contrato = sheet_obj.cell(row = i, column = 13)
+                    actividad = sheet_obj.cell(row = i, column = 14)
+                    inicio_actividad = sheet_obj.cell(row = i, column = 15)
+                    termino_actividad = sheet_obj.cell(row = i, column = 16)
+                    subactividad = sheet_obj.cell(row = i, column = 17)
 
-                        subactividades.append({
-                            'actividad': actividades[act_index-1]['actividad'],
-                            'subactividad': actividad.value,
-                            'fecha_inicio_programada': fecha_inicio.value,
-                            'fecha_inicio_programada': fecha_termino.value,
-                            'total_estimado': total_estimado.value,
-                            'referencia_diaria': round(referencia_diaria.value, 2),
-                            'medida': medida.value
-                            #'contrato': contrato,
-                            #'api': api 
-                            })
+                    dias_programado = sheet_obj.cell(row = i, column = 18)
+                    fecha_inicio_promagado = sheet_obj.cell(row = i, column = 19)
+                    fecha_termino_promagado = sheet_obj.cell(row = i, column = 20)
 
-                        print(actividades[i-1])
+                    dias_proyectado = sheet_obj.cell(row = i, column = 21)
+                    fecha_inicio_proyectado = sheet_obj.cell(row = i, column = 22)
+                    fecha_termino_proyectado = sheet_obj.cell(row = i, column = 23)
 
+                    total = sheet_obj.cell(row = i, column = 24)
+                    diaria = sheet_obj.cell(row = i, column = 25)
+                    unidad = sheet_obj.cell(row = i, column = 26)
+
+
+                    #Validaciones primarias (Verificación si existen aquellos datos)
+
+                    #Uso de la variable num_save:
+                    #- num_save = 1 : se agregara desde la api en adelante
+                    #- num_save = 2 : se agregara desde el contrato en adelante
+                    #- num_save = 3 : se agregara desde la actividad en adelante
+                    #- num_save = 4 : se agregara desde la subactividad en adelante
+
+                    if (numero_api.value is not None) and str(numero_api.value).isdigit():
+
+                        api_val = API.objects.filter(api_number=int(numero_api.value))
+
+                        if len(api_val) != 0:
+
+                            num_save = 1
+
+                            if (numero_contrato.value is not None) and str(numero_contrato.value).isdigit():
+                                
+                                con_val = Contract.objects.filter(contract_number=int(numero_contrato.value))
+
+                                if len(con_val) != 0:
+
+                                    num_save = 2
+
+                                    if actividad.value is not None:
+
+                                        act_val = Activity.objects.filter(activity_name=actividad.value.strip())
+                                        
+                                        if len(act_val) != 0:
+
+                                            num_save = 3
+
+                                            if subactividad is not None:
+
+                                                sub_val = SubActivity.objects.filter(subactivity_name=subactividad.value.strip())
+
+                                                if len(sub_val) != 0:
+
+                                                    num_save = 4
+
+                                                    val_num = 1
+                                                    validacion = "SubActividad encontrada, se actualizara su total acumulado."
+     
+                                                else:
+
+                                                    validacion = "SubActividad no existe, por lo tanto se agregara la subactividad."
+                                                    val_num = 1
+
+                                            else:
+                                                    
+                                                validacion = "SubActividad se encuentra vacía."
+                                                val_num = 2
+
+                                        else:
+
+                                            validacion = "Actividad no existe, por lo tanto se agregara con todas las subactividades."
+                                            val_num = 1
+
+                                    else:
+
+                                        validacion = "Actividad se encuentra vacía."
+                                        val_num = 2
+
+                                else:
+
+                                    validacion = "Número de Contrato no existe, por lo tanto se agregara todo su contenido."
+                                    val_num = 1
+
+                            else:
+
+                                validacion = "Número de Contrato se encuentra vacío o no es numérico."
+                                val_num = 2
+                            
+                        else:
+                            
+                            validacion = "Número de API no existe en los registros, por lo tanto se guardara todos los datos consiguientes."
+                            val_num = 1
+
+                    else: 
+
+                        validacion = "Número de API se encuentra vacío o no es numérico."
+                        val_num = 2
+
+                    #Validaciones secundarias (Verificación de datos a ingresar sean correctos)
+
+                    if len(api_val) == 0:
+
+                        validacion, val_num = verifydata(numero_api.value, "Numero de API", validacion, val_num)
+                        validacion, val_num = verifydata(inicio_api.value, "Inicio de API", validacion, val_num)
+                        validacion, val_num = verifydata(termino_api.value, "Termino de API", validacion, val_num)
+                        validacion, val_num = verifydata(nombre_proyecto.value, "Nombre Proyecto", validacion, val_num)
+
+                    if len(con_val) == 0: 
+
+                        validacion, val_num = verifydata(numero_contrato.value, "Número contrato", validacion, val_num)
+                        validacion, val_num = verifydata(contrato.value, "Contrato", validacion, val_num)
+                        validacion, val_num = verifydata(termino_contrato.value, "Termino de Contrato", validacion, val_num)
+                        validacion, val_num = verifydata(inicio_contrato.value, "Inicio de Contrato", validacion, val_num)
+                        validacion, val_num = verifydata(empresa.value, "Empresa", validacion, val_num)
+                        validacion, val_num = verifydata(tel_contacto.value, "Telefono de Contacto", validacion, val_num)
+                        validacion, val_num = verifydata(rut_empresa.value, "RUT Empresa", validacion, val_num)
+
+                    if len(act_val) == 0:
+
+                        validacion, val_num = verifydata(inicio_actividad.value, "Inicio de Actividad", validacion, val_num)
+                        validacion, val_num = verifydata(actividad.value, "Actividad", validacion, val_num)  
+                        validacion, val_num = verifydata(termino_actividad.value, "Termino de Actividad", validacion, val_num)
+
+                    if len(sub_val) == 0:
+
+                        validacion, val_num = verifydata(subactividad.value, "Sub Actividad", validacion, val_num)
+                        validacion, val_num = verifydata(dias_programado.value, "Días programado", validacion, val_num)
+                        validacion, val_num = verifydata(fecha_inicio_promagado.value, "Fecha inicio programado", validacion, val_num)
+                        validacion, val_num = verifydata(fecha_termino_promagado.value, "Fecha termino programado", validacion, val_num)
+                        validacion, val_num = verifydata(dias_proyectado.value, "Dias proyectado", validacion, val_num)
+                        validacion, val_num = verifydata(fecha_inicio_proyectado.value, "Fecha Inicio proyectado", validacion, val_num)
+                        validacion, val_num = verifydata(fecha_termino_proyectado.value, "Fecha termino proyectado", validacion, val_num)
+                        validacion, val_num = verifydata(diaria.value, "Referencia Diaria", validacion, val_num)
+                        validacion, val_num = verifydata(unidad.value, "Unidad", validacion, val_num)
+                        validacion, val_num = verifydata(total.value, "Total programado", validacion, val_num)
+
+                    if val_num == 0:
+
+                        val_name = "good"
+
+                    if val_num == 1:
+
+                        val_name = "careful"
+
+                    if val_num == 2:
+
+                        val_name = "danger"
+
+                    #or (type(diaria.value) is not float)
+                    if (diaria.value is not None):
+                        ref_dia = round(diaria.value, 3)
                     else:
+                        ref_dia = diaria.value
 
-                        actividad = sheet_obj.cell(row = i, column = 4)
+                    subactividades.append({
+                        'numero_api': numero_api.value,
+                        'nombre_proyecto': nombre_proyecto.value,
+                        'inicio_api': inicio_api.value,
+                        'termino_api': termino_api.value,
+                        'contrato': numero_contrato.value,
+                        'numero_contrato': numero_contrato.value,
+                        'empresa': empresa.value,
+                        'tel_contacto': tel_contacto.value,
+                        'rut_empresa': rut_empresa.value,
+                        'jefe_proyecto': jefe.value,
+                        'correo': correo.value,
+                        'inicio_contrato': inicio_contrato.value,
+                        'termino_contrato': termino_contrato.value,
+                        'actividad': actividad.value,
+                        'inicio_actividad': inicio_actividad.value,
+                        'termino_actividad': termino_actividad.value,
+                        'subactividad': subactividad.value,
+                        'dias_programado': dias_programado.value,
+                        'fecha_inicio_programada': fecha_inicio_promagado.value.date(),
+                        'fecha_termino_programada': fecha_termino_promagado.value.date(),
+                        'dias_proyectado': dias_proyectado.value,
+                        'fecha_inicio_proyectado': fecha_inicio_proyectado.value.date(),
+                        'fecha_termino_proyectado': fecha_termino_proyectado.value.date(),
+                        'total_estimado': total.value,
+                        'referencia_diaria': ref_dia,
+                        'medida': unidad.value,
+                        'obs_validacion': validacion,
+                        'clase_validacion': val_name,
+                        'numero_validacion': val_num,
+                        #'validacion_guardar': num_save
+                        })
+                    print(subactividades[isub])
 
-                        actividades.append({
-                                'actividad': actividad.value
-                            })
+                    isub += 1
 
-                        act_index += 1
+        return JsonResponse(subactividades, safe=False)
+
+def savecontract(data, a):
+
+    con = Contract.objects.filter(contract_number = int(data['numero_contrato'])).filter(api = a.id)
+
+    if len(con) != 0:
+        conies = con[0]
+    else:
+        conies = None
+
+    if conies is None:
+      
+        contr = Contract(
+                contract_name = data['contrato'],
+                contract_number = data['numero_contrato'],
+                enterprise = data['empresa'],
+                rut = data['rut_empresa'],
+                project_boss = data['jefe_proyecto'],
+                email = data['correo'],
+                cellphone = data['tel_contacto'],
+                start_date = datetime.strptime(data['inicio_contrato'], "%Y-%m-%dT%H:%M:%S"),
+                finish_date = datetime.strptime(data['termino_contrato'], "%Y-%m-%dT%H:%M:%S"),
+                state = 1,
+                api = a
+            )
+
+        contr.save()
+
+        return contr
+
+    else:
+        contrato = con[0]
+        return contrato
+
+def saveapi(data):
+
+    api = API.objects.filter(api_number = data['numero_api'])
+
+    if len(api) != 0:
+        apies = api[0]
+    else:
+        apies = None
+
+    if apies is None:
+
+        apis = API(
+                api_number = data['numero_api'],
+                project_name = data['nombre_proyecto'].strip(),
+                start_date = datetime.strptime(data['inicio_api'], "%Y-%m-%dT%H:%M:%S"),
+                finish_date = datetime.strptime(data['termino_api'], "%Y-%m-%dT%H:%M:%S"),
+                state = 1
+            )
+
+        apis.save()
+
+        return apis
+
+    else:
+        apireal = api[0]
+        return apireal
+
+def saveactivity(data, c, a):
+
+    act = Activity.objects.filter(activity_name = data['actividad'].strip()).filter(contract=c.id).filter(api=a.id)
+
+    if len(act) != 0:
+        acties = act[0]
+    else:
+        acties = None
+
+    if acties is None:
+
+        acts = Activity(
+                activity_name = data['actividad'].strip(),
+                start_date = datetime.strptime(data['inicio_actividad'], "%Y-%m-%dT%H:%M:%S"),
+                finish_date = datetime.strptime(data['termino_actividad'], "%Y-%m-%dT%H:%M:%S"),
+                state = 1,
+                api = a,
+                contract = c
+            )
+
+        acts.save()
+
+        return acts
+
+    else:
+        actividad = act[0]
+        return actividad
+
+def savesubactivity(data, c, a, ac, m):
+
+    subs = SubActivity.objects.filter(subactivity_name = data['subactividad'].strip()).filter(api=a.id).filter(contract=c.id).filter(activity=ac.id)
+    if len(subs) != 0:
+        subsies = subs[0]
+    else:
+        subsies = None
+
+    if subsies is None:
+
+        subsa = SubActivity(
+                subactivity_name = data['subactividad'].strip(),
+                average_amount = data['total_estimado'],
+                average_hh = data['total_estimado'],
+                start_date = datetime.strptime(data['fecha_inicio_programada'], "%Y-%m-%d"),
+                finish_date = datetime.strptime(data['fecha_termino_programada'], "%Y-%m-%d"),
+                days = data['dias_programado'],
+                api = a,
+                contract = c,
+                activity = ac,
+                measureunit = m
+            )
+
+        subsa.save()
+
+        return subsa
+
+    else:
+        subs.update(average_amount=data['total_estimado'])
+        subactividad = subs[0]
+        return subactividad
+
+def savemeasure(data):
+
+    mea = Measure.objects.all()
+    founded = 0
+
+    for unit in mea:
+
+        if unit.measure_name.lower() == data['medida'].lower():
+
+            founded = 1
+            un = unit
+
+    if founded == 0:
+
+        un = Measure(
+                measure_name = data['medida']
+            )
+
+        un.save()
+
+    return un
+
+#SUBIDA DE DATOS DESDE UN EXCEL
+@csrf_exempt
+@login_required(login_url="login")
+def submitdata(request, *args, **kwargs):
+
+    if request.method == 'POST':
+
+        subm = request.POST.getlist('data[]')
+        submit = json.loads(subm[0])
+
+        i = 1
+        s = 0
+        large = len(submit)
+        #Verificación a través del validador incluido para averiguar si los datos en general estan correctos para agregar
+        while i == 1:
+            print (i)
+
+            if int(submit[s]['numero_validacion']) ==  2:
+
+                i = 0
+
+            else:
+
+                if (s + 1) == large:
+
+                    i = 2
+
+                else:
+
+                    s+=1
+
+        if i == 1 or i == 2:
+
+            for sub in submit:
+
+                proyecto = saveapi(sub)
+                contrato = savecontract(sub, proyecto)
+                actividad = saveactivity(sub, contrato, proyecto)
+                medida = savemeasure(sub)
+                subactividad = savesubactivity(sub, contrato, proyecto, actividad, medida)
+
+                data = 1
+
+            return JsonResponse(data, safe=False)
+
+        else:
+
+            data = 0
+            return JsonResponse(data, safe=False)
+
 
 
 # DESCARGA DE PDF AL REGISTRAR UN INFORME DIARIO
 @login_required(login_url="login")
 def create_pdf(request):
-    
-    id_rep = 17
+
+    report_for_id = Report.objects.last()
+
+    id_rep = report_for_id.id
+
     reportehecho = Report.objects.filter(id=int(id_rep))
     historico = Historical.objects.filter(report=int(id_rep))
     subactividad = SubActivity.objects.filter(id=int(historico[0].subactivity_id))
@@ -780,6 +1297,12 @@ def create_pdf(request):
                       )
     width, height = portrait(letter) 
     stream = io.BytesIO()
+    
+    styles = getSampleStyleSheet()
+    styleN = styles["BodyText"]
+    styleN.alignment = TA_LEFT
+    styleBH = styles["Normal"]
+    styleBH.alignment = TA_CENTER
 
     #Cabezera PDF
     archivo_imagen = settings.STATIC_ROOT +'/app/img/logo.jpg'
@@ -834,7 +1357,9 @@ def create_pdf(request):
         data += [[hr.reference.reference_name, hr.description]]
 
     t=Table(data)
-    t.setStyle(TableStyle([ ('FONTSIZE', (0,0), (-1, -1), 10),
+    t.setStyle(TableStyle([ ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                            ('FONTSIZE', (0,0), (-1, -1), 10),
                             ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
                             ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
                             ('ALIGN', (0,0), (1,-1), 'LEFT'),
@@ -848,7 +1373,7 @@ def create_pdf(request):
     c.drawString(250, 20,"Página " + str(pagina))
 
     #Segunda Parte PDF: Resultados
-    height_pdf -= h
+    height_pdf -= (h + 20)
     url_img = settings.STATIC_ROOT + "/app/img/report_banners/ResultadoBanner.png" 
     im_banner = Image(url_img, width=600, height=47)
     im_banner.drawOn(c, 5, height_pdf)
@@ -865,21 +1390,15 @@ def create_pdf(request):
     im_banner = Image(url_img, width=600, height=47)
     im_banner.drawOn(c, 5, height_pdf)
 
-    height_pdf -= 47
-
-    styles = getSampleStyleSheet()
-    styleN = styles["BodyText"]
-    styleN.alignment = TA_LEFT
-    styleBH = styles["Normal"]
-    styleBH.alignment = TA_CENTER
+    #height_pdf -= 47
 
     n_activity = Paragraph('''<b>ACTIVIDAD</b>''', styleBH)
     n_subactivity = Paragraph('''<b>SUB ACTIVIDAD</b>''', styleBH)
-    n_cantidad = Paragraph('''<b>CANTIDAD REAL</b>''', styleBH)
+    n_cantidad = Paragraph('''<b>AVANCE DIARIO</b>''', styleBH)
     n_unidad = Paragraph('''<b>UNIDAD</b>''', styleBH)
     n_programado = Paragraph('''<b>PROGRAMADO</b>''', styleBH)
     n_refdia = Paragraph('''<b>REF. DIA</b>''', styleBH)
-    n_acumulado = Paragraph('''<b>ACUMULADO</b>''', styleBH)
+    n_acumulado = Paragraph('''<b>AVANCE REAL ACUMULADO</b>''', styleBH)
     n_cumpli = Paragraph('''<b>CUMPLIMIENTO</b>''', styleBH)
     n_causa = Paragraph('''<b>CAUSA NO CUMPLIMIENTO</b>''', styleBH)
     n_tipo_act = Paragraph('''<b>TIPO ACTIVIDAD</b>''', styleBH)
@@ -887,68 +1406,103 @@ def create_pdf(request):
     
     actividades = [[n_activity, n_subactivity, n_cantidad, n_unidad, n_programado, n_refdia, n_acumulado, n_cumpli, n_causa, n_tipo_act]]
     c.setFont('Helvetica', 10)
+    inc_hist = 0
 
     for acts in historico:
 
-        dias = int(np.busday_count(acts.subactivity.start_date,
-                            acts.subactivity.finish_date)) 
-        if dias == 0:
-            dias = 1
+        if inc_hist > 2:
 
-        if acts.nonconformity_id == 5:
-            cumplimiento = 'Si'
-            causa = 'Cumplida'
-        else:
-            cumplimiento = 'No'
-            causa = acts.nonconformity.nonconformity_name
-
-        if acts.activitytype_id == 1:
-            activ_total = Historical.objects.values('subactivity_id').filter(subactivity=int(acts.subactivity_id)).annotate(total=Sum('real_amount'))
-            actividades += [[Paragraph(acts.activity.activity_name, styleN), 
-                             Paragraph(acts.subactivity.subactivity_name, styleN),
-                             Paragraph(str(acts.real_amount), styleN), 
-                             Paragraph(acts.measure.measure_name, styleN) ,
-                             Paragraph(str(acts.subactivity.average_amount), styleN), 
-                             Paragraph(str(round(acts.subactivity.average_amount/dias, 2)), styleN),
-                             Paragraph(str(activ_total[0]['total']), styleN),
-                             Paragraph(cumplimiento, styleN),
-                             Paragraph(causa, styleN),
-                             Paragraph(acts.activitytype.activity_type_name, styleN)]]
-        else:
-            activ_total = 0
-            actividades += [[acts.activity.activity_name, 
-                             acts.subactivity.subactivity_name,
-                             str(acts.real_amount), 
-                             acts.measure.measure_name, 
-                             str(acts.no_program_total), 
-                             str(acts.no_program_refday),
-                             str(acts.no_program_total_acu),
-                             cumplimiento,
-                             causa,
-                             Paragraph(acts.activitytype.activity_type_name)]]
-
-    t=Table(actividades, colWidths=2.05 * cm)
-    t.setStyle(TableStyle([ ('FONTSIZE', (0,0), (-1, -1), 10),
-                            ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
-                            ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
-                            ('ALIGN', (0,0), (1,-1), 'LEFT'),
-                            ('ALIGN', (2,0), (-1,-1), 'RIGHT')]),
-                            )
+            t=Table(actividades, colWidths=2.05 * cm)
+            t.setStyle(TableStyle([ ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                    ('FONTSIZE', (0,0), (-1, -1), 10),
+                                    ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
+                                    ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
+                                    ('ALIGN', (0,0), (1,-1), 'LEFT'),
+                                    ('ALIGN', (2,0), (-1,-1), 'RIGHT')]),
+                                    )
 
 
-    t.wrapOn(c, width, height)
-    w, h = t.wrap(100, 100)
-    t.drawOn(c, 25, height_pdf, 0)
+            t.wrapOn(c, width, height)
+            w, h = t.wrap(100, 100)
+            height_pdf -= h 
+            t.drawOn(c, 10, height_pdf, 0)
 
-    height_pdf -= h 
-    #Tercera Parte: Recursos EECC En Terreno
+            c.showPage()
+            height_pdf = height
+            height_pdf -= 68
+            logopdf(c, height)
+
+        else: 
+
+            dias = acts.subactivity.finish_date - acts.subactivity.start_date 
+            diaspro = dias.days
+
+            if diaspro == 0:
+                diaspro = 1
+
+            if acts.nonconformity_id == 5:
+                cumplimiento = 'Si'
+                causa = 'Cumplida'
+            else:
+                cumplimiento = 'No'
+                causa = acts.nonconformity.nonconformity_name
+
+            if acts.activitytype_id == 1:
+                activ_total = Historical.objects.values('subactivity_id').filter(subactivity=int(acts.subactivity_id)).annotate(total=Sum('real_amount'))
+                actividades += [[Paragraph(acts.activity.activity_name, styleN), 
+                                 Paragraph(acts.subactivity.subactivity_name, styleN),
+                                 Paragraph(str(acts.real_amount), styleN), 
+                                 Paragraph(acts.measure.measure_name, styleN) ,
+                                 Paragraph(str(acts.subactivity.average_amount), styleN), 
+                                 Paragraph(str(round(acts.subactivity.average_amount/diaspro, 2)), styleN),
+                                 Paragraph(str(activ_total[0]['total']), styleN),
+                                 Paragraph(cumplimiento, styleN),
+                                 Paragraph(causa, styleN),
+                                 Paragraph(acts.activitytype.activity_type_name, styleN)]]
+                inc_hist += 1
+
+            else:
+                activ_total = 0
+                actividades += [[Paragraph(acts.activity.activity_name, styleN), 
+                                 Paragraph(acts.subactivity.subactivity_name, styleN),
+                                 Paragraph(str(acts.real_amount)), 
+                                 Paragraph(acts.measure.measure_name), 
+                                 Paragraph(str(acts.no_program_total)), 
+                                 Paragraph(str(acts.no_program_refday)),
+                                 Paragraph(str(acts.no_program_total_acu)),
+                                 Paragraph(cumplimiento),
+                                 Paragraph(causa),
+                                 Paragraph(acts.activitytype.activity_type_name)]]
+
+                inc_hist += 1
+
+    if inc_hist < 3:
+
+        t=Table(actividades, colWidths=2.05 * cm)
+        t.setStyle(TableStyle([ ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                                ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                ('FONTSIZE', (0,0), (-1, -1), 10),
+                                ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
+                                ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
+                                ('ALIGN', (0,0), (1,-1), 'LEFT'),
+                                ('ALIGN', (2,0), (-1,-1), 'RIGHT')]),
+                                )
+
+
+        t.wrapOn(c, width, height)
+        w, h = t.wrap(100, 100)
+        height_pdf -= h 
+        t.drawOn(c, 25, height_pdf, 0)
+
+    #Cuarta Parte: Recursos EECC En Terreno
+
+    height_pdf -= 47
 
     url_img = settings.STATIC_ROOT + "/app/img/report_banners/RecursosBanner.png" 
     im_banner = Image(url_img, width=600, height=47)
     im_banner.drawOn(c, 5, height_pdf)
     
-    height_pdf -= 47
-
     n_actividad = Paragraph('''<b>ACTIVIDAD</b>''', styleBH)
     n_equipo = Paragraph('''<b>EQUIPO</b>''', styleBH)
     n_cantidad = Paragraph('''<b>CANTIDAD</b>''', styleBH)
@@ -968,8 +1522,10 @@ def create_pdf(request):
                      Paragraph(str(equi.direct_reference), styleN),
                      Paragraph(str(equi.indirect_endowment), styleN)]]
     
-    t=Table(equipos, colWidths=2.05 * cm)
-    t.setStyle(TableStyle([ ('FONTSIZE', (0,0), (-1, -1), 10),
+    t=Table(equipos, colWidths=3.3 * cm)
+    t.setStyle(TableStyle([ ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                            ('FONTSIZE', (0,0), (-1, -1), 10),
                             ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
                             ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
                             ('ALIGN', (0,0), (1,-1), 'LEFT'),
@@ -977,64 +1533,128 @@ def create_pdf(request):
 
     t.wrapOn(c, width, height)
     w, h = t.wrap(100, 100)
+    height_pdf -= h
     t.drawOn(c, 25, height_pdf, 0)
 
     #Cuarta Parte: Imagenes
     c.showPage()
-    c.drawImage(archivo_imagen, 25, 740, 124, 82)
-    c.setFont('Helvetica', 20)
-    c.drawString(150, 700,"REGISTRO FOTOGRÁFICO")
-    y_img = 440
-    y_title = 670
 
-    c.setFont('Helvetica', 12)
+    height_pdf = height
+    height_pdf -= 115
+    logopdf(c, height)
+    url_img = settings.STATIC_ROOT + "/app/img/report_banners/FotosBanner.png" 
+    im_banner = Image(url_img, width=600, height=47)
+    im_banner.drawOn(c, 5, height_pdf)
+
+    c.setFont('Helvetica', 10)
+
     pagina += 1
     c.drawString(250, 20,"Página " + str(pagina))
+    height_pdf -= 160
+
+    inc_img = 0
+    img_space = 40
+    inc_page = 0
 
     for img in hist_img:
 
+        if inc_img > 2:
+            inc_img = 0
+            height_pdf -= 310
+            img_space = 40 
+
+            if inc_page > 5:
+                height_pdf = height
+                height_pdf -= 115
+
+                c.showPage()
+                logopdf(c, height)
+                url_img = settings.STATIC_ROOT + "/app/img/report_banners/FotosBanner.png" 
+                im_banner = Image(url_img, width=600, height=47)
+                im_banner.drawOn(c, 5, height_pdf)
+                height_pdf = height
+                height_pdf -= 115
+
+                
+                c.setFont('Helvetica', 10)
+
+                pagina += 1
+                c.drawString(250, 20,"Página " + str(pagina))
+                height_pdf -= 160
+
+                inc_page = 0
+
         url_img = settings.MEDIA_ROOT + "/" + img.image.image.name
-        imgsize = utils.ImageReader(url_img) 
-        iw, ih = imgsize.getSize() 
-        aspect = iw/float(ih) 
+        #imgsize = utils.ImageReader(url_img) 
+        #iw, ih = imgsize.getSize() 
+        #aspect = iw/float(ih) 
 
-        altura = 200
-        c.setFont('Helvetica', 12)
+        subact_name = "<b>SUB ACTIVIDAD: </b>" + img.subactivity.subactivity_name
+        n_subactivity = Paragraph(subact_name, styleBH)
 
-        c.drawString(40, y_title, "Sub Actividad: " + img.subactivity.subactivity_name)
-        y_title -= 20
-        c.drawString(40, y_title, "Observación: " + img.image.description)
+        obs_name = "<b>OBSERVACION: </b>" + img.image.description
+        n_obs = Paragraph(obs_name, styleBH)
 
-        im = Image(url_img, width=(altura*aspect), height=altura, hAlign='CENTER')
-        im.drawOn(c, 40, y_img)
-        y_img -= 270
-        y_title -= 250
+        w,h = n_subactivity.wrap(150,150)
+        n_subactivity.drawOn(c, img_space, height_pdf - 60)
 
+        w,h = n_obs.wrap(150,150)
+        n_obs.drawOn(c, img_space, height_pdf - 150)
+
+        im = Image(url_img, width=150, height=150, hAlign='CENTER')
+        im.drawOn(c, img_space, height_pdf)
+
+        inc_img += 1
+        img_space += 170
+        inc_page += 1
 
     #Quinta Parte: Observaciones generales
-    c.showPage()
-    c.drawImage(archivo_imagen, 25, 740, 124, 82)
-    c.setFont('Helvetica', 20)
-    c.drawString(150, 700,"OBSERVACIONES")
+    c.setFont('Helvetica', 10)
 
-    c.setFont('Helvetica', 12)
-    pagina += 1
-    c.drawString(250, 20,"Página " + str(pagina))
+    if inc_page > 2:
+        c.showPage()
+        logopdf(c, height)
 
-    c.setFont('Helvetica', 15)
-    c.drawString(30, 670,"DESVIACIONES DETECTADAS")
-    c.setFont('Helvetica', 12)
-    c.drawString(30, 650, reportehecho[0].deviation_detected)
+        height_pdf = height
+        height_pdf -= 115
+        pagina += 1
+        c.setFont('Helvetica', 10)
+        c.drawString(250, 20,"Página " + str(pagina))
+        c.drawString(150, 700,"OBSERVACIONES")
+    else:
+        height_pdf -= (47 + 150)
 
-    c.setFont('Helvetica', 15)
-    c.drawString(30, 520,"PLAN DE ACCION")
-    c.setFont('Helvetica', 12)
-    c.drawString(30, 500, reportehecho[0].action_plan)
+            
+    url_img = settings.STATIC_ROOT + "/app/img/report_banners/ObservacionesBanner.png" 
+    im_banner = Image(url_img, width=600, height=47)
+    im_banner.drawOn(c, 5, height_pdf)
 
-    c.setFont('Helvetica', 15)
-    c.drawString(30, 350,"OBSERVACIONES GENERALES DE FOTOGRAFIAS")
-    c.setFont('Helvetica', 12)        
-    c.drawString(30, 330, reportehecho[0].evidence_obs)
+    if reportehecho[0].deviation_detected.isspace() or len(reportehecho[0].deviation_detected)==0:
+        variable_report = "Ninguna"
+    else: 
+        variable_report = reportehecho[0].deviation_detected
+
+    n_desviacion = Paragraph("<b>DESVIACIONES DETECTADAS</b> <br />" + variable_report, styleBH)
+    w,h = n_desviacion.wrap(180,150)
+    n_desviacion.drawOn(c, 40, height_pdf - 160)
+
+    if reportehecho[0].action_plan.isspace() or len(reportehecho[0].action_plan)==0:
+        variable_report = "Ninguna"
+    else: 
+        variable_report = reportehecho[0].action_plan
+
+    n_plan = Paragraph("<b>PLAN DE ACCION</b> <br />" + variable_report, styleBH)
+    w,h = n_plan.wrap(180,150)
+    n_plan.drawOn(c, 230, height_pdf - 160)
+
+    if reportehecho[0].evidence_obs.isspace() or len(reportehecho[0].evidence_obs)==0:
+        variable_report = "Ninguna"
+    else: 
+        variable_report = reportehecho[0].evidence_obs
+
+    n_obsimg = Paragraph("<b>OBSERVACIONES GENERALES DE FOTOGRAFIAS</b> <br />" + variable_report, styleBH)
+    w,h = n_obsimg.wrap(180,150)
+    n_obsimg.drawOn(c, 390, height_pdf - 160)
 
     # Guardar
     c.save()
@@ -1057,6 +1677,7 @@ def create_pdf(request):
     pdfrelation.save()
 
     return response
+
 
     
  

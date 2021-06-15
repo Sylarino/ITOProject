@@ -824,7 +824,7 @@ $('input[id="btn-save_report"]').on('click', function () {
 
             refresh = 0;
 
-            swal("Guardado", "Reporte N°" + data.id_report + " agregado satisfactoriamente", "success", {
+            Swal.fire("Guardado", "Reporte N°" + data.id_report + " agregado satisfactoriamente", "success", {
                 buttons: {
                     acept: {
                         text: "Aceptar",

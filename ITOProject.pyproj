@@ -75,12 +75,14 @@
     <Folder Include="report\templates\report\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\css\datatables.min.css" />
     <Content Include="app\static\app\css\style.css">
       <SubType>Code</SubType>
     </Content>
     <Content Include="app\static\app\img\logo.png">
       <Publish>True</Publish>
     </Content>
+    <Content Include="app\static\app\scripts\datatables.min.js" />
     <Content Include="app\static\app\scripts\javascript.js">
       <SubType>Code</SubType>
     </Content>
@@ -89,6 +91,7 @@
     <Content Include="app\static\app\scripts\searchactivities.js" />
     <Content Include="report\templates\form-report\generatereport.html" />
     <Content Include="report\templates\form-report\loadfiles.html" />
+    <Content Include="report\templates\form-report\pagination.html" />
     <Content Include="report\templates\form-report\searchactivities.html" />
     <Content Include="report\templates\report\index.html" />
     <Content Include="requirements.txt" />

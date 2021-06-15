@@ -246,10 +246,10 @@ footer p {
     background-color: #D14648;
     padding-bottom: 2rem;
     padding-top: 2rem;
-    min-width: 120rem;
+    min-width: 320px;
     text-align: center;
     justify-content: center;
-    display: inline-block;
+    display: flex;
     padding: 2rem 2% 2rem 2%;
 }
 
@@ -343,8 +343,8 @@ input {
     border-radius: 1rem;
     padding-bottom: 2rem;
     position: relative;
-    left: 40%;
     bottom: 40%;
+    margin: 0 auto;
 }
 
 .form-check-label, 
@@ -376,15 +376,15 @@ input {
 }
 
 .large-text {
-    width: 500rem;
-    height: 100rem;
-    margin-left: 10%;
-    margin-right:10%;
+    min-width: 288px;
+    width: 80%;
+    margin: 0 auto;
 }
 
 .img-submit {
-    width: 250px;
-    height: auto;
+    min-height: 150px;
+    height: 200px;
+    width: 200px;
     margin: 1rem;
 }
 
@@ -401,10 +401,15 @@ input {
     display: inline-block;
 }
 
+.evidence {
+    min-width: 288px;
+    width: auto;
+}
+
+
 /*
     Búsqueda de actividades 
 */
-
 .form-search-act .btn-save {
     display: inline-block;
 }
@@ -476,4 +481,16 @@ select {
     width: 80rem;
     padding-left: 0;
     margin-left: 55%;
+}
+
+.table-load-cont .danger {
+    background-color: #F34B4B;
+}
+
+.table-load-cont .good {
+    background-color: #F2F541;
+}
+
+.table-load-cont .careful {
+    background-color: #E5E76F;
 }

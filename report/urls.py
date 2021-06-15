@@ -12,5 +12,7 @@ urlpatterns = [
     path('busquedaactividades/', views.busquedaactividades, name='busquedaactividades'),
     path('searchactivities/downloadexcelsearch/<str:id>', views.downloadexcelsearch, name='downloadexcelsearch'),
     path('createpdf/', views.create_pdf, name='createpdf'),
-    path('readexcel/', views.readexcel, name='readexcel'),
-]
+    path('loadfiles/readexcel/', views.readexcel, name='readexcel'),
+    path('searchactivities/deletehistoric/', views.deletehistoric, name='deletehistoric'),
+    path('loadfiles/submitdata/', views.submitdata, name='submitdata'),
+    ]

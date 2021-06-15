@@ -167,6 +167,7 @@ class SubActivity(models.Model):
     average_hh = models.DecimalField(max_length=50, max_digits=10, decimal_places=3, verbose_name="Promedio HH")
     start_date = models.DateField(verbose_name="Comienza el")
     finish_date = models.DateField(verbose_name="Finaliza el")
+    days = models.IntegerField(blank=True, null=True,verbose_name="Días a trabajar")
 
     #LLaves
     api = models.ForeignKey(API, verbose_name="API", on_delete=models.CASCADE)
@@ -198,7 +199,7 @@ class Report(models.Model):
         verbose_name_plural = 'Reportes'
 
     def __str__(self):
-        return str(self.inspection_date)
+        return str(self.id)
 
 
 class Historical(models.Model):
@@ -209,6 +210,7 @@ class Historical(models.Model):
     no_program_total = models.DecimalField(max_length=100, max_digits=10, decimal_places=3,blank=True, null=True, verbose_name="Total No Programado")
     no_program_refday = models.DecimalField(max_length=100, max_digits=10, decimal_places=3,blank=True, null=True, verbose_name="Referencia Diaria NO Programada")
     no_program_total_acu = models.DecimalField(max_length=100, max_digits=10, decimal_places=3,blank=True, null=True, verbose_name="Total Programado No Acumulado")
+    difference = models.DecimalField(max_length=100, max_digits=10, decimal_places=3, default=0.0 ,verbose_name="Total Restante")
 
     #Llaves
     report = models.ForeignKey(Report, verbose_name="Report", on_delete=models.CASCADE, default="")
@@ -227,7 +229,7 @@ class Historical(models.Model):
         verbose_name_plural = 'Historicos'
 
     def __str__(self):
-        return str(self.inspection_date)
+        return str(self.report)
 
 class EquipmentAmount(models.Model):
 

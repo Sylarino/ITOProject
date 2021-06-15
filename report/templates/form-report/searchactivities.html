@@ -21,7 +21,7 @@
             <div class="field-form">
                 <label>Contrato:</label>
                 <select name="contract" class="form-control" id="contr_antgen_id" required>
-                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    <option id="0" disabled selected>Seleccione Contrato</option>
 
                 </select>
             </div>
@@ -31,7 +31,7 @@
             <div class="field-form">
                 <label>Actividad:</label>
                 <select name="select-act-ap" id="select-act-ap" class="form-control" required>
-                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    <option id="0" disabled selected>Seleccione Actividad</option>
                     
                 </select>
             </div>
@@ -41,7 +41,7 @@
             <div class="field-form">
                 <label>Sub Actividad:</label>
                 <select name="select-sub-ap" id="select-sub-ap" class="form-control">
-                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    <option id="0" disabled selected>Seleccione SubActividad</option>
                     
                 </select>
             </div>
@@ -51,7 +51,7 @@
             <div class="field-form">
                 <label>Conformidad:</label>
                 <select id="select-confor" class="form-control">
-                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    <option id="0" disabled selected>Seleccione Conformidad</option>
                     {% for nonconformity in nonconformities %}
                     <option id="{{nonconformity.id}}" value="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
                     {% endfor %}
@@ -63,7 +63,7 @@
             <div class="field-form">
                 <label>Tipo de SubActividad:</label>
                 <select id="select-tip-act" class="form-control">
-                    <option id="0" disabled selected>Seleccione Proyecto</option>
+                    <option id="0" disabled selected>Seleccione Tipo</option>
                     {% for activitytype in activitytypes %}
                     <option id="{{activitytype.id}}" value="{{activitytype.id}}">{{activitytype.activity_type_name}}</option>
                     {% endfor %}
@@ -102,29 +102,14 @@
             <input id="btn-recargar" class="btn btn-danger" type="button" value="Limpiar"/>
         </div>
 
-        <table id="selectactivities" class="table">
-            <thead>
-                <tr>
-                    <th scope="col">API</th>
-                    <th scope="col">Contrato</th>
-                    <th scope="col">N de Contrato</th>
-                    <th scope="col">Nombre Actividad</th>
-                    <th scope="col">Nombre SubActividad</th>
-                    <th scope="col">Total a Cumplir</th>
-                    <th scope="col">Medida</th>
-                    <th scope="col">Total Acumulado</th>
-                    <th scope="col">Fecha Inicio</th>
-                    <th scope="col">Fecha Termino</th>
-                    <th scope="col">Observaciones</th>
-                </tr>
-            </thead>
-            <tbody id="table-actividad">
+        <div class="col-md-12 hidden" id="divTabla">
+            {% include 'form-report/pagination.html' %}
+        </div>
 
-            </tbody>
-        </table>
+        
 
         <div class="btn-save">
-            <a class="btn btn-danger" href="{% url 'createpdf' %}" type="button">Eliminar</a>
+            {#<a class="btn btn-danger" href="{% url 'createpdf' %}" type="button">Eliminar</a>#}
         </div>
 
         <div id="export" class="btn-save">
