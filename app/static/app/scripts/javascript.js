@@ -1,11 +1,21 @@
 //Funcion para agregar una imagen en el formulario
 
+//const { data } = require("jquery");
+
 i = 0;
 var dataimg = {};
 var obsimg = {};
 var idsubimg = {};
+var acts_id = ["first"]
 
-document.getElementById("file").onchange = function(e) {
+document.getElementById("file").onchange = function (e) {
+
+    selectsubap = document.getElementById("select-sub-img");
+    if (selectsubap.options[selectsubap.selectedIndex].disabled) {
+        Swal.fire("Error", "Seleccione una SubActividad o Actividad invalida.", "warning");
+        return false;
+    }
+
     // Creamos el objeto de la clase FileReader
     let reader = new FileReader();
     i = i + 1;
@@ -22,20 +32,22 @@ document.getElementById("file").onchange = function(e) {
         but = document.createElement('input');
         det = document.getElementById('det-img');
         sub = document.getElementById('select-sub-img');
-
+        div2 = document.createElement('div');
         label = document.createElement('p')
         label_subactividad = document.createElement('label')
 
         label.setAttribute("class", "lab-img-sub")
         label_subactividad.setAttribute("id", sub.options[sub.selectedIndex].id)
         div.setAttribute("id", "div_" + i);
+        div.setAttribute("class", "image-section--containar");
+        div2.setAttribute("class", "title-image--container");
         but.setAttribute("class", "btn btn-danger");
         but.setAttribute("value", "Borrar");
         but.setAttribute("type", "button");
         image.setAttribute("id", "img_" + i);
         image.setAttribute("class", "img-submit");
         label.textContent = det.value;
-        label_subactividad.textContent = sub.options[sub.selectedIndex].value;
+        label_subactividad.textContent = sub.options[sub.selectedIndex].textContent;
 
         obsimg[i] = label.textContent;
         idsubimg[i] = sub.options[sub.selectedIndex].id;
@@ -45,8 +57,9 @@ document.getElementById("file").onchange = function(e) {
         preview.append(div);
         div.append(image);
         div.insertBefore(but, image);
-        div.appendChild(label_subactividad);
-        div.appendChild(label)
+        div.appendChild(div2);
+        div2.appendChild(label_subactividad);
+        div2.appendChild(label)
 
         but.onclick = function () {
             var ultimo = document.getElementById("div_" + i);
@@ -79,7 +92,7 @@ document.getElementById("btn-reference").onclick = function (e) {
         (refinput.value == "") ||
         (refselectgen.options[refselectgen.selectedIndex].value == "Seleccione Referencia")) {
 
-        alert("Seleccione una opci�n valida y/o Escriba el nombre");
+        alert("Seleccione una opción valida y/o Escriba el nombre");
 
     } else {
 
@@ -115,8 +128,29 @@ document.getElementById("btn-reference").onclick = function (e) {
     }
 };
 
-//Funcion para el boton de agregar actividades programadas
+//Validación decimal
+function validateDecimal(valor) {
+    var RE = /^\d*\.?\d*$/;
+    if (RE.test(valor)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
+//Validación int
+function validateInt(valor) {
+    var RE = /^[0-9]+$/;
+    if (valor.match(RE)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+//Funcion para el boton de agregar actividades programadas
 document.getElementById("act-pro").onclick = function (e) {
 
     i = i + 1;
@@ -133,13 +167,59 @@ document.getElementById("act-pro").onclick = function (e) {
     var selectcauap = document.getElementById("select-cau-ap");
     var selectdetap = document.getElementById("input-det-ap");
     var tablegen = document.getElementById("table-actividad");
+    var selectpreap = document.getElementById("select-pre-ap");
 
-    $(function () {
-        if ((selectactap.options[selectactap.selectedIndex].textContent === '') ||
-            (selectsubap.options[selectsubap.selectedIndex].textContent === '')) {
-            alert("Seleccione una SubActividad o Actividad invvalida")
+    largo = acts_id.length;
+    console.log(acts_id);
+
+    for (var j = 0; j < largo; j++) {
+        console.log(j);
+        if (selectsubap.options[selectsubap.selectedIndex].id === acts_id[j]) {
+            Swal.fire("Error", "Sub Actividad ya agregada.", "warning");
             return false;
         }
+    }
+
+    $(function () {
+
+        if (selectactap.options[selectactap.selectedIndex].disabled||
+            selectsubap.options[selectsubap.selectedIndex].disabled) {
+            Swal.fire("Error", "Seleccione una SubActividad o Actividad invalida.", "warning");
+            return false;
+        }
+
+        if (selectcumap.options[selectcumap.selectedIndex].disabled) {
+            Swal.fire("Error", "Seleccione si cumplío o no.", "warning");
+            return false;
+        } else {
+            if (selectcumap.options[selectcumap.selectedIndex].textContent === "No") {
+                if (selectcauap.options[selectcauap.selectedIndex].disabled) {
+                    Swal.fire("Error", "Seleccione la causa del No Cumplimiento", "warning");
+                    return false;
+                }
+            }
+        }
+
+        if (inputcrap.value === '') {
+            Swal.fire("Error", "Ingrese el avance diario", "warning");
+            return false;
+        } else {
+            if (validateDecimal(inputcrap.value) === false) {
+                Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+                return false;
+            }
+        }
+
+        if (inputcrap.value < 1) {
+            Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+            return false;
+        }
+
+        if (selectpreap.options[selectpreap.selectedIndex].disabled) {
+            Swal.fire("Error", "Seleccione un pre requisito.", "warning");
+            return false;
+        }
+
         $.ajax({
             type: 'GET',
             data: {
@@ -195,6 +275,9 @@ document.getElementById("act-pro").onclick = function (e) {
                     td1.id = selectactap.options[selectactap.selectedIndex].id;
                     td7.id = selectcumap.options[selectcumap.selectedIndex].id;
                     td8.id = selectcauap.options[selectcauap.selectedIndex].id;
+
+                    acts_id.push(selectsubap.options[selectsubap.selectedIndex].id);
+
                     td3.id = inputuap.getAttribute("value");
                     td10.id = 1;
                     td4.className = "total-acumulado";
@@ -203,6 +286,11 @@ document.getElementById("act-pro").onclick = function (e) {
                     td3.className = "medida";
                     td8.className = "causa-no";
                     td10.className = "activity_type";
+
+                    if (selectcumap.value != "No") {
+                        td8.id = 1;
+                        td8.textContent = "Cumplio";
+                    }
 
                     tablegen.append(tr);
                     tr.appendChild(td);
@@ -221,11 +309,15 @@ document.getElementById("act-pro").onclick = function (e) {
                     button.onclick = function () {
                         tablegen.removeChild(tr);
                         i = i - 1;
+                        acts_id.splice(i, 1);
                         return i;
+                        return acts_id;
                     }
+
+                    return acts_id;
                 }
             }
-            message_error(data.error);
+        //    message_error(data.error);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert(textStatus + ': ' + errorThrown);
         }).always(function (data) {
@@ -251,85 +343,125 @@ document.getElementById("act-no-pro").onclick = function (e) {
     var selectcumanp = document.getElementById("select-cum-anp");
     var selectcauanp = document.getElementById("select-cau-anp");
     var selectdetanp = document.getElementById("input-det-anp");
-
+    var selectpreanp = document.getElementById("select-pre-anp");
     var tablegen = document.getElementById("table-actividad");
 
+    if (selectactanp.options[selectactanp.selectedIndex].disabled) {
+        Swal.fire("Error", "Seleccione una SubActividad.", "warning");
+        return false;
+    }
+
     if ((selectsubanp.value == "")) {
+        Swal.fire("Error", "Escriba una Sub Actividad valida.", "warning");
+        return false;
+    }
 
-        alert("Seleccione una opción valida y/o Escriba el nombre");
-
+    if (selectcumanp.options[selectcumanp.selectedIndex].disabled) {
+        Swal.fire("Error", "Seleccione si cumplío o no.", "warning");
+        return false;
     } else {
-
-        var tr = document.createElement("tr");
-        var td = document.createElement("td");
-        var td1 = document.createElement("td");
-        var td2 = document.createElement("td");
-        var td3 = document.createElement("td");
-        var td4 = document.createElement("td");
-        var td5 = document.createElement("td");
-        var td6 = document.createElement("td");
-        var td7 = document.createElement("td");
-        var td8 = document.createElement("td");
-        var td9 = document.createElement("td");
-        var td10 = document.createElement("td");
-        var td11 = document.createElement("td");
-
-        var button = document.createElement("input")
-
-        button.className = "btn btn-danger";
-        button.type = "button";
-        button.value = "Eliminar";
-
-        tr.id = "tr-anp" + i;
-
-        td.textContent = selectsubanp.value;
-        td.id = selectactanp.options[selectactanp.selectedIndex].id;
-        td1.textContent = selectactanp.options[selectactanp.selectedIndex].textContent;
-        td2.textContent = inputcranp.value;
-        td3.textContent = inputuanp.options[inputuanp.selectedIndex].value;
-        td4.textContent = inputteanp.value;
-        td5.textContent = inputrdanp.value;
-        td6.textContent = inputtaanp.value;
-        td7.textContent = selectcumanp.options[selectcumanp.selectedIndex].value;
-        td8.textContent = selectcauanp.options[selectcauanp.selectedIndex].value;
-        td9.textContent = selectdetanp.value;
-        td10.textContent = "No Programada";
-        td4.className = "total-estimado";
-        td5.className = "referencia-diaria";
-        td6.className = "total-acumulado";
-        td.className = "act-no-programada";
-        td3.id = inputuanp.options[inputuanp.selectedIndex].id;
-        td3.className = "medida";
-        td2.className = "cantidad-real";
-        td3.className = "medida";
-        td8.className = "causa-no";
-        td10.className = "activity_type";
-
-        td1.id = selectactanp.options[selectactanp.selectedIndex].id;
-        td7.id = selectcumanp.options[selectcumanp.selectedIndex].id;
-        td8.id = selectcauanp.options[selectcauanp.selectedIndex].id;
-        td10.id = 2;
-
-        tablegen.append(tr);
-        tr.appendChild(td);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-        tr.appendChild(td4);
-        tr.appendChild(td5);
-        tr.appendChild(td7);
-        tr.appendChild(td7);
-        tr.appendChild(td8);
-        tr.appendChild(td6);
-        tr.appendChild(td10);
-        tr.appendChild(td11);
-        td11.append(button);
-
-        button.onclick = function () {
-            tablegen.removeChild(tr);
-            i = i - 1;
-            return i;
+        if (selectcumanp.options[selectcumanp.selectedIndex].textContent === "No") {
+            if (selectcauanp.options[selectcauanp.selectedIndex].disabled) {
+                Swal.fire("Error", "Seleccione la causa del No Cumplimiento", "warning");
+                return false;
+            }
         }
     }
+
+    if (inputcranp.value === '') {
+        Swal.fire("Error", "Ingrese el avance diario", "warning");
+        return false;
+    } else {
+        if (validateDecimal(inputcranp.value) === false) {
+            Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+            return false;
+        }
+    }
+
+    if (inputcranp.value < 1) {
+        Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+        return false;
+    }
+
+    if (selectpreanp.options[selectpreanp.selectedIndex].disabled) {
+        Swal.fire("Error", "Ingrese un pre requisito", "warning");
+        return false;
+    }
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    var td1 = document.createElement("td");
+    var td2 = document.createElement("td");
+    var td3 = document.createElement("td");
+    var td4 = document.createElement("td");
+    var td5 = document.createElement("td");
+    var td6 = document.createElement("td");
+    var td7 = document.createElement("td");
+    var td8 = document.createElement("td");
+    var td9 = document.createElement("td");
+    var td10 = document.createElement("td");
+    var td11 = document.createElement("td");
+
+    var button = document.createElement("input")
+
+    button.className = "btn btn-danger";
+    button.type = "button";
+    button.value = "Eliminar";
+
+    tr.id = "tr-anp" + i;
+
+    td.textContent = selectsubanp.value;
+    td.id = selectactanp.options[selectactanp.selectedIndex].id;
+    td1.textContent = selectactanp.options[selectactanp.selectedIndex].textContent;
+    td2.textContent = inputcranp.value;
+    td3.textContent = inputuanp.options[inputuanp.selectedIndex].value;
+    td4.textContent = inputteanp.value;
+    td5.textContent = inputrdanp.value;
+    td6.textContent = inputtaanp.value;
+    td7.textContent = selectcumanp.options[selectcumanp.selectedIndex].value;
+    td8.textContent = selectcauanp.options[selectcauanp.selectedIndex].value;
+    td9.textContent = selectdetanp.value;
+    td10.textContent = "No Programada";
+    td4.className = "total-estimado";
+    td5.className = "referencia-diaria";
+    td6.className = "total-acumulado";
+    td.className = "act-no-programada";
+    td3.id = inputuanp.options[inputuanp.selectedIndex].id;
+    td3.className = "medida";
+    td2.className = "cantidad-real";
+    td3.className = "medida";
+    td8.className = "causa-no";
+    td10.className = "activity_type";
+
+    td1.id = selectactanp.options[selectactanp.selectedIndex].id;
+    td7.id = selectcumanp.options[selectcumanp.selectedIndex].id;
+    td8.id = selectcauanp.options[selectcauanp.selectedIndex].id;
+    td10.id = 2;
+
+    if (selectcumanp.value != "No") {
+        td8.id = 1;
+        td8.textContent = "Cumplio";
+    }
+
+    tablegen.append(tr);
+    tr.appendChild(td);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    tr.appendChild(td5);
+    tr.appendChild(td7);
+    tr.appendChild(td7);
+    tr.appendChild(td8);
+    tr.appendChild(td6);
+    tr.appendChild(td10);
+    tr.appendChild(td11);
+    td11.append(button);
+
+    button.onclick = function () {
+        tablegen.removeChild(tr);
+        i = i - 1;
+        return i;
+    }
+    
 };
 
 //Funcion para el boton de agregar Recursos EECC en Terreno
@@ -347,6 +479,50 @@ document.getElementById("but-rec-save").onclick = function (e) {
     var iddotrefequi = document.getElementById("id-dotref-equi");
     var iddotindequi = document.getElementById("id-dotind-equi");
     var tablaequipo = document.getElementById("tabla-equipo");
+
+    if (validateInt(idcantidadequi.value)) {
+        if (idcantidadequi.value < 0){
+            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            return false;
+        }
+    } else {
+        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        return false;
+    }
+
+
+    if (validateInt(iddotdiequi.value)) {
+        if (iddotdiequi.value < 0) {
+            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            return false;
+        }
+    } else {
+        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        return false;
+    }
+
+
+    if (validateInt(iddotrefequi.value)) {
+        if (iddotrefequi.value < 0) {
+            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            return false;
+        }
+    } else {
+        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        return false;
+    }
+
+
+    if (validateInt(iddotindequi.value)) {
+        if (iddotindequi.value < 0) {
+            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            return false;
+        }
+    } else {
+        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        return false;
+    }
+
 
     if (idnombreequi.value == "") {
 
@@ -452,8 +628,10 @@ $(function () {
         var id = $('#contr_antgen_id').val();
         var select_act_pro = $('select[name="select-act-ap"]');
         var options = '<option disabled selected>Seleccione Actividad</option>';
+        var optionsimg = '<option disabled selected>Seleccione Sub Actividad</option>';
         var select_act_nopro = $('select[name="select-act-anp"]');
         var select_act_equi = $('select[name="select-act-equi"]');
+        var select_act_img = $('select[name="select-sub-img"]');
 
         if (id === '') {
             $('label[name="enterprise"]').text(" ");
@@ -467,14 +645,27 @@ $(function () {
             url: "/buscarcontratos",
             dataType: 'json',
         }).done(function (data) {
-            debugger;
+
             if (!data.hasOwnProperty('error')) {
 
                 $('label[name="enterprise"]').text(data[0].enterprise);
                 $('label[name="start_date"]').text(data[0].start_date_contract);
                 $('label[name="finish_date"]').text(data[0].finish_date_contract);
+                var data_unique = [];
 
                 $.each(data, function (key, value) {
+                    optionsimg += '<option id="' + value.subactivity_id + '" value="' + value.subactivity_id + '">' + value.subactivity_name + '</option>';
+                    data_unique.push({ id: value.id, activity_name: value.activity_name });
+                });
+
+                let datamap = data_unique.map(item => {
+                    return [item.id, item]
+                });
+                var datamaparr = new Map(datamap); // Pares de clave y valor
+
+                let result = [...datamaparr.values()];
+
+                $.each(result, function (key, value) {
                     options += '<option id="' + value.id + '" value="' + value.id + '">' + value.activity_name + '</option>';
                 });
 
@@ -487,6 +678,7 @@ $(function () {
             select_act_pro.html(options);
             select_act_nopro.html(options);
             select_act_equi.html(options);
+            select_act_img.html(optionsimg);
         });
     });
 });
@@ -565,7 +757,7 @@ $(function () {
     });
 });
 
-//Accion para ejecutar al seleccionar una opci�n de las subactividades de actividades NO programadas
+//Accion para ejecutar al seleccionar una opción de las subactividades de actividades NO programadas
 
 $(function () {
     $('select[name="select-sub-anp"]').on('change', function () {
@@ -692,6 +884,47 @@ document.getElementById("id-nombre-equi").onclick = function (e) {
 
 // Agregar reporte
 
+function downloadrecentlypdf(id_pdf) {
+    $.ajax({
+        type: 'POST',
+        data: { 'id': id_pdf, csrfmiddlewaretoken: '{{ csrf_token }}' },
+        url: "downloadpdf/",
+        success: function (response) {
+            var blob = new Blob([response], { type: 'application/pdf' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "REPORT_N" + id_pdf + ".pdf";
+            link.click();
+        }
+    });
+}
+
+function messageSucces(data) {
+
+    if (data.submitted == 1) {
+
+        swal.fire("Guardado", "Reporte N°" + data.id_report + " agregado satisfactoriamente", "success", {
+            confirmButtonText: "Descargar"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                downloadrecentlypdf(data.id_report);
+                Swal.fire('Descargado!', '', 'success', {
+                    confirmButtonText: "Ok"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                        window.scrollTo(0, 0);
+                    } else {
+                        window.location.reload();
+                        window.scrollTo(0, 0);
+                    }
+                });
+            }
+        });
+
+    }
+}
 
 $('input[id="btn-save_report"]').on('click', function () {
 
@@ -707,6 +940,11 @@ $('input[id="btn-save_report"]').on('click', function () {
     var plandeaccion = document.getElementById("plandeaccion");
     var evidenciaobs = document.getElementById("evidencia");
     var subnopro = document.getElementById("input-subact-anp");
+
+    if (especialidad.options[especialidad.selectedIndex].disabled) {
+        Swal.fire("Reporte no Agregado", "Seleccione una Especialidad", "warning");
+        return false;
+    }
 
     //Recorrido de tabla de actividades
     document.querySelectorAll('.table-actividad tr').forEach(function (e) {
@@ -731,7 +969,7 @@ $('input[id="btn-save_report"]').on('click', function () {
             historicos.push(fila);
         } else {
             let fila = {
-                id_subactividad: 4,
+                id_subactividad: 358,
                 id_actividad: e.querySelector('.act-no-programada').id,
                 cantidad_real: e.querySelector('.cantidad-real').innerText,
                 id_medida: e.querySelector('.medida').id,
@@ -772,30 +1010,40 @@ $('input[id="btn-save_report"]').on('click', function () {
         referencias.push(fila);
     });
 
+    val_imagen = document.getElementsByClassName("image-section--containar");
+    lengimg = val_imagen.length;
+    if (lengimg > 0) {
+        img_val = 1;
+        //Recorrido de imagenes
+        var form_data = new FormData();
+
+        debugger;
+        for (var key in dataimg) {
+            form_data.append('image', dataimg[key]);
+        }
+
+        for (var i in obsimg) {
+            form_data.append('observation', obsimg[i]);
+        }
+
+        for (var subi in idsubimg) {
+            form_data.append('image_subactivity', idsubimg[subi]);
+        }
+
+    } else {
+        img_val = 0;
+    }
+
     let filareport = {
         desviacion: desviacion.value,
         plandeaccion: plandeaccion.value,
         evidencia_obs: evidenciaobs.value,
-        id_seguimiento: $('input:radio[name=exampleRadios]:checked').val()
+        id_seguimiento: $('input:radio[name=exampleRadios]:checked').val(),
+        img_exist: img_val
     };
 
     reporte.push(filareport);
 
-    //Recorrido de imagenes
-    var form_data = new FormData();
-
-    for (var key in dataimg) {
-        form_data.append('image', dataimg[key]);
-    }
-
-    for (var i in obsimg) {
-        form_data.append('observation', obsimg[i]);
-    }
-
-    for (var subi in idsubimg) {
-        form_data.append('image_subactivity', idsubimg[subi]);
-    }
-    
     //Conexion a traves de ajax
     $.ajax({
         url: 'savereport/',
@@ -809,53 +1057,33 @@ $('input[id="btn-save_report"]').on('click', function () {
         },
         dataType: 'JSON',
 
-    });
-
-    $.ajax({
-        url: 'saveimage/',
-        type: 'POST',
-        data: form_data,
-        contentType: false,
-        processData: false,
-        dataType: 'json',
     }).done(function (data) {
 
-        if (data.submitted == 1) {
-
-            refresh = 0;
-
-            Swal.fire("Guardado", "Reporte N°" + data.id_report + " agregado satisfactoriamente", "success", {
-                buttons: {
-                    acept: {
-                        text: "Aceptar",
-                        value: "acept"
-                    },
-                    download: {
-                        text: "Descargar PDF",
-                        value: "download"
-                    }
-                },
-            }).then((value) => {
-                switch (value) {
-                    case "acept":
-                        window.location.reload();
-                        window.scrollTo(0, 0);
-
-                    case "download":
-                        document.location.href = "/createpdf";
-                        refresh = 1;
-
-                }
-            });
-
-            if (refresh == 1) {
-                window.location.reload();
-                window.scrollTo(0, 0);
-            };
-        //    
+        if (img_val === 0) {
+            messageSucces(data);
         }
-        else {
-            alert("Reporte no fue agregado, verifique los datos");
-        }
+
+    }).fail(function (data) {
+        Swal.fire("Reporte No Agregado", "Verifique los datos a ingresar", "warning");
+        return false;
     });
+
+    if (img_val === 1) {
+        $.ajax({
+            url: 'saveimage/',
+            type: 'POST',
+            data: form_data,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+        }).done(function (data) {
+
+            messageSucces(data);
+
+        }).fail(function (data) {
+            Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
+            return false;
+        });
+    }
+
 });

@@ -94,6 +94,17 @@
             </div>
         </div>
 
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label>Rango de Fechas de Reporte:</label>
+                <input class="form-control" type="text" id="daterange" name="daterange"/>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="btn-section-container">
         <div class="btn-save">
             <input id="btn-buscar" class="btn btn-danger" type="button" value="Buscar"/>
         </div>
@@ -101,21 +112,22 @@
         <div class="btn-save">
             <input id="btn-recargar" class="btn btn-danger" type="button" value="Limpiar"/>
         </div>
+    </div>
 
-        <div class="col-md-12 hidden" id="divTabla">
-            {% include 'form-report/pagination.html' %}
-        </div>
+    <div class="col-md-12 hidden" id="divTabla">
+        {% include 'form-report/pagination.html' %}
+    </div>
 
         
 
-        <div class="btn-save">
-            {#<a class="btn btn-danger" href="{% url 'createpdf' %}" type="button">Eliminar</a>#}
-        </div>
-
-        <div id="export" class="btn-save">
-
-        </div>
+    <div class="btn-save">
+        {#<a class="btn btn-danger" href="{% url 'createpdf' %}" type="button">Eliminar</a>#}
     </div>
+
+    <div id="export" class="btn-save">
+
+    </div>
+
 
     <script src="{% static 'app/scripts/searchactivities.js' %}"></script>
 </form>

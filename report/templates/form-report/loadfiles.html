@@ -13,27 +13,43 @@
 
 
 
-    <div id="wrapper" class="btn-save">
+    <div id="wrapper" class="btn-save load">
         <input type="file" name="file" class="btn btn-danger" value="Adjuntar Excel"/> 
     </div>
 
-    <div id="wrapper" class="btn-save">
+    <div id="wrapper" class="btn-save load">
         <input class="btn btn-danger" value="Leer Excel" type="submit"/> 
     </div>
 
-   <!--
-   <div class="row">
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label>Tabla:</label>
-                <select class="form-control">
-                    <option>Seleccione Tabla</option>
-                </select>
+    <section class="info-load--container">
+        <div class="info-button--container">
+            <div class="info-load--button">
+                <a href="{% url 'downloadstructure' id='structure' %}" class="btn btn-danger">Descargar Estructura de Excel</a>
+            </div>
+            <div class="info-load--button">
+                <a href="{% url 'downloadstructure' id='example' %}" class="btn btn-danger">Descargar Excel de Ejemplo</a>
             </div>
         </div>
-   </div>
-   -->
-    <div class="col-md-12 hidden table-load-cont" id="divTabla">
+        <section>
+            <h2 class="title-representation">Representación de Colores en Observación</h2>
+            <article>
+                <span class="circle-representation good"></span>
+                <p>Correcto, se actualizaran datos.</p>
+
+            </article>
+            <article>
+                <span class="circle-representation careful"></span>
+                <p>Cuidado, se agregaran datos.</p>
+
+            </article>
+            <article>
+                <span class="circle-representation danger"></span>
+                <p>Error, datos incorrectos.</p>
+            </article>
+        </section>
+    </section>
+
+    <div class="col-md-12 hidden table-load-cont table-container--load" id="divTabla">
         <table id="table-load" class="table table-load">
             <thead>
                 <tr>
@@ -49,7 +65,7 @@
                     <th>Total estimado</th>
                     <th>Referencia diaria</th>
                     <th>Medida</th>
-                    <th>Observacion</th>
+                    <th>Observación</th>
                 </tr>
             </thead>
         </table>

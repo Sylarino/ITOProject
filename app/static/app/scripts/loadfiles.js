@@ -42,6 +42,9 @@ function upload(event) {
         contentType: false,
     }).done(function (load) {
         cargarTabla(load)
+    }).fail(function (response) {
+        Swal.fire("Archivo Incorrecto", "El archivo no cumple estructura o no es valido.", "warning");
+        return false;
     });
     return false;
 }
@@ -89,7 +92,7 @@ function cargarTabla(response) {
         },
         data: response,
         "columns": [
-            { "data": "contrato", "name": "Contrato" },
+            { "data": "numero_contrato", "name": "Contrato" },
             { "data": "actividad", "name": "Actividad" },
             { "data": "subactividad", "name": "Subactividad" },
             { "data": "dias_programado", "name": "Dias_programado" },
@@ -147,7 +150,7 @@ function guardarDatos() {
 
         if (data == 1) {
 
-            Swal.fire("¡Guardado!", "Datos cargados y guardados correctamente.", "success");
+            Swal.fire("Guardado!", "Datos cargados y guardados correctamente.", "success");
             return false;
 
         }

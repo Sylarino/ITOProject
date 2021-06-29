@@ -1,4 +1,43 @@
+var startDate = "";
+var endDate = "";
 
+$(function () {
+    $('input[name="daterange"]').daterangepicker({
+        startDate: moment().subtract('days', 29),
+        endDate: moment(),
+        "locale": {
+            "daysOfWeek": [
+                "Dom",
+                "Lun",
+                "Mar",
+                "Mie",
+                "Jue",
+                "Vie",
+                "Sáb"
+            ],
+            "monthNames": [
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
+            ],
+            format: 'DD/MM/YYYY'
+        },
+        opens: 'left'
+    }, function (start, end, label) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        startDate = start;
+        endDate = end;
+    });
+});
 
 //Accion para ejecutar cuando hay un cambio en el select del proyecto
 $(function () {
@@ -51,7 +90,14 @@ $(function () {
         }).done(function (data) {
             if (!data.hasOwnProperty('error')) {
 
-                $.each(data, function (key, value) {
+                let datamap = data.map(item => {
+                    return [item.id, item]
+                });
+                var datamaparr = new Map(datamap); // Pares de clave y valor
+
+                let result = [...datamaparr.values()];
+
+                $.each(result, function (key, value) {
                     options += '<option id="' + value.id + '" value="' + value.id + '">' + value.activity_name + '</option>';
                 });
 
@@ -119,9 +165,16 @@ $('input[id="btn-buscar"]').on('click', function () {
     //Table.innerHTML = "";
     var exportexist = document.getElementById("export");
     var exportexcelexist = document.getElementById("exportarexcel");
-
+    debugger;
     if (exportexcelexist != null) {
         exportexist.removeChild(exportexcelexist);
+    }
+
+    if (startDate === "" && endDate === "") {
+        console.log("Si verifico");
+    } else {
+        startDate = startDate.format('DD/MM/YYYY');
+        endDate = endDate.format('DD/MM/YYYY');
     }
 
     var api = document.getElementById("api_antgen_id");
@@ -143,7 +196,9 @@ $('input[id="btn-buscar"]').on('click', function () {
         id_subactividad: subactividad.options[subactividad.selectedIndex].id,
         id_seguimiento: seguimiento.options[seguimiento.selectedIndex].id,
         id_tipoactividad: tipoactividad.options[tipoactividad.selectedIndex].id,
-        id_conformidad: conformidad.options[conformidad.selectedIndex].id
+        id_conformidad: conformidad.options[conformidad.selectedIndex].id,
+        fecha_inicio: startDate,
+        fecha_termino: endDate
     };
 
     datos.push(fila);

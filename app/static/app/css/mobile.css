@@ -1,0 +1,116 @@
+.table-container--load {
+    display: flex;
+    overflow-x: scroll;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+}
+
+.row-section .form-section {
+    flex-flow: column;
+}
+
+.form-report .medium-text {
+    max-width: 250px;
+    min-width: 150px;
+}
+
+.header-layout {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.letra-puntos {
+    position: absolute;
+    left: calc(60% - 25px);
+    top: calc(50% - 125px);
+
+}
+
+.letra-puntos img {
+    max-width: 150px;
+    max-width: 150px;
+}
+
+.form-section {
+    min-width: 150px;
+}
+
+form {
+    overflow: hidden;
+}
+
+.header-layout h1 {
+    font-size: 4rem;
+}
+
+.form-load .btn-save input {
+    min-width: 250px;
+}
+
+.info-load--container {
+    width: 90%;
+    flex-flow: column;
+}
+
+.info-load--container .info-button--container {
+    text-align: center;
+}
+
+section .title-representation {
+    font-size: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.login-box {
+    margin: 0 auto;
+    border-radius: 0px;
+}
+
+.form-horizontal .form-group .form-control {
+    margin: 0 auto;
+    min-width: 20rem;
+}
+
+.col-md-6 .title-description {
+    text-align: center;
+    margin-top: 20px;
+    padding-left: 0rem;
+}
+
+.col-md-6 .text-description {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.section-home_img {
+    padding: 0rem;
+    margin: 3rem;
+}
+
+.navbar-collapse.in {
+    height: 236px;
+}
+
+.nav {
+    position: inherit;
+    left: 0;
+}
+
+.navbar-toggle {
+    background-color: #decfcf;
+    margin-top: 20px;
+}
+
+.navbar-header {
+    background: #decfcf;
+}
+
+.navbar-collapse {
+    background-color: #decfcf;
+}
+
+.navbar-inverse .navbar-toggle {
+    margin-top: 20px;
+}

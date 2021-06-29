@@ -15,4 +15,7 @@ urlpatterns = [
     path('loadfiles/readexcel/', views.readexcel, name='readexcel'),
     path('searchactivities/deletehistoric/', views.deletehistoric, name='deletehistoric'),
     path('loadfiles/submitdata/', views.submitdata, name='submitdata'),
+    path('loadfiles/submitdata/', views.submitdata, name='submitdata'),
+    path('downloadstructure/<str:id>', views.downloadstructure, name='downloadstructure'),
+    path('generatereport/downloadpdf/', views.downloadpdf, name='downloadpdf'),
     ]

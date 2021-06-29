@@ -81,17 +81,19 @@
                 <label>Referencias Registradas:</label>
             </div>
 
-            <table class="table table-load">
-                <thead>
-                    <tr>
-                        <th scope="col">Referencia</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">¿Eliminar?</th>
-                    </tr>
-                </thead>
-                <tbody class="table-referencia" id="table-body">
-                </tbody>
-            </table>
+            <section class="table-container--load"> 
+                <table class="table table-load">
+                    <thead>
+                        <tr>
+                            <th scope="col">Referencia</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">¿Eliminar?</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-referencia" id="table-body">
+                    </tbody>
+                </table>
+            </section>
 
         </div>
     </div>
@@ -106,14 +108,14 @@
             <div class="col-md-6 form-report">
                 <label>Nombre de Actividad:</label>
                 <select name="select-act-ap" id="select-act-ap" class="form-control" required>
-                    
+                    <option disabled selected>Seleccione Actividad</option>
                 </select>
             </div>
 
             <div class="col-md-6 form-report">
                 <label>Nombre de Sub Actividad:</label>
                 <select name="select-sub-ap" id="select-sub-ap" class="form-control" required>
-                    
+                    <option disabled selected>Seleccione Sub Actividad</option>
                 </select>
             </div>
         </div>
@@ -143,7 +145,7 @@
             </div>
         </section>
 
-        <section class="section-md-field">
+        <section class="section-md-field select-section--activities">
             <div class="col-md-4 form-report">
                 <label>Cumplimiento:</label>
                 <select id="select-cum-ap" class="form-control" required>
@@ -162,22 +164,25 @@
                     {% endfor %}
                 </select>
             </div>
+
+            <div class="col-md-4 form-report">
+                <label>Detalle:</label>
+                <input id="input-det-ap" class="form-control" required readonly="readonly"/>
+            </div>
+
+            <div class="col-md-4 form-report">
+                <label>Pre Requisito:</label>
+                <select id="select-pre-ap" class="form-control">
+                    <option disabled selected>Seleccione Pre Requisito</option>
+                    {% for precondition in preconditions %}
+                    <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
         </section>
 
-        <div class="col-md-4 form-report">
-            <label>Detalle:</label>
-            <input id="input-det-ap" class="form-control" required readonly="readonly"/>
-        </div>
 
-        <div class="col-md-4 form-report">
-            <label>Pre Requisito:</label>
-            <select id="select-pre-ap" class="form-control">
-                <option disabled selected>Seleccione Pre Requisito</option>
-                {% for precondition in preconditions %}
-                <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
-                {% endfor %}
-            </select>
-        </div>
 
     </div>
 
@@ -234,7 +239,7 @@
         </section>
 
 
-        <section class="section-md-field">
+        <section class="section-md-field select-section--activities">
             <div class="col-md-4 form-report">
                 <label>Cumplimiento:</label>
                 <select id="select-cum-anp" class="form-control" required>
@@ -253,22 +258,25 @@
                     {% endfor %}
                 </select>
             </div>
+
+            <div class="col-md-4 form-report">
+                <label>Detalle:</label>
+                <input id="input-det-anp" class="form-control" readonly="readonly" />
+            </div>
+
+            <div class="col-md-4 form-report">
+                <label>Pre Requisito:</label>
+                <select id="select-pre-anp" class="form-control">
+                    <option disabled selected>Seleccione Pre Requisito</option>
+                    {% for precondition in preconditions %}
+                    <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
         </section>
 
-        <div class="col-md-4 form-report">
-            <label>Detalle:</label>
-            <input id="input-det-anp" class="form-control" readonly="readonly" />
-        </div>
 
-        <div class="col-md-4 form-report">
-            <label>Pre Requisito:</label>
-            <select id="select-pre-anp" class="form-control">
-                <option disabled selected>Seleccione Pre Requisito</option>
-                {% for precondition in preconditions %}
-                <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
-                {% endfor %}
-            </select>
-        </div>
     </div>
 
     <div class="btn-save">
@@ -276,25 +284,27 @@
     </div>
 
     <div class="separator"></div>
-
-    <table class="table table-load">
-        <thead>
-            <tr>
-                <th scope="col">Nombre SubActividad</th>
-                <th scope="col">Avance Diario</th>
-                <th scope="col">Unidad</th>
-                <th scope="col">Total Programado</th>
-                <th scope="col">Ref.Día</th>
-                <th scope="col">Cumplimiento</th>
-                <th scope="col">Causa No Cumplimiento</th>
-                <th scope="col">Avance Real Acumulado</th>
-                <th scope="col">Tipo Actividad</th>
-                <th scope="col">¿Eliminar?</th>
-            </tr>
-        </thead>
-        <tbody class="table-actividad" id="table-actividad">
-        </tbody>
-    </table>
+    
+    <section class="table-container--load">
+        <table class="table table-load">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre SubActividad</th>
+                    <th scope="col">Avance Diario</th>
+                    <th scope="col">Unidad</th>
+                    <th scope="col">Total Programado</th>
+                    <th scope="col">Ref.Día</th>
+                    <th scope="col">Cumplimiento</th>
+                    <th scope="col">Causa No Cumplimiento</th>
+                    <th scope="col">Avance Real Acumulado</th>
+                    <th scope="col">Tipo Actividad</th>
+                    <th scope="col">¿Eliminar?</th>
+                </tr>
+            </thead>
+            <tbody class="table-actividad" id="table-actividad">
+            </tbody>
+        </table>
+    </section>
 
     {#Formulario para realizar registro de Recursos y Observaciones (Desviaciones y Plan)#}
     <h2 class="title-page">{{ title }}</h2>
@@ -347,24 +357,26 @@
         <input id="but-rec-save" class="btn btn-danger" type="button" value="Agregar" />
     </div>
 
-    <table class="table table-load">
-        <thead>
-            <tr>
-                <th scope="col">N°</th>
-                <th scope="col">Nombre Equipo</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Actividad</th>
-                <th scope="col">Sub Actividad</th>
-                <th scope="col">Dotación Directa</th>
-                <th scope="col">Dotación Referencial</th>
-                <th scope="col">Dotación Indirecta</th>
-                <th scope="col">¿Eliminar?</th>
-            </tr>
-        </thead>
-        <tbody class="tabla-equipo" id="tabla-equipo">
+    <section class="table-container--load">
+        <table class="table table-load">
+            <thead>
+                <tr>
+                    <th scope="col">N°</th>
+                    <th scope="col">Nombre Equipo</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Actividad</th>
+                    <th scope="col">Sub Actividad</th>
+                    <th scope="col">Dotación Directa</th>
+                    <th scope="col">Dotación Referencial</th>
+                    <th scope="col">Dotación Indirecta</th>
+                    <th scope="col">¿Eliminar?</th>
+                </tr>
+            </thead>
+            <tbody class="tabla-equipo" id="tabla-equipo">
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </section>
 
     <div class="separator"></div>
 
@@ -391,11 +403,8 @@
         <div class="col-md-6 form-report">
             <div class="field-form">
                 <label>Sub Actividad:</label>
-                <select id="select-sub-img" class="form-control" required>
-                    <option id="subact-img" disabled selected>Seleccione Sub Actividad</option>
-                    {% for subactivity in subactivities %}
-                    <option id="{{subactivity.id}}">{{subactivity.subactivity_name}}</option>
-                    {% endfor %}
+                <select name="select-sub-img" id="select-sub-img" class="form-control" required>
+
                 </select>
             </div>
 

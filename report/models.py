@@ -87,29 +87,29 @@ class NonConformity(models.Model):
 
 class API(models.Model):
     api_number = models.CharField(max_length=100, verbose_name="Número de API")
-    project_name = models.CharField(max_length=100, verbose_name="Nombre de Proyecto")
+    project_name = models.CharField(blank=True, null=True, max_length=100, verbose_name="Nombre de Proyecto")
     start_date = models.DateField(verbose_name="Comienza el")
     finish_date = models.DateField(verbose_name="Finaliza el")
-    state = models.CharField(max_length=1, verbose_name="Estado")
+    state = models.CharField(blank=True, null=True, max_length=1, verbose_name="Estado")
 
     class Meta:
         verbose_name = 'API'
         verbose_name_plural = 'API'
 
     def __str__(self):
-        return self.project_name
+        return str(self.api_number)
 
 class Contract(models.Model):
-    contract_name = models.CharField(max_length=100, verbose_name="Nombre del Contrato")
+    contract_name = models.CharField(blank=True, null=True, max_length=100, verbose_name="Nombre del Contrato")
     contract_number = models.IntegerField(verbose_name="Número de Contrato")
-    enterprise = models.CharField(max_length=150, verbose_name="Empresa Contratista")
-    rut = models.CharField(max_length=12, verbose_name="RUT")
-    project_boss = models.CharField(max_length=12, verbose_name="Jefe de Proyecto")
-    email = models.CharField(max_length=12, verbose_name="Correo")
-    cellphone = models.CharField(max_length=12, verbose_name="Celular")
+    enterprise = models.CharField(blank=True, null=True, max_length=150, verbose_name="Empresa Contratista")
+    rut = models.CharField(blank=True, null=True, max_length=12, verbose_name="RUT")
+    project_boss = models.CharField(blank=True, null=True, max_length=12, verbose_name="Jefe de Proyecto")
+    email = models.CharField(blank=True, null=True, max_length=12, verbose_name="Correo")
+    cellphone = models.CharField(blank=True, null=True, max_length=12, verbose_name="Celular")
     start_date = models.DateField(verbose_name="Comienza el")
     finish_date = models.DateField(verbose_name="Finaliza el")
-    state = models.CharField(max_length=1, verbose_name="Estado")
+    state = models.CharField(blank=True, null=True, max_length=1, verbose_name="Estado")
 
     #LLaves
     api = models.ForeignKey(API, verbose_name="API", on_delete=models.CASCADE)
@@ -168,6 +168,8 @@ class SubActivity(models.Model):
     start_date = models.DateField(verbose_name="Comienza el")
     finish_date = models.DateField(verbose_name="Finaliza el")
     days = models.IntegerField(blank=True, null=True,verbose_name="Días a trabajar")
+    #Nuevo
+    ref_day = models.DecimalField(max_length=100, max_digits=10, decimal_places=3, default=0.0 ,verbose_name="Referencia Diaria")
 
     #LLaves
     api = models.ForeignKey(API, verbose_name="API", on_delete=models.CASCADE)

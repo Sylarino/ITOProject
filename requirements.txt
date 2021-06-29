@@ -1,1 +1,5 @@
 django~=2.2
+mysqlclient
+reportlab
+openpyxl
+numpy
