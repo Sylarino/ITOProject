@@ -1,495 +1,498 @@
 {% extends "app/layout.html" %}
 {% load staticfiles %}
 {% block content %}
-<form action="">
-        {% csrf_token %}
-    <h2 class="title-page">{{ title }}</h2>
+    
+<div class="container">
+    <form action="">
+            {% csrf_token %}
+        <h2 class="title-page">{{ title }}</h2>
 
-    {#Formulario Antecedentes Generales#}
-    <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
-    <div class="row">
-        <div class="col-md-6 form-report">
+        {#Formulario Antecedentes Generales#}
+        <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
+        <div class="row">
+            <div class="col-md-6 form-report">
            
-            <div class="field-form">
-                <label>N° de API:</label>
-                <select name="api" id="api_antgen_id" class="form-control" required>
-                    <option disabled selected>Seleccione API</option>
-                    {% for api in apis %}
-                    <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+                <div class="field-form">
+                    <label>N° de API:</label>
+                    <select name="api" id="api_antgen_id" class="form-control" required>
+                        <option disabled selected>Seleccione API</option>
+                        {% for api in apis %}
+                        <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <div class="field-form">
-                <label>N° de Contrato:</label>
-                <select name="contract" class="form-control" id="contr_antgen_id" required>
-                </select>
-            </div>
+                <div class="field-form">
+                    <label>N° de Contrato:</label>
+                    <select name="contract" class="form-control" id="contr_antgen_id" required>
+                    </select>
+                </div>
 
-            <div class="field-form">
-                <label>Fecha de Inicio:</label>
-                <label name="start_date"></label>
-            </div>
+                <div class="field-form">
+                    <label>Fecha de Inicio:</label>
+                    <label name="start_date"></label>
+                </div>
 
-            <div class="field-form">
-                <label>Especialidad:</label>
-                <select id="especialidad_id" class="form-control" required>
-                    <option disabled selected>Seleccione Especialidad</option>
-                    {% for specialty in specialties %}
-                    <option value="{{specialty.id}}" id="{{specialty.id}}">{{ specialty.specialty_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+                <div class="field-form">
+                    <label>Especialidad:</label>
+                    <select id="especialidad_id" class="form-control" required>
+                        <option disabled selected>Seleccione Especialidad</option>
+                        {% for specialty in specialties %}
+                        <option value="{{specialty.id}}" id="{{specialty.id}}">{{ specialty.specialty_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <div class="field-form">
-                <label>Referencia Utilizada:</label>
-                <select id="select-id" class="form-control" required>
-                    <option disabled selected>Seleccione Referencia</option>
-                    {% for reference in references %}
-                    <option id="{{reference.id}}">{{ reference.reference_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+                <div class="field-form">
+                    <label>Referencia Utilizada:</label>
+                    <select id="select-id" class="form-control" required>
+                        <option disabled selected>Seleccione Referencia</option>
+                        {% for reference in references %}
+                        <option id="{{reference.id}}">{{ reference.reference_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <div class="field-form">
-                <label>Nombre Referencia:</label>
-                <input id="ref-name" class="form-control" required>
-            </div>
+                <div class="field-form">
+                    <label>Nombre Referencia:</label>
+                    <input id="ref-name" class="form-control" required>
+                </div>
 
-            <input id="btn-reference" class="btn btn-danger" type="button" value="Agregar Referencia"/>
+                <input id="btn-reference" class="btn btn-danger btn-ref" type="button" value="Agregar Referencia"/>
             
+            </div>
+
+            <div class="col-md-6 form-report">
+
+                <div class="field-form">
+                    <label>Nombre del Proyecto:</label>
+                    <label name="project_name"></label>
+                </div>
+
+                <div class="field-form">
+                    <label>Empresa Contratista:</label>
+                    <label name="enterprise"></label>
+                </div>
+
+                <div class="field-form">
+                    <label>Fecha de Termino:</label>
+                    <label name="finish_date"></label>
+                </div>
+
+                <div class="field-form">
+                    <label>Referencias Registradas:</label>
+                </div>
+
+                <section class="table-container--load"> 
+                    <table class="table table-load">
+                        <thead>
+                            <tr>
+                                <th scope="col">Referencia</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">¿Eliminar?</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-referencia" id="table-body">
+                        </tbody>
+                    </table>
+                </section>
+
+            </div>
         </div>
+        <h2 class="title-page">{{ title }}</h2>
 
-        <div class="col-md-6 form-report">
+        {#Formulario Control de Avance por Actividad (Programada y No Programada)#}
+        <div class="row">
 
-            <div class="field-form">
-                <label>Nombre del Proyecto:</label>
-                <label name="project_name"></label>
+            <h3 class="section-title"> CONTROL DE AVANCE POR ACTIVIDAD SEGÚN PROGRAMA </h3>
+            <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES PROGRAMADAS </h4>
+            <div class="row">
+                <div class="col-md-6 form-report">
+                    <label>Nombre de Actividad:</label>
+                    <select name="select-act-ap" id="select-act-ap" class="form-control" required>
+                        <option disabled selected>Seleccione Actividad</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 form-report">
+                    <label>Nombre de Sub Actividad:</label>
+                    <select name="select-sub-ap" id="select-sub-ap" class="form-control" required>
+                        <option disabled selected>Seleccione Sub Actividad</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="field-form">
-                <label>Empresa Contratista:</label>
-                <label name="enterprise"></label>
-            </div>
-
-            <div class="field-form">
-                <label>Fecha de Termino:</label>
-                <label name="finish_date"></label>
-            </div>
-
-            <div class="field-form">
-                <label>Referencias Registradas:</label>
-            </div>
-
-            <section class="table-container--load"> 
-                <table class="table table-load">
-                    <thead>
-                        <tr>
-                            <th scope="col">Referencia</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">¿Eliminar?</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-referencia" id="table-body">
-                    </tbody>
-                </table>
+            <section class="row-section">
+                <div class="form-section">
+                    <div class="col-lg-2 form-report">
+                        <label>Avance Diario:</label>
+                        <input type="number" id="input-cr-ap" class="form-control" required/>
+                    </div>
+                    <div class="col-lg-2 form-report">
+                        <label>Unidad:</label>
+                        <input name="input-u-ap" id="input-u-ap" class="form-control" required readonly="readonly"/>
+                    </div>
+                    <div class="col-lg-2 form-report">
+                        <label>Total Programado:</label>
+                        <input name="input-te-ap" id="input-te-ap" class="form-control" required readonly="readonly"/>
+                    </div>
+                    <div class="col-lg-2 form-report">
+                        <label>Referencia Diaria: </label>
+                        <input name="input-rd-ap" id="input-rd-ap" class="form-control" required readonly="readonly"/>
+                    </div>
+                    <div class="col-lg-2 form-report">
+                        <label>Avance Real Acumulado:</label>
+                        <input name="input-ta-ap" id="input-ta-ap" class="form-control" required readonly="readonly"/>
+                    </div>
+                </div>
             </section>
 
+            <section class="section-md-field select-section--activities">
+                <div class="col-md-4 form-report">
+                    <label>Cumplimiento:</label>
+                    <select id="select-cum-ap" class="form-control" required>
+                        <option disabled selected>Si o No</option>
+                        <option>Si</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-report">
+                    <label>Causa de NO Cumplimiento:</label>
+                    <select id="select-cau-ap" class="form-control" required disabled>
+                        <option disabled selected>Seleccione Causa</option>
+                        {% for nonconformity in nonconformities %}
+                        <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-report">
+                    <label>Detalle:</label>
+                    <input id="input-det-ap" class="form-control" required readonly="readonly"/>
+                </div>
+
+                <div class="col-md-4 form-report">
+                    <label>Pre Requisito:</label>
+                    <select id="select-pre-ap" class="form-control">
+                        <option disabled selected>Seleccione Pre Requisito</option>
+                        {% for precondition in preconditions %}
+                        <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </section>
+
+
+
         </div>
-    </div>
-    <h2 class="title-page">{{ title }}</h2>
 
-    {#Formulario Control de Avance por Actividad (Programada y No Programada)#}
-    <div class="row">
+        <div class="btn-save">
+            <input id="act-pro" class="btn btn-danger" type="button" value="Agregar"/>
+        </div>
 
-        <h3 class="section-title"> CONTROL DE AVANCE POR ACTIVIDAD SEGÚN PROGRAMA </h3>
-        <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES PROGRAMADAS </h4>
+        <div class="separator"></div>
+
+        <div class="row">
+            <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES NO PROGRAMADAS </h4>
+            <div class="row">
+                <div class="col-md-6 form-report">
+                    <label>Nombre de Actividad:</label>
+                    <select name="select-act-anp" id="select-act-anp" class="form-control" required>
+
+                    </select>
+                </div>
+
+                <div class="col-md-6 form-report">
+                     <label>Nombre de Sub Actividad:</label>
+                     <input name="input-subact-anp" id="input-subact-anp" class="form-control" />
+                </div>
+            </div>
+
+            <section class="row-section">
+                <div class="form-section">
+                    <div class="col-md-2 form-report">
+                        <label>Avance Diario:</label>
+                        <input type="number" name="input-cr-anp" id="input-cr-anp" class="form-control" />
+                    </div>
+                    <div class="col-md-2 form-report">
+                        <label>Unidad:</label>
+                        <select name="input-u-anp" id="input-u-anp" class="form-control">
+                            <option disabled selected>Seleccione Medida</option>
+                            {% for measure in measures %}
+                            <option id="{{measure.id}}" class="{{measure.id}}">{{measure.measure_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 form-report">
+                        <label>Total Programado:</label>
+                        <input name="input-te-anp" id="input-te-anp" class="form-control" />
+                    </div>
+                    <div class="col-md-2 form-report">
+                        <label>Referencia Diaria: </label>
+                        <input name="input-rf-anp" id="input-rf-anp" class="form-control" />
+                    </div>
+                    <div class="col-md-2 form-report">
+                        <label>Avance Real Acumulado:</label>
+                        <input name="input-ta-anp" id="input-ta-anp" class="form-control" />
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="section-md-field select-section--activities">
+                <div class="col-md-4 form-report">
+                    <label>Cumplimiento:</label>
+                    <select id="select-cum-anp" class="form-control" required>
+                        <option disabled selected>Si o No</option>
+                        <option>Si</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-report">
+                    <label>Causa de NO Cumplimiento:</label>
+                    <select id="select-cau-anp" class="form-control" disabled>
+                        <option disabled selected>Seleccione Causa</option>
+                        {% for nonconformity in nonconformities %}
+                        <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-report">
+                    <label>Detalle:</label>
+                    <input id="input-det-anp" class="form-control" readonly="readonly" />
+                </div>
+
+                <div class="col-md-4 form-report">
+                    <label>Pre Requisito:</label>
+                    <select id="select-pre-anp" class="form-control">
+                        <option disabled selected>Seleccione Pre Requisito</option>
+                        {% for precondition in preconditions %}
+                        <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </section>
+
+
+        </div>
+
+        <div class="btn-save">
+            <input id="act-no-pro" class="btn btn-danger" type="button" value="Agregar" />
+        </div>
+
+        <div class="separator"></div>
+    
+        <section class="table-container--load">
+            <table class="table table-load">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre SubActividad</th>
+                        <th scope="col">Avance Diario</th>
+                        <th scope="col">Unidad</th>
+                        <th scope="col">Total Programado</th>
+                        <th scope="col">Ref.Día</th>
+                        <th scope="col">Cumplimiento</th>
+                        <th scope="col">Causa No Cumplimiento</th>
+                        <th scope="col">Avance Real Acumulado</th>
+                        <th scope="col">Tipo Actividad</th>
+                        <th scope="col">¿Eliminar?</th>
+                    </tr>
+                </thead>
+                <tbody class="table-actividad" id="table-actividad">
+                </tbody>
+            </table>
+        </section>
+
+        {#Formulario para realizar registro de Recursos y Observaciones (Desviaciones y Plan)#}
+        <h2 class="title-page">{{ title }}</h2>
+        <h3 class="section-title"> RECURSOS EECC EN TERRENO </h3>
         <div class="row">
             <div class="col-md-6 form-report">
                 <label>Nombre de Actividad:</label>
-                <select name="select-act-ap" id="select-act-ap" class="form-control" required>
-                    <option disabled selected>Seleccione Actividad</option>
+                <select name="select-act-equi" id="select-act-equi" class="form-control" required>
+
                 </select>
             </div>
 
             <div class="col-md-6 form-report">
                 <label>Nombre de Sub Actividad:</label>
-                <select name="select-sub-ap" id="select-sub-ap" class="form-control" required>
-                    <option disabled selected>Seleccione Sub Actividad</option>
+                <select name="select-sub-equi" id="select-sub-equi" class="form-control" required>
+
                 </select>
             </div>
+
+            <div class="col-md-4 form-report">
+                <label>Nombre <br /> de Equipo:</label>
+                <select name="id-nombre-equi" id="id-nombre-equi" class="form-control" required>
+                    <option disabled selected>Seleccione Equipo</option>
+                    {% for equipment in equipments %}
+                        <option id="{{equipment.id}}">{{equipment.equipment_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <section class="section-md-field">
+                <div class="col-md-2 form-report">
+                    <label>Cantidad <br /> de Equipos:</label>
+                    <input type="number" id="id-cantidad-equi" class="form-control" readonly="readonly"/>
+                </div>
+                <div class="col-md-2 form-report">
+                    <label>Dotación <br/> Directa: </label>
+                    <input type="number" id="id-dotdi-equi" class="form-control" readonly="readonly"/>
+                </div>
+                <div class="col-md-2 form-report">
+                    <label>Dotación <br /> Referencial: </label>
+                    <input type="number" id="id-dotref-equi" class="form-control" readonly="readonly"/>
+                </div>
+                <div class="col-md-2 form-report">
+                    <label>Dotación <br /> Indirecta: </label>
+                    <input type="number" id="id-dotind-equi" class="form-control" readonly="readonly"/>
+                </div>
+            </section>
         </div>
 
-        <section class="row-section">
-            <div class="form-section">
-                <div class="col-lg-2 form-report">
-                    <label>Avance Diario:</label>
-                    <input type="number" id="input-cr-ap" class="form-control" required/>
-                </div>
-                <div class="col-lg-2 form-report">
-                    <label>Unidad:</label>
-                    <input name="input-u-ap" id="input-u-ap" class="form-control" required readonly="readonly"/>
-                </div>
-                <div class="col-lg-2 form-report">
-                    <label>Total Programado:</label>
-                    <input name="input-te-ap" id="input-te-ap" class="form-control" required readonly="readonly"/>
-                </div>
-                <div class="col-lg-2 form-report">
-                    <label>Referencia Diaria: </label>
-                    <input name="input-rd-ap" id="input-rd-ap" class="form-control" required readonly="readonly"/>
-                </div>
-                <div class="col-lg-2 form-report">
-                    <label>Avance Real Acumulado:</label>
-                    <input name="input-ta-ap" id="input-ta-ap" class="form-control" required readonly="readonly"/>
-                </div>
-            </div>
+        <div class="btn-save">
+            <input id="but-rec-save" class="btn btn-danger" type="button" value="Agregar" />
+        </div>
+
+        <section class="table-container--load">
+            <table class="table table-load">
+                <thead>
+                    <tr>
+                        <th scope="col">N°</th>
+                        <th scope="col">Nombre Equipo</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Actividad</th>
+                        <th scope="col">Sub Actividad</th>
+                        <th scope="col">Dotación Directa</th>
+                        <th scope="col">Dotación Referencial</th>
+                        <th scope="col">Dotación Indirecta</th>
+                        <th scope="col">¿Eliminar?</th>
+                    </tr>
+                </thead>
+                <tbody class="tabla-equipo" id="tabla-equipo">
+
+                </tbody>
+            </table>
         </section>
 
-        <section class="section-md-field select-section--activities">
-            <div class="col-md-4 form-report">
-                <label>Cumplimiento:</label>
-                <select id="select-cum-ap" class="form-control" required>
-                    <option disabled selected>Si o No</option>
-                    <option>Si</option>
-                    <option>No</option>
-                </select>
-            </div>
+        <div class="separator"></div>
 
-            <div class="col-md-4 form-report">
-                <label>Causa de NO Cumplimiento:</label>
-                <select id="select-cau-ap" class="form-control" required disabled>
-                    <option disabled selected>Seleccione Causa</option>
-                    {% for nonconformity in nonconformities %}
-                    <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="col-md-4 form-report">
-                <label>Detalle:</label>
-                <input id="input-det-ap" class="form-control" required readonly="readonly"/>
-            </div>
-
-            <div class="col-md-4 form-report">
-                <label>Pre Requisito:</label>
-                <select id="select-pre-ap" class="form-control">
-                    <option disabled selected>Seleccione Pre Requisito</option>
-                    {% for precondition in preconditions %}
-                    <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-        </section>
-
-
-
-    </div>
-
-    <div class="btn-save">
-        <input id="act-pro" class="btn btn-danger" type="button" value="Agregar"/>
-    </div>
-
-    <div class="separator"></div>
-
-    <div class="row">
-        <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES NO PROGRAMADAS </h4>
         <div class="row">
             <div class="col-md-6 form-report">
-                <label>Nombre de Actividad:</label>
-                <select name="select-act-anp" id="select-act-anp" class="form-control" required>
-
-                </select>
-            </div>
-
-            <div class="col-md-6 form-report">
-                 <label>Nombre de Sub Actividad:</label>
-                 <input name="input-subact-anp" id="input-subact-anp" class="form-control" />
-            </div>
-        </div>
-
-        <section class="row-section">
-            <div class="form-section">
-                <div class="col-md-2 form-report">
-                    <label>Avance Diario:</label>
-                    <input type="number" name="input-cr-anp" id="input-cr-anp" class="form-control" />
-                </div>
-                <div class="col-md-2 form-report">
-                    <label>Unidad:</label>
-                    <select name="input-u-anp" id="input-u-anp" class="form-control">
-                        <option disabled selected>Seleccione Medida</option>
-                        {% for measure in measures %}
-                        <option id="{{measure.id}}" class="{{measure.id}}">{{measure.measure_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-2 form-report">
-                    <label>Total Programado:</label>
-                    <input name="input-te-anp" id="input-te-anp" class="form-control" />
-                </div>
-                <div class="col-md-2 form-report">
-                    <label>Referencia Diaria: </label>
-                    <input name="input-rf-anp" id="input-rf-anp" class="form-control" />
-                </div>
-                <div class="col-md-2 form-report">
-                    <label>Avance Real Acumulado:</label>
-                    <input name="input-ta-anp" id="input-ta-anp" class="form-control" />
-                </div>
-            </div>
-        </section>
-
-
-        <section class="section-md-field select-section--activities">
-            <div class="col-md-4 form-report">
-                <label>Cumplimiento:</label>
-                <select id="select-cum-anp" class="form-control" required>
-                    <option disabled selected>Si o No</option>
-                    <option>Si</option>
-                    <option>No</option>
-                </select>
-            </div>
-
-            <div class="col-md-4 form-report">
-                <label>Causa de NO Cumplimiento:</label>
-                <select id="select-cau-anp" class="form-control" disabled>
-                    <option disabled selected>Seleccione Causa</option>
-                    {% for nonconformity in nonconformities %}
-                    <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="col-md-4 form-report">
-                <label>Detalle:</label>
-                <input id="input-det-anp" class="form-control" readonly="readonly" />
-            </div>
-
-            <div class="col-md-4 form-report">
-                <label>Pre Requisito:</label>
-                <select id="select-pre-anp" class="form-control">
-                    <option disabled selected>Seleccione Pre Requisito</option>
-                    {% for precondition in preconditions %}
-                    <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-        </section>
-
-
-    </div>
-
-    <div class="btn-save">
-        <input id="act-no-pro" class="btn btn-danger" type="button" value="Agregar" />
-    </div>
-
-    <div class="separator"></div>
-    
-    <section class="table-container--load">
-        <table class="table table-load">
-            <thead>
-                <tr>
-                    <th scope="col">Nombre SubActividad</th>
-                    <th scope="col">Avance Diario</th>
-                    <th scope="col">Unidad</th>
-                    <th scope="col">Total Programado</th>
-                    <th scope="col">Ref.Día</th>
-                    <th scope="col">Cumplimiento</th>
-                    <th scope="col">Causa No Cumplimiento</th>
-                    <th scope="col">Avance Real Acumulado</th>
-                    <th scope="col">Tipo Actividad</th>
-                    <th scope="col">¿Eliminar?</th>
-                </tr>
-            </thead>
-            <tbody class="table-actividad" id="table-actividad">
-            </tbody>
-        </table>
-    </section>
-
-    {#Formulario para realizar registro de Recursos y Observaciones (Desviaciones y Plan)#}
-    <h2 class="title-page">{{ title }}</h2>
-    <h3 class="section-title"> RECURSOS EECC EN TERRENO </h3>
-    <div class="row">
-        <div class="col-md-6 form-report">
-            <label>Nombre de Actividad:</label>
-            <select name="select-act-equi" id="select-act-equi" class="form-control" required>
-
-            </select>
-        </div>
-
-        <div class="col-md-6 form-report">
-            <label>Nombre de Sub Actividad:</label>
-            <select name="select-sub-equi" id="select-sub-equi" class="form-control" required>
-
-            </select>
-        </div>
-
-        <div class="col-md-4 form-report">
-            <label>Nombre <br /> de Equipo:</label>
-            <select name="id-nombre-equi" id="id-nombre-equi" class="form-control" required>
-                <option disabled selected>Seleccione Equipo</option>
-                {% for equipment in equipments %}
-                    <option id="{{equipment.id}}">{{equipment.equipment_name}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <section class="section-md-field">
-            <div class="col-md-2 form-report">
-                <label>Cantidad <br /> de Equipos:</label>
-                <input type="number" id="id-cantidad-equi" class="form-control" readonly="readonly"/>
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Dotación <br/> Directa: </label>
-                <input type="number" id="id-dotdi-equi" class="form-control" readonly="readonly"/>
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Dotación <br /> Referencial: </label>
-                <input type="number" id="id-dotref-equi" class="form-control" readonly="readonly"/>
-            </div>
-            <div class="col-md-2 form-report">
-                <label>Dotación <br /> Indirecta: </label>
-                <input type="number" id="id-dotind-equi" class="form-control" readonly="readonly"/>
-            </div>
-        </section>
-    </div>
-
-    <div class="btn-save">
-        <input id="but-rec-save" class="btn btn-danger" type="button" value="Agregar" />
-    </div>
-
-    <section class="table-container--load">
-        <table class="table table-load">
-            <thead>
-                <tr>
-                    <th scope="col">N°</th>
-                    <th scope="col">Nombre Equipo</th>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Actividad</th>
-                    <th scope="col">Sub Actividad</th>
-                    <th scope="col">Dotación Directa</th>
-                    <th scope="col">Dotación Referencial</th>
-                    <th scope="col">Dotación Indirecta</th>
-                    <th scope="col">¿Eliminar?</th>
-                </tr>
-            </thead>
-            <tbody class="tabla-equipo" id="tabla-equipo">
-
-            </tbody>
-        </table>
-    </section>
-
-    <div class="separator"></div>
-
-    <div class="row">
-        <div class="col-md-6 form-report">
-            <h4 class="subsection-title"> DESVIACIONES DETECTADAS</h4>
-            <textarea id="desviacion" class="form-control medium-text">
+                <h4 class="subsection-title"> DESVIACIONES DETECTADAS</h4>
+                <textarea id="desviacion" class="form-control medium-text">
                 
-            </textarea>
-        </div>
-
-        <div class="col-md-6 form-report">
-            <h4 class="subsection-title"> PLAN DE ACCIÓN</h4>
-            <textarea id="plandeaccion" class="form-control medium-text">
-
-            </textarea>
-        </div>
-    </div>
-
-    {#Formulario de Registro Fotografico#}
-    <h2 class="title-page">{{ title }}</h2>
-    <h3 class="section-title">REGISTRO FOTOGRÁFICO</h3>
-    <div class="row">
-        <div class="col-md-6 form-report">
-            <div class="field-form">
-                <label>Sub Actividad:</label>
-                <select name="select-sub-img" id="select-sub-img" class="form-control" required>
-
-                </select>
-            </div>
-
-            <div class="field-form">
-                <label>Detalle de Imagen:</label>
-                <textarea id="det-img" class="form-control medium-text">
                 </textarea>
             </div>
 
-            <div class="field-form">
-                <input id="file" type="file" value="Subir Imagen" multiple/>
+            <div class="col-md-6 form-report">
+                <h4 class="subsection-title"> PLAN DE ACCIÓN</h4>
+                <textarea id="plandeaccion" class="form-control medium-text">
+
+                </textarea>
             </div>
         </div>
 
-        <div class="col-md-6 form-report">
-            <div class="preview" id="preview">
+        {#Formulario de Registro Fotografico#}
+        <h2 class="title-page">{{ title }}</h2>
+        <h3 class="section-title">REGISTRO FOTOGRÁFICO</h3>
+        <div class="row">
+            <div class="col-md-6 form-report">
+                <div class="field-form">
+                    <label>Sub Actividad:</label>
+                    <select name="select-sub-img" id="select-sub-img" class="form-control" required>
 
-            </div>
-        </div>
-    </div>
+                    </select>
+                </div>
 
-    <div class="separator"></div>
-    <h4 class="subsection-title">OBSERVACIÓN</h4>
-    <textarea id="evidencia" class="form-control large-text"></textarea>
+                <div class="field-form">
+                    <label>Detalle de Imagen:</label>
+                    <textarea id="det-img" class="form-control medium-text">
+                    </textarea>
+                </div>
 
-    {#Formulario Final, Vista Previa de la Inspección Diaria#} 
-    <h2 class="title-page">{{ title }}</h2>
-    <h3 class="section-title">GUARDAR INFORME</h3>
-
-    <div class="row">
-        <div class="col-md-6">
-            <h4 class="subsection-title">INSPECTOR EMISOR DEL INFORME</h4>
-            <div class="form-report">
-                <label>Empresa: </label> <br />
-                <label>Nombre: </label> <br />
-                <label>Correo: </label> <br />
-            </div>
-
-        </div>
-
-        <div class="col-md-6">
-            <h4 class="subsection-title">JEFE DE PROYECTO</h4>
-            <div class="form-report">
-                <label>Empresa: </label> <br />
-                <label>Nombre: </label> <br />
-                <label>Correo: </label> <br />
+                <div class="field-form">
+                    <input class="submit-img" id="file" type="file" value="Subir Imagen" multiple/>
+                </div>
             </div>
 
-        </div>
+            <div class="col-md-6 form-report">
+                <div class="preview" id="preview">
 
-        <div class="col-md-6">
-            <h4 class="subsection-title">JEFE DE TERRENO</h4>
-            <div class="form-report">
-                <label>Empresa: </label> <br />
-                <label>Nombre: </label> <br />
-                <label>Correo: </label> <br />
-            </div>
-        </div>
-    </div>
-
-    <section class="bar-results">
-
-        <div class="bar-enterprise">
-            <div class="radio-box">
-                <h4 class="subsection-title"> RESULTADOS </h4>
-                <ul class="radio-buttons-group">
-                    {% for following in followings %}
-                    <li>
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="{{following.id}}" value="{{following.id}}" checked>
-                        <label class="form-check-label" for="{{following.id}}">
-                            {{following.following_name}}
-                        </label>
-                    </li>
-                    {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
 
-    </section>
+        <div class="separator"></div>
+        <h4 class="subsection-title">OBSERVACIÓN</h4>
+        <textarea id="evidencia" class="form-control large-text"></textarea>
 
-    <div class="btn-save">
-        <input id="btn-save_report" class="btn btn-danger" type="button" value="Guardar y Descargar"/>
-    </div>
+        {#Formulario Final, Vista Previa de la Inspección Diaria#} 
+        <h2 class="title-page">{{ title }}</h2>
+        <h3 class="section-title">GUARDAR INFORME</h3>
 
-    <script src="{% static 'app/scripts/javascript.js' %}"></script>
-</form>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="subsection-title">INSPECTOR EMISOR DEL INFORME</h4>
+                <div class="form-report">
+                    <label>Empresa: </label> <br />
+                    <label>Nombre: </label> <br />
+                    <label>Correo: </label> <br />
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+                <h4 class="subsection-title">JEFE DE PROYECTO</h4>
+                <div class="form-report">
+                    <label>Empresa: </label> <br />
+                    <label>Nombre: </label> <br />
+                    <label>Correo: </label> <br />
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+                <h4 class="subsection-title">JEFE DE TERRENO</h4>
+                <div class="form-report">
+                    <label>Empresa: </label> <br />
+                    <label>Nombre: </label> <br />
+                    <label>Correo: </label> <br />
+                </div>
+            </div>
+        </div>
+
+        <section class="bar-results">
+
+            <div class="bar-enterprise">
+                <div class="radio-box">
+                    <h4 class="subsection-title"> RESULTADOS </h4>
+                    <ul class="radio-buttons-group">
+                        {% for following in followings %}
+                        <li>
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="{{following.id}}" value="{{following.id}}" checked>
+                            <label class="form-check-label" for="{{following.id}}">
+                                {{following.following_name}}
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <div class="btn-save">
+            <input id="btn-save_report" class="btn btn-danger" type="button" value="Guardar y Descargar"/>
+        </div>
+
+        <script src="{% static 'app/scripts/javascript.js' %}"></script>
+    </form>
+</div>
 
 {% endblock %}

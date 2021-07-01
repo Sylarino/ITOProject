@@ -2,13 +2,15 @@
 {% load staticfiles %}
 {% block content %}
 <form action="">
+    <div class="container">
+
     <h2 class="title-page">{{ title }}</h2>
 
     <div class="row form-search-act">
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Proyecto:</label>
-                <select name="api" id="api_antgen_id" class="form-control" required>
+                <label class="form-search-label">Proyecto:</label>
+                <select name="api" id="api_antgen_id" class="form-control form-search-control" required>
                     <option id="0" disabled selected>Seleccione API</option>
                     {% for api in apis %}
                     <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
@@ -19,8 +21,8 @@
 
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Contrato:</label>
-                <select name="contract" class="form-control" id="contr_antgen_id" required>
+                <label class="form-search-label">Contrato:</label>
+                <select name="contract" class="form-control form-search-control" id="contr_antgen_id" required>
                     <option id="0" disabled selected>Seleccione Contrato</option>
 
                 </select>
@@ -29,8 +31,8 @@
 
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Actividad:</label>
-                <select name="select-act-ap" id="select-act-ap" class="form-control" required>
+                <label class="form-search-label">Actividad:</label>
+                <select name="select-act-ap" id="select-act-ap" class="form-control form-search-control" required>
                     <option id="0" disabled selected>Seleccione Actividad</option>
                     
                 </select>
@@ -39,8 +41,8 @@
 
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Sub Actividad:</label>
-                <select name="select-sub-ap" id="select-sub-ap" class="form-control">
+                <label class="form-search-label">Sub Actividad:</label>
+                <select name="select-sub-ap" id="select-sub-ap" class="form-control form-search-control">
                     <option id="0" disabled selected>Seleccione SubActividad</option>
                     
                 </select>
@@ -49,8 +51,8 @@
 
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Conformidad:</label>
-                <select id="select-confor" class="form-control">
+                <label class="form-search-label">Conformidad:</label>
+                <select id="select-confor" class="form-control form-search-control">
                     <option id="0" disabled selected>Seleccione Conformidad</option>
                     {% for nonconformity in nonconformities %}
                     <option id="{{nonconformity.id}}" value="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
@@ -61,8 +63,8 @@
 
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Tipo de SubActividad:</label>
-                <select id="select-tip-act" class="form-control">
+                <label class="form-search-label">Tipo de SubActividad:</label>
+                <select id="select-tip-act" class="form-control form-search-control">
                     <option id="0" disabled selected>Seleccione Tipo</option>
                     {% for activitytype in activitytypes %}
                     <option id="{{activitytype.id}}" value="{{activitytype.id}}">{{activitytype.activity_type_name}}</option>
@@ -74,8 +76,8 @@
         <!--
          <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Historico:</label>
-                <select class="form-control">
+                <label class="form-search-label">Historico:</label>
+                <select class="form-control form-search-control">
                     <option id="0">Seleccione Proyecto</option>
                 </select>
             </div>
@@ -84,8 +86,8 @@
 
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Seguimiento:</label>
-                <select id="select-seguimiento" class="form-control">
+                <label class="form-search-label">Seguimiento:</label>
+                <select id="select-seguimiento" class="form-control form-search-control">
                     <option id="0" disabled selected>Seleccione Proyecto</option>
                     {% for follow in followings %}
                     <option id="{{follow.id}}">{{follow.following_name}}</option>
@@ -96,8 +98,8 @@
 
         <div class="col-md-3 form-report">
             <div class="field-form">
-                <label>Rango de Fechas de Reporte:</label>
-                <input class="form-control" type="text" id="daterange" name="daterange"/>
+                <label class="form-search-label">Rango de Fechas de Reporte:</label>
+                <input class="form-control form-search-control" type="text" id="daterange" name="daterange"/>
             </div>
         </div>
     </div>
@@ -112,23 +114,21 @@
         <div class="btn-save">
             <input id="btn-recargar" class="btn btn-danger" type="button" value="Limpiar"/>
         </div>
+
+        <div id="export" class="btn-save">
+
+        </div>
     </div>
+    </div>
+    
 
     <div class="col-md-12 hidden" id="divTabla">
         {% include 'form-report/pagination.html' %}
     </div>
 
-        
-
-    <div class="btn-save">
-        {#<a class="btn btn-danger" href="{% url 'createpdf' %}" type="button">Eliminar</a>#}
-    </div>
-
-    <div id="export" class="btn-save">
-
-    </div>
+</form>
 
 
     <script src="{% static 'app/scripts/searchactivities.js' %}"></script>
-</form>
+
 {% endblock %}

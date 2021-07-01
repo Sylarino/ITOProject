@@ -2,98 +2,134 @@
 {% load auth_extras %}
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{ title }} - ITO Project</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'app/css/style.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'app/css/mobile.css' %}" media="(max-width: 768px)" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/file-saverjs@1.3.6/FileSaver.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/tableexport@5.2.0/dist/js/tableexport.min.js"></script>
-    <!--
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    -->
-    <script src="{% static 'app/scripts/javascript.js' %}"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'app/css/datatables.min.css' %}" />
-    <script src="{% static 'app/scripts/datatables.min.js' %}"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'app/css/bootstrap-5.0.2-dist/css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />-->
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> {{ title }} - ITO Project</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'app/css/style.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'app/css/mobile.css' %}" media="(max-width: 768px)" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/file-saverjs@1.3.6/FileSaver.min.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/tableexport@5.2.0/dist/js/tableexport.min.js"></script>
+        <!--
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        -->
+        <script src="{% static 'app/scripts/javascript.js' %}"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'app/css/datatables.min.css' %}" />
+        <script src="{% static 'app/scripts/datatables.min.js' %}"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+        <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.jqueryui.min.css" />
+        <!--<link rel="stylesheet" type="text/css" href="{% static 'app/css/bootstrap-5.0.2-dist/css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />-->
+    </head>
 
-<body>
+    <body>
 
-    <nav class="navbar navbar-inverse personal-navbar">
-        <div class="header-layout">
-            <h3> ITO PROJECT </h3>
-            <h1> INFORME DE INSPECCIÓN<br /> DIARIA</h1>
-            <figure class="letra-puntos">
-                <img src="{% static 'app\img\Puntos.png' %}" />
-            </figure>
-        </div>
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <figure>
-                    <img class="logo-brand" src="{% static 'app\img\logo.png' %}" />
+        <nav id="nav-header" class="navbar navbar-inverse personal-navbar">
+            <div class="header-layout navbar-img">
+                <h3> ITO PROJECT </h3>
+                <h1> INFORME DE INSPECCIÓN<br /> DIARIA</h1>
+                <figure class="letra-puntos">
+                    <img src="{% static 'app\img\Puntos.png' %}" />
                 </figure>
             </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li id="home" class="active"><a href="{% url 'home' %}">Inicio</a></li>
-                    {% if user.is_authenticated %}
-                    <li id="gen"><a href="{% url 'generatereport' %}">Registro de Informe</a></li>
-                    <li id="search"><a href="{% url 'searchactivities' %}">Consulta</a></li>
-                    {% if request.user|has_group:"P&C" %}
-                    <li id="load"><a href="{% url 'loadfiles' %}">Cargar</a></li>
-                    {% endif %}
-                    {% else %}
-                    {% endif %}
-                    <li id="contact"><a href="{% url 'contact' %}">Contacto</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if user.is_authenticated %}
-                    <li id="logout"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
-                    {% else %}
-                    <li id="login"><a href="{% url 'login' %}">Iniciar Sesión</a></li>
-                    {% endif %}
-                </ul>
+            <div class="container">
+                <div class="navbar-header ">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <figure>
+                        <img class="logo-brand" src="{% static 'app\img\logo.png' %}" />
+                    </figure>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li id="nav-item-id" class="nav-item"><a href="{% url 'home' %}">Inicio</a></li>
+                        {% if user.is_authenticated %}
+                        <li id="nav-item-id" class="nav-item"><a href="{% url 'generatereport' %}">Registro de Informe</a></li>
+                        <li id="nav-item-id" class="nav-item"><a href="{% url 'searchactivities' %}">Consulta</a></li>
+                        {% if request.user|has_group:"P&C" %}
+                        <li id="nav-item-id" class="nav-item"><a href="{% url 'loadfiles' %}">Cargar</a></li>
+                        {% endif %}
+                        {% else %}
+                        {% endif %}
+                        <li id="nav-item-id" class="nav-item"><a href="{% url 'contact' %}">Contacto</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                        <li id="nav-item-id" class="nav-item"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                        {% else %}
+                        <li id="nav-item-id" class="nav-item"><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
+        </nav>
+
+        <!--<div class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+
+
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'home' %}">Inicio</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'generatereport' %}">Registro de Informe</a></li>
+                        <li><a href="{% url 'searchactivities' %}">Consulta</a></li>
+                        <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                        {% if request.user|has_group:"P&C" %}
+                        <li><a href="{% url 'loadfiles' %}">Cargar</a></li>
+                        {% endif %}
+                        {% else %}
+                        <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'contact' %}">Contacto</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+
+
+        </div>-->
+    
+        <div class="container-fluid">
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
         </div>
-    </nav>
 
-    <!--<div class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div class="navbar-collapse collapse">
-
-
-                <ul class="nav navbar-nav">
+        <footer>
+            <section>
+                <figure>
+                    <img src="{% static 'app\img\logo-white.png' %}" />
+                </figure>
+                <ul class="footer-nav">
                     <li><a href="{% url 'home' %}">Inicio</a></li>
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'generatereport' %}">Registro de Informe</a></li>
@@ -106,55 +142,28 @@
                     <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
                     {% endif %}
                     <li><a href="{% url 'contact' %}">Contacto</a></li>
+                    <li><a href="https://www.metaproject.cl/">Sitio Oficial</a></li>
                 </ul>
-            </div>
+            </section>
 
-        </div>
+            <p>&copy; {{ year }} - Todos los derechos reservados</p>
 
+        </footer>
 
+        {% block scripts %}
 
-    </div>-->
-    
-    <div class="container">
-        <main>
-            {% block content %}
-            {% endblock %}
-        </main>
-    </div>
-
-
-
-    <footer>
-        <section>
-            <figure>
-                <img src="{% static 'app\img\logo-white.png' %}" />
-            </figure>
-            <ul class="footer-nav">
-                <li><a href="{% url 'home' %}">Inicio</a></li>
-                {% if user.is_authenticated %}
-                <li><a href="{% url 'generatereport' %}">Registro de Informe</a></li>
-                <li><a href="{% url 'searchactivities' %}">Consulta</a></li>
-                <li><a href="{% url 'loadfiles' %}">Cargar</a></li>
-                <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
-                {% else %}
-                <li><a href="{% url 'login' %}">Inciar Sesión</a></li>
-                {% endif %}
-                <li><a href="{% url 'contact' %}">Consulta</a></li>
-                <li><a href="https://www.metaproject.cl/">Sitio Oficial</a></li>
-            </ul>
-        </section>
-
-        <p>&copy; {{ year }} - Todos los derechos reservados</p>
-
-    </footer>
-
-    {% block scripts %}
-
-    <!--<script src="{% static 'app/scripts/bootstrap/bootstrap.js' %}"></script>-->
-    <script src="{% static 'app/scripts/respond.js' %}"></script>
-
-    {% endblock %}
-
-</body>
+        <!--<script src="{% static 'app/scripts/bootstrap/bootstrap.js' %}"></script>-->
+        <script src="{% static 'app/scripts/respond.js' %}"></script>
+        {% endblock %}
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+	            // get current URL path and assign 'active' class
+	            var pathname = window.location.pathname;
+	            $('.navbar-nav > li > a[href="'+pathname+'"]').parent().addClass('active');
+            })
+                
+        </script>
+    </body>
 </html>
 

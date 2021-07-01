@@ -25,14 +25,16 @@ body {
     color: #F73434;
     font-weight: bold;
     text-align: center;
+    text-shadow: 2px 6px 5px rgb(0 0 0);
 }
 
 .header-layout h1 {
-    color: #000000;
+    color: #ffffff;
     font-weight: bold;
     padding-bottom: 10rem;
     text-align: center;
     font-size: 5rem;
+    text-shadow: 2px 6px 5px rgb(56 24 15 / 58%);
 }
 
 .navbar {
@@ -164,7 +166,6 @@ footer p {
     font-weight: bolder;
     color: #C70000;
     padding-bottom: 2rem;
-    margin-top: 15rem;
 }
 
 .title-page {
@@ -233,7 +234,7 @@ footer p {
 .field-form label {
     min-width: 25rem;
     margin-right: 5rem;
-    text-align: right;
+    text-align: left;
 }
 
 .field-form {
@@ -318,6 +319,7 @@ input {
 
 .form-report .form-control {
     display: inline-block;
+    margin: 0 auto;
 }
 
 .row {
@@ -329,6 +331,8 @@ input {
 .form-report {
     text-align: center;
     margin-bottom: 20px;
+    display: flex;
+    flex-flow: column;
 }
 
 .separator {
@@ -472,6 +476,7 @@ label {
 .form-group
 .form-control {
     min-width: 20rem;
+    margin: 0 auto !important;
 }
 
 .form-horizontal
@@ -543,9 +548,10 @@ article .careful {
     width: 220px;
 }
 
-.info-load--container section article p{
+.info-load--container section article p {
     vertical-align: middle;
     margin: auto 0;
+    font-family: 'Montserrat';
 }
 
 .circle-representation {
@@ -608,7 +614,8 @@ article .careful {
     background-color: #decfcf;
 }
 
-.navbar .container-fluid {
+.navbar .container-fluid,
+.navbar .container {
     background-color: #decfcf;
 }
 
@@ -617,7 +624,8 @@ article .careful {
     border: none !important;
 }
 
-.container-fluid {
+.container-fluid,
+.container {
     border-width: thick;
 }
 
@@ -635,4 +643,70 @@ article .careful {
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
     color: #fff !important;
     background-color: #5d4f4f !important;
+}
+
+.form-control {
+    width: 60% !important;
+}
+
+.btn-ref {
+    width: 40%;
+    margin: 0 auto;
+}
+
+.submit-img {
+    margin: 0 auto;
+}
+
+.form-search-control {
+    width: 80% !important;
+}
+
+.form-search-label {
+    text-align: center !important;
+}
+
+.navbar-img {
+    background-image: url("../img/minera.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-box-shadow: inset 0px -50px 35px -2px rgb(0 0 0 / 80%);
+}
+
+.nav > li {
+    margin-bottom: 15px;
+}
+
+.navbar {
+    background-color: #decfcf !important;
+    margin: 0 !important;
+}
+
+footer {
+    overflow: hidden;
+}
+
+.title-representation {
+    font-family: 'Montserrat';
+    font-weight: 600;
+    line-height: 3.6rem;
+}
+
+.active {
+    box-shadow: 12px 11px 8px -2px rgb(125 125 125 / 52%) !important;
+}
+
+body > .container-fluid {
+    box-shadow: inset 0px 10px 5px -5px rgb(0 0 0 / 24%);
+    padding-top: 15px;
+}
+
+.navbar-nav .nav-item a:hover {
+    color: #F13300 !important;
+    text-decoration: none;
+    text-shadow: 4px 2px 2px rgba(49,57,255,0)
+}
+
+#divTabla {
+    margin-bottom: 30px;
 }

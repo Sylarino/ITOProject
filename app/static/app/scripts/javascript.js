@@ -1087,3 +1087,9 @@ $('input[id="btn-save_report"]').on('click', function () {
     }
 
 });
+
+$("nav .navbar-bar li").on("click", function () {
+    console.log("Hola");
+    $("nav").find(".active").removeClass("active");
+    $(this).addClass("active");
+});
