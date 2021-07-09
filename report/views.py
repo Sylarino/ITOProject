@@ -1783,7 +1783,387 @@ def create_pdf(id):
 
     #return response
 
+#MODIFICAR REPORTE 
+@login_required(login_url="login")
+def modifiedreport(request, id):
 
+    #Objetos a mostrar
+    apis = API.objects.all()
+    contracts = Contract.objects.all()
+    specialties = Specialty.objects.all()
+    references = Reference.objects.all()
+    activities = Activity.objects.all()
+    subactivities = SubActivity.objects.all()
+    equipments = Equipment.objects.all()
+    nonconformities = NonConformity.objects.all()
+    followings = Following.objects.all()
+    preconditions = Precondition.objects.all()
+    measures = Measure.objects.all()
+    historic = Historical.objects.filter(report=id)
+    report = Report.objects.filter(id=id)[0]
+    equipmentamount = EquipmentAmount.objects.filter(report=id)
+    reportimage = ReportImage.objects.filter(report=id)
+    historical_reference = HistoricalReference.objects.filter(report=id)
+
+    id_contract = historic[0].activity.contract_id
+    contract_report = Contract.objects.filter(id=id_contract)[0]
     
- 
+    i = 0
+    specialty_id = historic[0].specialty_id
+    id_refs = []
+    id_hists = []
+
+    for ref in historical_reference:
+        i += 1
+        id_refs.append({
+                'id_ref_hist': ref.id,
+                'id_referencia': ref.reference.id,
+                'nombre_referencia': ref.reference.reference_name,
+                'descripcion': ref.description,
+                'id_table': "tr-ref" + str(i)
+            })
+
+    for hist in historic:
+
+        id_hists.append({
+                'id_html': 'hist-' + str(hist.id),
+                'id': hist.id
+            })
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'form-report/modifiedreport.html',
+        {
+            'title':'Modificación de Informe Diario',
+            'year': datetime.now().year,
+            'apis': apis,
+            'contracts': contracts,
+            'specialties': specialties,
+            'references': references,
+            'activities': activities,
+            'subactivities': subactivities,
+            'equipments': equipments,
+            'nonconformities': nonconformities,
+            'followings': followings,
+            'preconditions': preconditions,
+            'measures': measures,
+            'historical': historic,
+            'report': report,
+            'equipmentamount': equipmentamount,
+            'reportimage' : reportimage,
+            'historical_reference' : id_refs,
+            'id_contract': id_contract,
+            'id_historic': id_hists,
+            'contract_report': contract_report,
+            'specialty_id': specialty_id
+    })
+    
+@csrf_exempt
+@login_required(login_url="login")
+def modifiedactualreport(request, *args, **kwargs):
+
+    if request.method == "POST":
+
+        action = request.POST.get('action')
+        hd = request.POST.getlist('historico[]')
+        rd = request.POST.getlist('referencias[]')
+        ed = request.POST.getlist('equipos[]')
+        rpd = request.POST.getlist('reporte[]')
+
+        if action == 'save_report':
+
+            data = {}
+
+            historicaldata = json.loads(hd[0])
+            referencedata = json.loads(rd[0])
+            reportdata = json.loads(rpd[0])
+            equipmentdata = json.loads(ed[0])
+
+            rp_id = 0
+
+            for i in reportdata:
+
+                follow = Following.objects.get(pk = int(i['id_seguimiento']))
+
+                old_report = Report.objects.get(pk = int(i['report_id']))
+                    
+                    
+                if old_report.deviation_detected != i['desviacion']:
+
+                    old_report.deviation_detected = i['desviacion']
+                    old_report.save()
+                
+                if old_report.action_plan != i['plandeaccion']:
+
+                    old_report.action_plan = i['plandeaccion']
+                    old_report.save()
+
+                if old_report.evidence_obs != i['evidencia_obs']:
+
+                    old_report.evidence_obs = i['evidencia_obs']
+                    old_report.save()
+
+                if old_report.following_id != int(i['id_seguimiento']):
+                    
+                    old_report.following_id = int(i['id_seguimiento'])
+                    old_report.save()
+
+                id_report = int(i['report_id'])
+                rp_id = int(i['report_id'])
+                  
+            for i in historicaldata:
+
+                if int(i['id_historico']) == 0:
+
+                    subact = SubActivity.objects.get(pk = int(i['id_subactividad']))
+
+                    histo = Historical.objects.filter(subactivity = int(i['id_subactividad']))
+                    diff = 0
+                    for hs in histo:
+                        diff += hs.real_amount
+
+                    mea = Measure.objects.get(pk = int(i['id_medida']))
+                    noncon = NonConformity.objects.get(pk = int(i['id_conformidad']))
+                    spec = Specialty.objects.get(pk = int(i['id_especialidad']))
+                    precon = Precondition.objects.get(pk = int(i['id_precondicion']))
+                    actype = ActivityType.objects.get(pk = int(i['id_actividad_type']))
+                    activi = Activity.objects.get(pk = int(i['id_actividad']))
+
+                    historical = Historical(
+                        real_amount = i['cantidad_real'],
+                        subactivity_no_program = i['subactivity_no_program'],
+                        subactivity = subact,
+                        measure = mea,
+                        nonconformity = noncon,
+                        specialty= spec,
+                        precondition= precon,
+                        user= request.user,
+                        activitytype= actype,
+                        report = reporte,
+                        no_program_total = i['total_estimado'],
+                        no_program_refday = i['referencia_diaria'],
+                        no_program_total_acu = i['total_acumulado'],
+                        activity = activi,
+                        difference = diff
+                        )
+
+                    historical.save()
+
+                else:
+                    #VERIFICAR SI EL HISTORICO FUE ELIMINADO AL MODIFICARLO 
+                    old_historic = Historical.objects.get(pk = int(i['id_historico']))
+
+                    if old_historic.real_amount != float(i['cantidad_real'].replace(",", ".")):
+                        #REALIZAR DESCUENTO DE LA CANTIDAD PARA LA SUMA QUE SE HACE EN EL TOTAL ACUMULADO, 
+                        #COMO TAMBIÉN PARA LOS HISTORICOS POSTERIORES A ESA FECHA
+                        old_historic.real_amount = float(i['cantidad_real'].replace(",", "."))
+                        old_historic.save()
+
+                    if old_historic.no_program_total != float(i['total_estimado'].replace(",", ".")):
+
+                        old_historic.no_program_total = float(i['total_estimado'].replace(",", "."))
+                        old_historic.save()
+
+                    if old_historic.no_program_refday != float(i['referencia_diaria'].replace(",", ".")):
+
+                        old_historic.no_program_refday = float(i['referencia_diaria'].replace(",", "."))
+                        old_historic.save()
+
+                    if old_historic.no_program_total_acu != float(i['total_acumulado'].replace(",", ".")):
+
+                        old_historic.no_program_total_acu = float(i['total_acumulado'].replace(",", "."))
+                        old_historic.save()
+
+                    if old_historic.subactivity_no_program != i['subactivity_no_program']:
+
+                        old_historic.subactivity_no_program = i['subactivity_no_program']
+                        old_historic.save()
+                        
+                    if old_historic.subactivity_id != int(i['id_subactividad']):
+
+                        old_historic.subactivity_id = int(i['id_subactividad'])
+                        old_historic.save()                    
+                        
+                    if old_historic.measure_id != int(i['id_medida']):
+
+                        old_historic.measure_id = int(i['id_medida'])
+                        old_historic.save()       
+                        
+                    if old_historic.nonconformity_id != int(i['id_conformidad']):
+
+                        old_historic.nonconformity_id = int(i['id_conformidad'])
+                        old_historic.save()     
+
+                    if old_historic.specialty_id != int(i['id_especialidad']):
+
+                        old_historic.specialty_id = int(i['id_especialidad'])
+                        old_historic.save()             
+
+                    if old_historic.precondition_id != int(i['id_precondicion']):
+
+                        old_historic.precondition_id = int(i['id_precondicion'])
+                        old_historic.save()               
+
+                    if old_historic.activity_id != int(i['id_actividad']):
+
+                        old_historic.activity_id = int(i['id_actividad'])
+                        old_historic.save()
+
+            if len(rd) > 0:
+
+                for i in referencedata:
+
+                    if int(i['id_ref_hist']) == 0:
+
+                        ref = Reference.objects.get(pk = int(i['referencia_id']))
+
+                        reference = HistoricalReference(
+                            description = i['descripcion'],
+                            report = reporte,
+                            reference = ref
+                            )
+
+                        reference.save()
+
+                    else:
+
+                        old_ref = HistoricalReference.objects.get(pk = int(i['id_ref_hist']))
+
+                        if old_ref.description != i['descripcion']:
+
+                            old_ref.description = i['descripcion']
+                            old_ref.save()
+
+                        if old_ref.reference_id != int(i['referencia_id']):
+
+                            old_ref.reference_id = int(i['referencia_id'])
+                            old_ref.save()
+
+
+
+            if len(ed) > 0:
+
+                for i in equipmentdata:
+
+                    if int(i['id_equipohist']) == 0:
+                        act = Activity.objects.get(pk = int(i['id_actividad']))
+                        equi = Equipment.objects.get(pk = int(i['id_equipo']))
+
+                        equipment = EquipmentAmount(
+                                equipment_amount = i['cantidad'],
+                                direct_endowment = i['dot_directa'],
+                                direct_reference = i['dot_referen'],
+                                indirect_endowment = i['dot_indirecta'],
+                                activity = act,
+                                equipment = equi,
+                                report = reporte
+                            )
+                        equipment.save()
+
+                    else:
+
+                        old_equi = EquipmentAmount.objects.get(pk=int(i['id_equipohist']))
+
+                        if old_equi.equipment_amount != int(i['cantidad']):
+
+                            old_equi.equipment_amount = int(i['cantidad'])
+                            old_equi.save()     
+                        
+                        if old_equi.direct_endowment != int(i['dot_directa']):
+
+                            old_equi.direct_endowment = int(i['dot_directa'])
+                            old_equi.save()
+                        
+                        if old_equi.direct_reference != int(i['dot_referen']):
+
+                            old_equi.direct_reference = int(i['dot_referen'])
+                            old_equi.save()
+                        
+                        if old_equi.indirect_endowment != int(i['dot_indirecta']):
+
+                            old_equi.indirect_endowment = int(i['dot_indirecta'])
+                            old_equi.save()          
+
+                        if old_equi.activity_id != int(i['id_actividad']):
+
+                            old_equi.activity_id = int(i['id_actividad'])
+                            old_equi.save()
+
+                        if old_equi.equipment_id != int(i['id_equipo']):
+
+                            old_equi.equipment_id = int(i['id_equipo'])
+                            old_equi.save()
+
+            if rp_id > 0:
+                    
+                data = {
+                    'submitted': 1,
+                    'id_report': rp_id
+                    }
+
+                if reportdata[0]['img_exist'] == 0:
+
+                    create_pdf(rp_id)
+
+            else:
+                data = {
+                    'submitted': 0
+                    }
+
+            return JsonResponse(data)
+
+        
+        if len(request.FILES.getlist('image')) > 0:
+
+            image = request.FILES.getlist('image')
+            observation = request.POST.getlist('observation')
+            subactivity_image = request.POST.getlist('image_subactivity')
+
+            report_for_id = Report.objects.last()
+
+            id_rep = report_for_id.id
+
+            repor = Report.objects.get(pk = id_rep)
+            obser = 0
+            
+            for i in image:
+
+                subactividad_img = SubActivity.objects.get(id=int(subactivity_image[obser]))     
+                
+                imagen = ImgReport(
+                    image = i,
+                    description = observation[obser]
+                    )
+
+                imagen.save()
+
+                imagereport = ReportImage(
+                    report = repor,
+                    image = imagen,
+                    subactivity = subactividad_img
+                    )
+
+                imagereport.save()
+
+                obser = obser + 1
+
+            if id_rep > 0:
+                    
+                data = {
+                    'submitted': 1,
+                    'id_report': id_rep
+                    }
+
+                create_pdf(id_rep)
+
+            else:
+                data = {
+                    'submitted': 0
+                    }
+
+            return JsonResponse(data)
+
+    else:
+        return HttpResponse("<h2>No es posible agregar el reporte, verifique los datos correctamente</h2>")
 

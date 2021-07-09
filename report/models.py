@@ -225,7 +225,6 @@ class Historical(models.Model):
     activitytype = models.ForeignKey(ActivityType, verbose_name="Tipo de Actividad", on_delete=models.CASCADE, default="")
     activity = models.ForeignKey(Activity, verbose_name="Actividad", on_delete=models.CASCADE, default="")
 
-
     class Meta:
         verbose_name = 'Historico'
         verbose_name_plural = 'Historicos'

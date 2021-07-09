@@ -264,11 +264,12 @@ function cargarTabla(response) {
             { "data": "total_estimado", "name": "Total_estimado" },
             { "data": "total_acumulado", "name": "Total_acumulado" },
             { "data": "dias_acumulado", "name": "Dias_acumulado" },
-            { "data": "ref_dia", "name": "Ref_dia" }
-            //{
-            //    "data": "id_historico", "render": function (data, type, full, meta) {
-            //        return '<a onclick="Eliminar(' + data + ');" class="form-control btn-danger"><i class="glyphicon glyphicon-remove"></i></a>';
-            //    }}
+            { "data": "ref_dia", "name": "Ref_dia" },
+            {
+                "data": "reporte", "render": function (data, type, full, meta) {
+                    return '<a onclick="Modificar(' + data + ');" class="form-control btn-danger"><i class="glyphicon glyphicon-pencil"></i></a>';
+                }
+            }
             ,
         ]
     });
@@ -287,18 +288,18 @@ function cargarTabla(response) {
     
 }
 
-function Eliminar(id) {
+function Modificar(id) {
     Swal.fire({
-        title: '¿Seguro que quieres eliminarlo?',
+        title: '¿Seguro que deseas modificar el reporte?',
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: `Save`,
-        denyButtonText: `No guardar`,
+        denyButtonText: `No modificar`,
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-            deleteHist(id);
-            $('input[id="btn-buscar"]').click();
+            location.href = "/modifiedreport/" + id;
+/*            $('input[id="btn-buscar"]').click();*/
         } else if (result.isDenied) {
             Swal.fire('Changes are not saved', '', 'info')
         }
@@ -306,21 +307,21 @@ function Eliminar(id) {
 
 }
 
-function deleteHist(id) {
-    $.ajax({
-        type: 'POST',
-        data: { 'id': id },
-        url: "deletehistoric/",
-        dataType: 'json',
-    }).done(function (data, search) {
+//function modifiedHist(id) {
+//    $.ajax({
+//        type: 'POST',
+//        data: { 'id': id },
+//        url: "modifiedreport/",
+//        dataType: 'json',
+//    }).done(function (data, search) {
 
-        Swal.fire('Saved!', '', 'success')
-        cargarTabla(search);
+//        Swal.fire('Saved!', '', 'success')
+//        cargarTabla(search);
 
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        Swal.fire('Changes are not saved', '', 'info')
-    });
-}
+//    }).fail(function (jqXHR, textStatus, errorThrown) {
+//        Swal.fire('Changes are not saved', '', 'info')
+//    });
+//}
 
 
 //Evento para refrescar pagina
