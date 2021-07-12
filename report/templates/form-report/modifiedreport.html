@@ -115,7 +115,7 @@
                             {% for hist in historical_reference %}
                                 <tr id="histref-{{hist.id_table}}">
                                     <td class="referencia" id="{{hist.id_referencia}}">{{hist.nombre_referencia}}</td>
-                                    <td class="descripcion" id="{{hist.id_ref_hist}}">yrty</td>
+                                    <td class="descripcion" id="{{hist.id_ref_hist}}">{{hist.descripcion}}</td>
                                     <td>
                                         <input class="btn btn-danger" type="button" value="Modificar" onclick="modificarReferencia('histref-{{hist.id_table}}')">
                                     </td>

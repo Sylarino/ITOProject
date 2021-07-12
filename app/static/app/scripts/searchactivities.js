@@ -293,16 +293,14 @@ function Modificar(id) {
         title: '¿Seguro que deseas modificar el reporte?',
         showDenyButton: true,
         showCancelButton: false,
-        confirmButtonText: `Save`,
+        confirmButtonText: `Modificar`,
         denyButtonText: `No modificar`,
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             location.href = "/modifiedreport/" + id;
 /*            $('input[id="btn-buscar"]').click();*/
-        } else if (result.isDenied) {
-            Swal.fire('Changes are not saved', '', 'info')
-        }
+        } 
     })
 
 }
