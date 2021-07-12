@@ -20,4 +20,5 @@ urlpatterns = [
     path('generatereport/downloadpdf/', views.downloadpdf, name='downloadpdf'),
     path('modifiedreport/<str:id>', views.modifiedreport, name='modifiedreport'),
     path('modifiedreport/modifiedactualreport/', views.modifiedactualreport, name='modifiedactualreport'),
+    path('modifiedreport/savemodifiedimage/', views.modifiedactualreport, name='savemodifiedimage'),
     ]

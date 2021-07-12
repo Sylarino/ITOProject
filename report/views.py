@@ -2119,34 +2119,59 @@ def modifiedactualreport(request, *args, **kwargs):
             image = request.FILES.getlist('image')
             observation = request.POST.getlist('observation')
             subactivity_image = request.POST.getlist('image_subactivity')
+            id_img = request.POST.getlist('report')
 
-            report_for_id = Report.objects.last()
+            report_for_id = ReportImage.objects.get(id=int(id_img[0]))
 
-            id_rep = report_for_id.id
+            id_rep = report_for_id.report_id
 
             repor = Report.objects.get(pk = id_rep)
             obser = 0
             
             for i in image:
 
-                subactividad_img = SubActivity.objects.get(id=int(subactivity_image[obser]))     
+                if int(id_img[obser]) == 0:
+                    subactividad_img = SubActivity.objects.get(id=int(subactivity_image[obser]))     
                 
-                imagen = ImgReport(
-                    image = i,
-                    description = observation[obser]
-                    )
+                    imagen = ImgReport(
+                        image = i,
+                        description = observation[obser]
+                        )
 
-                imagen.save()
+                    imagen.save()
 
-                imagereport = ReportImage(
-                    report = repor,
-                    image = imagen,
-                    subactivity = subactividad_img
-                    )
+                    imagereport = ReportImage(
+                        report = repor,
+                        image = imagen,
+                        subactivity = subactividad_img
+                        )
 
-                imagereport.save()
+                    imagereport.save()
 
-                obser = obser + 1
+                    obser = obser + 1
+
+                else:
+                    report_img = ReportImage.objects.get(id=int(id_img[obser]))
+
+                    if report_img.subactivity_id != int(subactivity_image[obser]):
+
+                        report_img.subactivity_id = int(subactivity_image[obser])
+                        report_img.save()        
+                        
+                    if report_img.image.description != observation[obser]:
+
+                        report_img.image.description = observation[obser]
+                        report_img.save()
+
+                    if report_img.image.image != i:
+                        img_new = ImgReport(
+                                image = i,
+                                description = observation[obser]
+                            )
+                        img_new.save()
+
+                        report_img.image_id = img_new.id
+                        report_img.save()
 
             if id_rep > 0:
                     

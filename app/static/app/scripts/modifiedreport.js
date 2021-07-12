@@ -1,3 +1,4 @@
+
 function agregarHistorico(id_hist, actividad, cantidad, medida, total, refday, subactividad, cau, tot_acu, act_type, precondition, vala) {
 
     document.getElementById("select-act-" + vala + "-mod").value = actividad.textContent;
@@ -324,30 +325,6 @@ function modificarReporte(id_report) {
         referencias.push(fila);
     });
 
-    //val_imagen = document.getElementsByClassName("image-section--containar");
-    //lengimg = val_imagen.length;
-    //if (lengimg > 0) {
-    //    img_val = 1;
-    //    //Recorrido de imagenes
-    //    var form_data = new FormData();
-
-    //    debugger;
-    //    for (var key in dataimg) {
-    //        form_data.append('image', dataimg[key]);
-    //    }
-
-    //    for (var i in obsimg) {
-    //        form_data.append('observation', obsimg[i]);
-    //    }
-
-    //    for (var subi in idsubimg) {
-    //        form_data.append('image_subactivity', idsubimg[subi]);
-    //    }
-
-    //} else {
-    //    img_val = 0;
-    //}
-
     let filareport = {
         desviacion: desviacion.value,
         plandeaccion: plandeaccion.value,
@@ -358,6 +335,31 @@ function modificarReporte(id_report) {
     };
 
     reporte.push(filareport);
+
+    var img_val = 0;
+    var form_data = new FormData();
+
+    if (img_mod.length != 0) {
+
+        img_val = 1;
+        for (var i = 0; i < img_mod.length; i++) {
+            descripcion_img = document.getElementById("div_mod_" + img_mod[i][0]).getElementsByClassName("lab-img-sub")[0];
+            subactividad_img = document.getElementById("div_mod_" + img_mod[i][0]).getElementsByClassName("subactividad")[0];
+
+            img_mod[i][2] = subactividad_img.id;
+            img_mod[i][3] = descripcion_img.textContent;
+
+            form_data.append('image', img_mod[i][1]);
+            form_data.append('observation', img_mod[i][3]);
+            form_data.append('image_subactivity', img_mod[i][2]);
+            form_data.append('report', img_mod[i][0]);
+        }
+
+    } else {
+
+        img_val = 0;
+
+    }
 
     //Conexion a traves de ajax
     $.ajax({
@@ -374,50 +376,84 @@ function modificarReporte(id_report) {
 
     }).done(function (data) {
 
-        //if (img_val === 0) {
-        //}
-        messageSucces(data);
+        if (img_val === 0) {
 
+            messageSucces(data);
+
+        }
 
     }).fail(function (data) {
         Swal.fire("Reporte No Modificado", "Verifique los datos a ingresar", "warning");
         return false;
     });
 
-    //if (img_val === 1) {
-    //    $.ajax({
-    //        url: 'saveimage/',
-    //        type: 'POST',
-    //        data: form_data,
-    //        contentType: false,
-    //        processData: false,
-    //        dataType: 'json',
-    //    }).done(function (data) {
 
-    //        messageSucces(data);
+    debugger;
 
-    //    }).fail(function (data) {
-    //        Swal.fire("Reporte No Modificado", "Verifique que imagenés esten correctas", "warning");
-    //        return false;
-    //    });
-    //}
+    if (img_val === 1) {
+
+        $.ajax({
+            url: 'savemodifiedimage/',
+            type: 'POST',
+            data: form_data,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+        }).done(function (data) {
+
+            messageSucces(data);
+
+        }).fail(function (data) {
+            Swal.fire("Reporte No Modificado", "Verifique que imagenés esten correctas", "warning");
+            return false;
+        });
+
+    }
+
+    debugger;
 
 }
 
-document.getElementById("file-mod").onchange = function (e) {
+var img_mod = [];
 
+function obtenerNuevaImagen(input)  {
+    debugger;
+    console.log("llega");
     let reader = new FileReader();
     i = i + 1;
 
-    reader.readAsDataURL(e.target.files[0]);
+    debugger;
+    reader.readAsDataURL(input.files[0]);
+    id_imgmod = $(input).attr('class');
+    id_img_report = id_imgmod.replace('img-sub-', '');
 
-    id_imgmod = $(this).attr('class')
-    id_img_report = id_imgmod.replace('img-sub-', '')
+    if (img_mod.length != 0) {
+
+        for (var i = 0; i < img_mod.length; i++) {
+
+            console.log(img_mod[i][0]);
+            if (parseInt(img_mod[i][0]) == parseInt(id_img_report)) {
+
+                img_mod[i][0] = id_img_report;
+                img_mod[i][1] = input.files[0];
+                img_mod[i][2] = " ";
+                img_mod[i][3] = " ";
+
+            } else {
+                img_mod.push([id_img_report, input.files[0], 0, " "]);
+            }
+
+        }
+
+    } else {
+        img_mod.push([id_img_report, input.files[0], 0, " "]);
+    }
+
+    debugger;
 
     reader.onload = function () {
 
         old_image = document.getElementById("img_" + id_img_report);
-
         old_image.src = reader.result;
 
     };
@@ -436,29 +472,49 @@ function modificarImagen(id) {
 
     div_mod = $('div[id="div-mod-container"]');
 
-    button = "<input class='btn btn-danger' value='Modificar' onclick='agregarImgMod('" + id + "')' type='button'>";
-
+    button = document.createElement("input");
+    button.setAttribute("class", "btn btn-danger");
+    button.setAttribute("value", "Modificar");
+    button.setAttribute("type", "button");
     div_mod.html(button);
-    debugger;
+
+    id_img = id;
+    button.onclick = function agregarImgMod() {
+        subactividad = document.getElementById(id_img).getElementsByClassName("subactividad")[0];
+        descripcion = document.getElementById(id_img).getElementsByClassName("lab-img-sub")[0];
+
+        inputcr = document.getElementById("det-img");
+
+        subactividad_in = document.getElementsByName("select-sub-img")[0];
+        descripcion_in = document.getElementsByName("det-img")[0];
+
+        subactividad.textContent = subactividad_in.options[subactividad_in.selectedIndex].textContent;
+        subactividad.id = subactividad_in.options[subactividad_in.selectedIndex].id;
+
+        descripcion.textContent = descripcion_in.value;
+    }
 
 }
 
-function agregarImgMod(id) {
+function eliminarImg(id) {
 
-    subactividad = document.getElementById(id).getElementsByClassName("subactividad")[0];
-    descripcion = document.getElementById(id).getElementsByClassName("lab-img-sub")[0];
-
-    inputcr = document.getElementById("det-img")[0];
-    let id_ref = inputcr.id.replace('def', '');
-
-    referencia = document.getElementsByName("select-ref-mod")[0];
-    descripcion = document.getElementsByName("input-ref-mod")[0];
+    deleteDiv = document.getElementById(id).parentNode;
+    imgDiv = document.getElementById(id);
     debugger;
-    referencia_td = document.getElementById(id_ref).getElementsByClassName("referencia")[0];
-    descripcion_td = document.getElementById(id_ref).getElementsByClassName("descripcion")[0];
+    deleteDiv.removeChild(imgDiv);
 
-    referencia_td.textContent = referencia.options[referencia.selectedIndex].textContent;
-    descripcion_td.textContent = descripcion.value;
+    id_img_div = imgDiv.id.replace('div_mod_', '');
 
+    for (var i = 0; i < img_mod.length; i++) {
+
+        if (img_mod[i][0] == id_img_div) {
+
+            img_mod[i].splice(i, 1);
+
+        }
+    
+    }
+
+    debugger;
 }
 

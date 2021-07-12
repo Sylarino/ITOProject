@@ -484,7 +484,7 @@
 
                 <div class="field-form">
                     <label>Detalle de Imagen:</label>
-                    <textarea id="det-img" class="form-control medium-text">
+                    <textarea name="det-img" id="det-img" class="form-control medium-text">
                     </textarea>
                 </div>
 
@@ -501,8 +501,8 @@
                 <div class="preview" id="preview">
                     {% for img in reportimage %}
                     <div id="div_mod_{{img.id}}" class="image-section--containar">
-                        <input class="btn btn-danger" value="Borrar" type="button">
-                        <input class="img-sub-{{img.id}}" id="file-mod" type="file" value="Cambiar Imagen" multiple />
+                        <input class="btn btn-danger" onclick="eliminarImg('div_mod_{{img.id}}');" value="Borrar" type="button">
+                        <input name="file-mod" onchange="obtenerNuevaImagen(this)" class="img-sub-{{img.id}}" id="file-mod" type="file" value="Cambiar Imagen" multiple />
                         <input class="btn btn-danger" value="Modificar" onclick="modificarImagen('div_mod_{{img.id}}')" type="button">
                         <img id="img_{{img.id}}" class="img-submit" src="{{img.image.image.url}}">
                         <div class="title-image--container">

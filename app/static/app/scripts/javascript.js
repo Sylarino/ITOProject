@@ -62,6 +62,7 @@ document.getElementById("file").onchange = function (e) {
         div2.appendChild(label)
 
         but.onclick = function () {
+
             var ultimo = document.getElementById("div_" + i);
             preview.removeChild(ultimo);
             /*Incrementable*/
@@ -71,6 +72,7 @@ document.getElementById("file").onchange = function (e) {
             idsubimg[i].remove();
 
             return dataimg, obsimg, idsubimg;
+
         }
     };
 
