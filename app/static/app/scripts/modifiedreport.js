@@ -1,4 +1,4 @@
-
+ï»¿
 function agregarHistorico(id_hist, actividad, cantidad, medida, total, refday, subactividad, cau, tot_acu, act_type, precondition, vala) {
 
     document.getElementById("select-act-" + vala + "-mod").value = actividad.textContent;
@@ -406,7 +406,7 @@ function modificarReporte(id_report) {
             messageSucces(data);
 
         }).fail(function (data) {
-            Swal.fire("Reporte No Modificado", "Verifique que imagenés esten correctas", "warning");
+            Swal.fire("Reporte No Modificado", "Verifique que imagenÃ©s esten correctas", "warning");
             return false;
         });
 
@@ -536,7 +536,7 @@ function eliminarImg(id) {
         (refinput.value == "") ||
         (refselectgen.options[refselectgen.selectedIndex].value == "Seleccione Referencia")) {
 
-        alert("Seleccione una opción valida y/o Escriba el nombre");
+        alert("Seleccione una opciÃ³n valida y/o Escriba el nombre");
 
     } else {
 
@@ -647,7 +647,7 @@ function agregarHistgoricoProgramado() {
         }
 
         if (selectcumap.options[selectcumap.selectedIndex].disabled) {
-            Swal.fire("Error", "Seleccione si cumplío o no.", "warning");
+            Swal.fire("Error", "Seleccione si cumplÃ­o o no.", "warning");
             return false;
         } else {
             if (selectcumap.options[selectcumap.selectedIndex].textContent === "No") {
@@ -691,7 +691,7 @@ function agregarHistgoricoProgramado() {
 
             if (!data.hasOwnProperty('error')) {
                 if (data == 0) {
-                    alert("Seleccione una opción valida y/o Escriba el nombre");
+                    alert("Seleccione una opciÃ³n valida y/o Escriba el nombre");
                 } else {
 
                     var tr = document.createElement("tr");
@@ -820,7 +820,7 @@ function agregarHistoricoNoProgramado() {
     }
 
     if (selectcumanp.options[selectcumanp.selectedIndex].disabled) {
-        Swal.fire("Error", "Seleccione si cumplío o no.", "warning");
+        Swal.fire("Error", "Seleccione si cumplÃ­o o no.", "warning");
         return false;
     } else {
         if (selectcumanp.options[selectcumanp.selectedIndex].textContent === "No") {
@@ -974,51 +974,51 @@ function agregarEquipo() {
 
     if (validateInt(idcantidadequi.value)) {
         if (idcantidadequi.value < 0) {
-            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            Swal.fire("Error", "Ingrese un valor nÃºmerico positivo", "warning");
             return false;
         }
     } else {
-        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        Swal.fire("Error", "Ingrese un valor nÃºmerico correcto", "warning");
         return false;
     }
 
 
     if (validateInt(iddotdiequi.value)) {
         if (iddotdiequi.value < 0) {
-            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            Swal.fire("Error", "Ingrese un valor nÃºmerico positivo", "warning");
             return false;
         }
     } else {
-        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        Swal.fire("Error", "Ingrese un valor nÃºmerico correcto", "warning");
         return false;
     }
 
 
     if (validateInt(iddotrefequi.value)) {
         if (iddotrefequi.value < 0) {
-            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            Swal.fire("Error", "Ingrese un valor nÃºmerico positivo", "warning");
             return false;
         }
     } else {
-        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        Swal.fire("Error", "Ingrese un valor nÃºmerico correcto", "warning");
         return false;
     }
 
 
     if (validateInt(iddotindequi.value)) {
         if (iddotindequi.value < 0) {
-            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            Swal.fire("Error", "Ingrese un valor nÃºmerico positivo", "warning");
             return false;
         }
     } else {
-        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        Swal.fire("Error", "Ingrese un valor nÃºmerico correcto", "warning");
         return false;
     }
 
 
     if (idnombreequi.value == "") {
 
-        alert("Seleccione una opción valida y/o Escriba el nombre");
+        alert("Seleccione una opciÃ³n valida y/o Escriba el nombre");
 
     } else {
 
@@ -1074,4 +1074,77 @@ function agregarEquipo() {
             return i;
         }
     }
+};
+
+document.getElementById("file-new").onchange = function (e) {
+
+    selectsubap = document.getElementById("select-sub-img");
+    if (selectsubap.options[selectsubap.selectedIndex].disabled) {
+        Swal.fire("Error", "Seleccione una SubActividad o Actividad invalida.", "warning");
+        return false;
+    }
+
+    // Creamos el objeto de la clase FileReader
+    let reader = new FileReader();
+
+    // Leemos el archivo subido y se lo pasamos a nuestro fileReader
+    reader.readAsDataURL(e.target.files[0]);
+
+    pos = img_mod.length;
+    debugger;
+    sub = document.getElementById('select-sub-img');
+
+    img_mod.push([0, e.target.files[0], sub.options[sub.selectedIndex].id, " "]);
+
+    // Le decimos que cuando este listo ejecute el codigo interno
+    reader.onload = function () {
+        let preview = document.getElementById('preview');
+        div = document.createElement('div');
+        image = document.createElement('img');
+        but = document.createElement('input');
+        det = document.getElementById('det-img');
+        div2 = document.createElement('div');
+        label = document.createElement('p')
+        label_subactividad = document.createElement('label')
+
+        label.setAttribute("class", "lab-img-sub")
+        label_subactividad.setAttribute("id", sub.options[sub.selectedIndex].id)
+        div.setAttribute("id", "div_mod_" + (pos + 1));
+        div.setAttribute("class", "image-section--containar");
+        div2.setAttribute("class", "title-image--container");
+        but.setAttribute("class", "btn btn-danger");
+        but.setAttribute("value", "Borrar");
+        but.setAttribute("type", "button");
+        image.setAttribute("id", "img_" + (pos + 1));
+        image.setAttribute("class", "img-submit");
+        label.textContent = det.value;
+        label.className = "lab-img-sub";
+        label_subactividad.textContent = sub.options[sub.selectedIndex].textContent;
+        label_subactividad.className = "subactividad";
+
+        image.src = reader.result;
+
+        //preview.innerHTML = '';
+        preview.append(div);
+        div.append(image);
+        div.insertBefore(but, image);
+        div.appendChild(div2);
+        div2.appendChild(label_subactividad);
+        div2.appendChild(label)
+
+        but.onclick = function () {
+
+            var ultimo = document.getElementById("div_" + pos);
+            preview.removeChild(ultimo);
+            /*Incrementable*/
+            
+            img_mod.splice(pos, 1);
+            pos -= 1;
+            return img_mod;
+
+        }
+    };
+
+    return img_mod;
+
 };

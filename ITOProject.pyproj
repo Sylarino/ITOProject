@@ -61,6 +61,16 @@
     </Compile>
     <Compile Include="report\views.py" />
     <Compile Include="report\__init__.py" />
+    <Compile Include="walkreport\admin.py" />
+    <Compile Include="walkreport\apps.py" />
+    <Compile Include="walkreport\migrations\__init__.py" />
+    <Compile Include="walkreport\models.py" />
+    <Compile Include="walkreport\tests.py" />
+    <Compile Include="walkreport\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="walkreport\views.py" />
+    <Compile Include="walkreport\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
@@ -81,6 +91,10 @@
     <Folder Include="report\templates\" />
     <Folder Include="report\templates\form-report\" />
     <Folder Include="report\templates\report\" />
+    <Folder Include="walkreport\" />
+    <Folder Include="walkreport\migrations\" />
+    <Folder Include="walkreport\templates\" />
+    <Folder Include="walkreport\templates\walkreport\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\css\datatables.min.css" />
@@ -135,6 +149,9 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
+    <Content Include="walkreport\templates\walkreport\index.html" />
+    <Content Include="walkreport\templates\walkreport\registerwalkreport.html" />
+    <Content Include="walkreport\templates\walkreport\searchwalkreport.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.html">

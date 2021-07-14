@@ -1,0 +1,72 @@
+{% extends "app/layout.html" %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="container">
+    <form>
+        <h2 class="title-page">{{ title }}</h2>
+
+        {#Antecedentes generales del informe de caminata#}
+        <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
+               <div class="row">
+            <div class="col-md-6 form-report">
+           
+               <div class="field-form">
+                    <label>N° de API:</label>
+                    <select name="api" id="api_antgen_id" class="form-control" required>
+                        <option disabled selected>Seleccione API</option>
+                        {% for api in apis %}
+                        <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
+                        {% endfor %}
+                    </select>
+               </div>
+
+               <div class="field-form">
+                    <label>N° de Contrato:</label>
+                    <select name="contract" class="form-control" id="contr_antgen_id" required>
+                    </select>
+               </div>
+
+               <div class="field-form">
+                    <label>Fecha de Inicio:</label>
+                    <label name="start_date"></label>
+               </div>
+
+                <div class="field-form">
+                    <label>Especialidad:</label>
+                    <select id="especialidad_id" class="form-control" required>
+                        <option disabled selected>Seleccione Especialidad</option>
+                        {% for specialty in specialties %}
+                        <option value="{{specialty.id}}" id="{{specialty.id}}">{{ specialty.specialty_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            
+            </div>
+
+            <div class="col-md-6 form-report">
+
+                <div class="field-form">
+                    <label>Nombre del Proyecto:</label>
+                    <label name="project_name"></label>
+                </div>
+
+                <div class="field-form">
+                    <label>Empresa Contratista:</label>
+                    <label name="enterprise"></label>
+                </div>
+
+                <div class="field-form">
+                    <label>Fecha de Termino:</label>
+                    <label name="finish_date"></label>
+                </div>
+
+            </div>
+        </div>
+
+¿       <h2 class="title-page">{{ title }}</h2>
+
+    </form>
+</div>
+
+{% endblock %}

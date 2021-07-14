@@ -29,6 +29,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),
     path('', include('report.urls')),
+    path('', include('walkreport.urls')),
 ]
 
 #Configuracion para cargar imagenes

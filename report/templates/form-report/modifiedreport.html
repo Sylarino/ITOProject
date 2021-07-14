@@ -76,9 +76,12 @@
                     <label>Nombre Referencia:</label>
                     <input id="ref-name" name="input-ref-mod" class="form-control" required>
                 </div>
-
-                <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Modificar" onclick="agregarReferenciaModificado()"/>
-                <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Agregar" onclick="agregarReferencia()"/>
+                <div class="btn-save">
+                    <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Modificar" onclick="agregarReferenciaModificado()"/>
+                </div>
+                <div class="btn-save">
+                    <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Agregar" onclick="agregarReferencia()"/>
+                </div>
             
             </div>
 
@@ -383,44 +386,56 @@
         <h2 class="title-page">{{ title }}</h2>
         <h3 class="section-title"> RECURSOS EECC EN TERRENO </h3>
         <div class="row">
-            <div class="col-md-6 form-report">
-                <label>Nombre de Actividad:</label>
-                <select name="select-act-equi-mod" id="select-act-equi-mod" class="form-control" required>
-                    {% for acts in activities %}
-                        {% if acts.contract_id == id_contract %}
-                            <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
 
-            <div class="col-md-4 form-report">
-                <label>Nombre <br /> de Equipo:</label>
-                <select name="id-nombre-equi-mod" id="id-nombre-equi-mod" class="form-control" required>
-                    <option disabled selected>Seleccione Equipo</option>
-                    {% for equipment in equipments %}
-                        <option id="{{equipment.id}}">{{equipment.equipment_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <section class="section-md-field">
+            <section class="row">
+
+                <div class="col-md-6 form-report">
+                    <label>Nombre de Actividad:</label>
+                    <select name="select-act-equi-mod" id="select-act-equi-mod" class="form-control" required>
+                        {% for acts in activities %}
+                            {% if acts.contract_id == id_contract %}
+                                <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4 form-report">
+                    <label>Nombre <br /> de Equipo:</label>
+                    <select name="id-nombre-equi-mod" id="id-nombre-equi-mod" class="form-control" required>
+                        <option disabled selected>Seleccione Equipo</option>
+                        {% for equipment in equipments %}
+                            <option id="{{equipment.id}}">{{equipment.equipment_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </section>
+
+            <section class="row">
+
                 <div class="col-md-2 form-report">
                     <label>Cantidad <br /> de Equipos:</label>
                     <input type="number" name="id-cantidad-equi-mod" id="id-cantidad-equi-mod" class="form-control" readonly="readonly"/>
                 </div>
+
                 <div class="col-md-2 form-report">
                     <label>Dotación <br/> Directa: </label>
                     <input type="number" name="id-dotdi-equi-mod" id="id-dotdi-equi-mod" class="form-control" readonly="readonly"/>
                 </div>
+
                 <div class="col-md-2 form-report">
                     <label>Dotación <br /> Referencial: </label>
                     <input type="number" name="id-dotref-equi-mod" id="id-dotref-equi-mod" class="form-control" readonly="readonly"/>
                 </div>
+
                 <div class="col-md-2 form-report">
                     <label>Dotación <br /> Indirecta: </label>
                     <input type="number" name="id-dotind-equi-mod" id="id-dotind-equi-mod" class="form-control" readonly="readonly"/>
                 </div>
+
             </section>
+
         </div>
 
         <div class="btn-save">
@@ -502,7 +517,7 @@
                 </div>
 
                 <div class="field-form">
-                    <input class="submit-img" id="file" type="file" value="Subir Imagen" multiple />
+                    <input class="submit-img" id="file-new" type="file" value="Subir Imagen" multiple />
                 </div>
 
                 <div class="field-form" id="div-mod-container">
@@ -514,9 +529,11 @@
                 <div class="preview" id="preview">
                     {% for img in reportimage %}
                     <div id="div_mod_{{img.id}}" class="image-section--containar">
-                        <input class="btn btn-danger" onclick="eliminarImg('div_mod_{{img.id}}');" value="Borrar" type="button">
-                        <input name="file-mod" onchange="obtenerNuevaImagen(this)" class="img-sub-{{img.id}}" id="file-mod" type="file" value="Cambiar Imagen" multiple />
-                        <input class="btn btn-danger" value="Modificar" onclick="modificarImagen('div_mod_{{img.id}}')" type="button">
+                        <div class="div-buttons--container">
+                            <input name="file-mod" onchange="obtenerNuevaImagen(this)" class="img-sub-{{img.id}}" id="file-mod" type="file" value="Cambiar Imagen" multiple />
+                            <input class="btn btn-danger" onclick="eliminarImg('div_mod_{{img.id}}');" value="Borrar" type="button">
+                            <input class="btn btn-danger" value="Modificar" onclick="modificarImagen('div_mod_{{img.id}}')" type="button">
+                        </div>                      
                         <img id="img_{{img.id}}" class="img-submit" src="{{img.image.image.url}}">
                         <div class="title-image--container">
                             <label class="subactividad" id="{{img.subactivity_id}}">{{img.subactivity.subactivity_name}}</label>

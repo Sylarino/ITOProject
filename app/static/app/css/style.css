@@ -710,3 +710,19 @@ body > .container-fluid {
 #divTabla {
     margin-bottom: 30px;
 }
+
+.div-buttons--container {
+    display: flex;
+    flex-flow: column;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.div-buttons--container input {
+    margin-top: 10px;
+}
+
+.div-buttons--container .btn-danger {
+    max-width: 80px;
+    margin: auto 0;
+}
