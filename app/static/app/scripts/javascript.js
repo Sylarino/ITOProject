@@ -721,7 +721,7 @@ $(function () {
     });
 });
 
-//Accion para ejecutar al seleccionar una opci�n de las subactividades de actividades programadas
+//Accion para ejecutar al seleccionar una opción de las subactividades de actividades programadas
 
 $(function () {
     $('select[name="select-sub-ap"]').on('change', function () {

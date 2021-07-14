@@ -77,7 +77,8 @@
                     <input id="ref-name" name="input-ref-mod" class="form-control" required>
                 </div>
 
-                <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Agregar Referencia" onclick="agregarReferenciaModificado()"/>
+                <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Modificar" onclick="agregarReferenciaModificado()"/>
+                <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Agregar" onclick="agregarReferencia()"/>
             
             </div>
 
@@ -138,6 +139,7 @@
                 <div class="col-md-6 form-report">
                     <label>Nombre de Actividad:</label>
                     <select name="select-act-ap-mod" id="select-act-ap-mod" class="form-control" required>
+                        <option disabled selected>Seleccione Actividad</option>
                         {% for acts in activities %}
                             {% if acts.contract_id == id_contract %}
                                 <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
@@ -221,7 +223,11 @@
         </div>
 
         <div class="btn-save">
-            <input id="act-pro-mod" class="btn btn-danger" type="button" value="Agregar" onclick="agregarModificado()"/>
+            <input id="act-pro-mod" class="btn btn-danger" type="button" value="Modificar" onclick="agregarModificado()"/>
+        </div>
+
+        <div class="btn-save">
+            <input id="act-pro-mod" class="btn btn-danger" type="button" value="Agregar" onclick="agregarHistgoricoProgramado()"/>
         </div>
 
         <div class="separator"></div>
@@ -232,10 +238,11 @@
                 <div class="col-md-6 form-report">
                     <label>Nombre de Actividad:</label>
                     <select name="select-act-anp-mod" id="select-act-anp-mod" class="form-control" required>
+                        <option disabled selected>Seleccione Actividad</option>
                         {% for acts in activities %}
-                            {% if acts.contract_id == id_contract %}
-                            <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
-                            {% endif %}
+                        {% if acts.contract_id == id_contract %}
+                        <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                 </div>
@@ -319,7 +326,10 @@
         </div>
 
         <div class="btn-save">
-            <input id="act-no-pro-mod" class="btn btn-danger" type="button" value="Agregar" onclick="agregarModificado()" />
+            <input id="act-no-pro-mod" class="btn btn-danger" type="button" value="Modificar" onclick="agregarModificado()" />
+        </div>        
+        <div class="btn-save">
+            <input id="act-no-pro-mod" class="btn btn-danger" type="button" value="Agregar" onclick="agregarHistoricoNoProgramado()" />
         </div>
 
         <div class="separator"></div>
@@ -414,7 +424,10 @@
         </div>
 
         <div class="btn-save">
-            <input id="but-rec-save" class="btn btn-danger" type="button" value="Agregar" onclick="agregarEquipoModificado()" />
+            <input id="but-rec-save" class="btn btn-danger" type="button" value="Modificar" onclick="agregarEquipoModificado()" />
+        </div>        
+        <div class="btn-save">
+            <input id="but-rec-save" class="btn btn-danger" type="button" value="Agregar" onclick="agregarEquipo()" />
         </div>
 
         <section class="table-container--load">
@@ -582,7 +595,6 @@
             <input id="btn-save-mod" class="btn btn-danger" type="button" value="Guardar y Descargar" onclick="modificarReporte('{{report.id}}')"/>
         </div>
 
-        <script src="{% static 'app/scripts/javascript.js' %}"></script>
         <script src="{% static 'app/scripts/modifiedreport.js' %}"></script>
     </form>
 </div>

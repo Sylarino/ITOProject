@@ -1911,6 +1911,8 @@ def modifiedactualreport(request, *args, **kwargs):
 
                 id_report = int(i['report_id'])
                 rp_id = int(i['report_id'])
+
+            reporte = Report.objects.get(pk=int(i['report_id']))
                   
             for i in historicaldata:
 
@@ -2172,6 +2174,9 @@ def modifiedactualreport(request, *args, **kwargs):
 
                         report_img.image_id = img_new.id
                         report_img.save()
+
+                    obser = obser + 1
+
 
             if id_rep > 0:
                     

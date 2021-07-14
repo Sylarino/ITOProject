@@ -317,6 +317,7 @@ function modificarReporte(id_report) {
 
     //Recorrido de tabla de referencias
     document.querySelectorAll('.table-referencia tr').forEach(function (e) {
+
         let fila = {
             descripcion: e.querySelector('.descripcion').innerText,
             referencia_id: e.querySelector('.referencia').id,
@@ -325,16 +326,6 @@ function modificarReporte(id_report) {
         referencias.push(fila);
     });
 
-    let filareport = {
-        desviacion: desviacion.value,
-        plandeaccion: plandeaccion.value,
-        evidencia_obs: evidenciaobs.value,
-        id_seguimiento: $('input:radio[name=exampleRadios]:checked').val(),
-        img_exist: 0,
-        report_id: id_report
-    };
-
-    reporte.push(filareport);
 
     var img_val = 0;
     var form_data = new FormData();
@@ -360,6 +351,17 @@ function modificarReporte(id_report) {
         img_val = 0;
 
     }
+
+    let filareport = {
+        desviacion: desviacion.value,
+        plandeaccion: plandeaccion.value,
+        evidencia_obs: evidenciaobs.value,
+        id_seguimiento: $('input:radio[name=exampleRadios]:checked').val(),
+        img_exist: img_val,
+        report_id: id_report
+    };
+
+    reporte.push(filareport);
 
     //Conexion a traves de ajax
     $.ajax({
@@ -417,38 +419,42 @@ function modificarReporte(id_report) {
 var img_mod = [];
 
 function obtenerNuevaImagen(input)  {
-    debugger;
     console.log("llega");
     let reader = new FileReader();
-    i = i + 1;
+    //i = i + 1;
 
-    debugger;
     reader.readAsDataURL(input.files[0]);
     id_imgmod = $(input).attr('class');
     id_img_report = id_imgmod.replace('img-sub-', '');
 
-    if (img_mod.length != 0) {
+    var pos = 0;
+    esigual = false;
 
-        for (var i = 0; i < img_mod.length; i++) {
+    if (img_mod.length == 0) {
+        debugger;
+        img_mod.push([id_img_report, input.files[0], 0, " "]);
 
-            console.log(img_mod[i][0]);
-            if (parseInt(img_mod[i][0]) == parseInt(id_img_report)) {
+    } 
 
-                img_mod[i][0] = id_img_report;
-                img_mod[i][1] = input.files[0];
-                img_mod[i][2] = " ";
-                img_mod[i][3] = " ";
+    for (var i = 0; i < img_mod.length; i++) {
 
-            } else {
-                img_mod.push([id_img_report, input.files[0], 0, " "]);
-            }
-
+        if (parseInt(img_mod[i][0]) == parseInt(id_img_report)) {
+            esigual = true;
+            pos = i;
         }
 
+    }
+
+    if (esigual == true) {
+        img_mod[pos][0] = id_img_report;
+        img_mod[pos][1] = input.files[0];
+        img_mod[pos][2] = " ";
+        img_mod[pos][3] = " ";
     } else {
         img_mod.push([id_img_report, input.files[0], 0, " "]);
     }
 
+    
     debugger;
 
     reader.onload = function () {
@@ -518,3 +524,554 @@ function eliminarImg(id) {
     debugger;
 }
 
+ function agregarReferencia() {
+
+    i = i + 1;
+
+    var refselectgen = document.getElementById("select-ref-mod");
+    var refinput = document.getElementById("ref-name");
+    var tablegen = document.getElementById("table-body");
+
+    if ((refselectgen.options[refselectgen.selectedIndex].value == "") ||
+        (refinput.value == "") ||
+        (refselectgen.options[refselectgen.selectedIndex].value == "Seleccione Referencia")) {
+
+        alert("Seleccione una opción valida y/o Escriba el nombre");
+
+    } else {
+
+        var td = document.createElement("td");
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var button = document.createElement("input")
+
+        button.className = "btn btn-danger";
+        button.type = "button";
+        button.value = "Eliminar";
+
+        tr.id = "tr-ref" + i;
+        td.textContent = refselectgen.options[refselectgen.selectedIndex].value;
+        td.className = "referencia";
+        td.id = refselectgen.options[refselectgen.selectedIndex].id;
+        td1.textContent = refinput.value;
+        td1.className = "descripcion";
+        td1.id = 0;
+
+        tablegen.append(tr);
+        tr.appendChild(td);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        td2.append(button);
+
+        button.onclick = function () {
+            tablegen.removeChild(tr);
+            i = i - 1;
+            return i;
+        }
+    }
+};
+
+$(function () {
+    $('select[name="select-sub-ap-mod"]').on('change', function () {
+        debugger;
+        var id = $('#select-sub-ap-mod').val();
+        var medidaid = document.getElementsByName("input-u-ap-mod");
+
+        if (id === '') {
+            $('input[name="input-u-ap-mod"]').val(" ");
+            $('input[name="input-te-ap-mod"]').val(" ");
+            return false;
+        }
+        $.ajax({
+            type: 'GET',
+            data: { action: 'search_sub_p_info', id: id },
+            url: "/buscarcontratos",
+            dataType: 'json',
+        }).done(function (data) {
+
+
+            if (!data.hasOwnProperty('error')) {
+                $('input[name="input-u-ap-mod"]').val(data[0].measure);
+                $('input[name="input-u-ap-mod"]').attr("value", data[0].measure_id)
+                $('input[name="input-te-ap-mod"]').val(data[0].average_amount);
+                $('input[name="input-ta-ap-mod"]').val(data[0].total);
+                $('input[name="input-rf-ap-mod"]').val(data[0].ref_day);
+
+                return false;
+            }
+            message_error(data.error);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }).always(function (data) {
+
+        });
+    });
+});
+
+function agregarHistgoricoProgramado() {
+
+    i = i + 1;
+
+    //Variablas elementos de actividades programadas
+    var selectsubap = document.getElementById("select-sub-ap-mod");
+    var selectactap = document.getElementById("select-act-ap-mod");
+    var inputcrap = document.getElementById("input-cr-ap-mod");
+    var inputuap = document.getElementById("input-u-ap-mod");
+    var inputteap = document.getElementById("input-te-ap-mod");
+    var inputrdap = document.getElementById("input-rd-ap-mod");
+    var inputtaap = document.getElementById("input-ta-ap-mod");
+    var selectcumap = document.getElementById("select-cum-ap-mod");
+    var selectcauap = document.getElementById("select-cau-ap-mod");
+    var selectdetap = document.getElementById("input-det-ap-mod");
+    var tablegen = document.getElementById("table-actividad");
+    var selectpreap = document.getElementById("select-pre-ap-mod");
+
+    largo = acts_id.length;
+    console.log(acts_id);
+
+    for (var j = 0; j < largo; j++) {
+        console.log(j);
+        if (selectsubap.options[selectsubap.selectedIndex].id === acts_id[j]) {
+            Swal.fire("Error", "Sub Actividad ya agregada.", "warning");
+            return false;
+        }
+    }
+
+    $(function () {
+
+        if (selectactap.options[selectactap.selectedIndex].disabled ||
+            selectsubap.options[selectsubap.selectedIndex].disabled) {
+            Swal.fire("Error", "Seleccione una SubActividad o Actividad invalida.", "warning");
+            return false;
+        }
+
+        if (selectcumap.options[selectcumap.selectedIndex].disabled) {
+            Swal.fire("Error", "Seleccione si cumplío o no.", "warning");
+            return false;
+        } else {
+            if (selectcumap.options[selectcumap.selectedIndex].textContent === "No") {
+                if (selectcauap.options[selectcauap.selectedIndex].disabled) {
+                    Swal.fire("Error", "Seleccione la causa del No Cumplimiento", "warning");
+                    return false;
+                }
+            }
+        }
+
+        if (inputcrap.value === '') {
+            Swal.fire("Error", "Ingrese el avance diario", "warning");
+            return false;
+        } else {
+            if (validateDecimal(inputcrap.value) === false) {
+                Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+                return false;
+            }
+        }
+
+        if (inputcrap.value < 1) {
+            Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+            return false;
+        }
+
+        if (selectpreap.options[selectpreap.selectedIndex].disabled) {
+            Swal.fire("Error", "Seleccione un pre requisito.", "warning");
+            return false;
+        }
+
+        $.ajax({
+            type: 'GET',
+            data: {
+                action: 'search_subactivities',
+                act: selectactap.options[selectactap.selectedIndex].textContent,
+                subact: selectsubap.options[selectsubap.selectedIndex].textContent
+            },
+            url: "/buscarsubactividades",
+            dataType: 'json',
+        }).done(function (data) {
+
+            if (!data.hasOwnProperty('error')) {
+                if (data == 0) {
+                    alert("Seleccione una opción valida y/o Escriba el nombre");
+                } else {
+
+                    var tr = document.createElement("tr");
+                    var td = document.createElement("td");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    var td3 = document.createElement("td");
+                    var td4 = document.createElement("td");
+                    var td5 = document.createElement("td");
+                    var td6 = document.createElement("td");
+                    var td7 = document.createElement("td");
+                    var td8 = document.createElement("td");
+                    var td9 = document.createElement("td");
+                    var td10 = document.createElement("td");
+                    var td11 = document.createElement("td");
+                    var td12 = document.createElement("td");
+
+                    var button = document.createElement("input")
+
+                    button.className = "btn btn-danger";
+                    button.type = "button";
+                    button.value = "Eliminar";
+
+                    tr.id = "tr-ap" + i;
+
+                    td.textContent = selectsubap.options[selectsubap.selectedIndex].textContent;
+                    td1.textContent = selectactap.options[selectactap.selectedIndex].textContent;
+                    td2.textContent = inputcrap.value;
+                    td3.textContent = inputuap.value;
+                    td4.textContent = inputteap.value;
+                    td5.textContent = inputrdap.value;
+                    td6.textContent = inputtaap.value;
+                    td7.textContent = selectcumap.options[selectcumap.selectedIndex].value;
+                    td8.textContent = selectcauap.options[selectcauap.selectedIndex].value;
+                    td9.textContent = selectdetap.value;
+                    td10.textContent = "Actividad Programada";
+                    td12.textContent = selectpreap.options[selectpreap.selectedIndex].value;
+
+                    td.id = selectsubap.options[selectsubap.selectedIndex].id;
+                    td4.id = selectactap.options[selectactap.selectedIndex].id;
+                    td1.id = selectactap.options[selectactap.selectedIndex].id;
+                    td7.id = selectcumap.options[selectcumap.selectedIndex].id;
+                    td8.id = selectcauap.options[selectcauap.selectedIndex].id;
+                    td12.id = selectpreap.options[selectpreap.selectedIndex].id;
+                    td6.id = 0;
+
+                    acts_id.push(selectsubap.options[selectsubap.selectedIndex].id);
+
+                    td3.id = inputuap.getAttribute("value");
+                    td10.id = 1;
+                    td4.className = "total";
+                    td1.className = "actividad";
+                    td.className = "subactividad";
+                    td2.className = "cantidad";
+                    td3.className = "medida";
+                    td5.className = "refday";
+                    td6.className = "total_acumulado";
+                    td8.className = "causa-no";
+                    td10.className = "activity_type";
+                    td12.className = "precondition";
+
+                    if (selectcumap.value != "No") {
+                        td8.id = 1;
+                        td8.textContent = "Cumplido";
+                    }
+
+                    tablegen.append(tr);
+                    tr.appendChild(td1);
+                    tr.appendChild(td);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    tr.appendChild(td4);
+                    tr.appendChild(td5);
+                    tr.appendChild(td8);
+                    tr.appendChild(td6);
+                    tr.appendChild(td10);
+                    tr.appendChild(td12);
+                    tr.appendChild(td11);
+                    td11.append(button);
+
+                    button.onclick = function () {
+                        tablegen.removeChild(tr);
+                        i = i - 1;
+                        acts_id.splice(i, 1);
+                        return i;
+                        return acts_id;
+                    }
+
+                    return acts_id;
+                }
+            }
+            //    message_error(data.error);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }).always(function (data) {
+
+        });
+    });
+};
+function agregarHistoricoNoProgramado() {
+
+    i = i + 1;
+
+    //Variablas elementos de actividades no programadas
+    var selectsubanp = document.getElementById("input-subact-anp-mod");
+    var selectactanp = document.getElementById("select-act-anp-mod");
+    var inputcranp = document.getElementById("input-cr-anp-mod");
+    var inputuanp = document.getElementById("input-u-anp-mod");
+    var inputteanp = document.getElementById("input-te-anp-mod");
+    var inputrdanp = document.getElementById("input-rf-anp-mod");
+    var inputtaanp = document.getElementById("input-ta-anp-mod");
+    var selectcumanp = document.getElementById("select-cum-anp-mod");
+    var selectcauanp = document.getElementById("select-cau-anp-mod");
+    var selectdetanp = document.getElementById("input-det-anp-mod");
+    var selectpreanp = document.getElementById("select-pre-anp");
+    var tablegen = document.getElementById("table-actividad");
+
+    if (selectactanp.options[selectactanp.selectedIndex].disabled) {
+        Swal.fire("Error", "Seleccione una SubActividad.", "warning");
+        return false;
+    }
+
+    if ((selectsubanp.value == "")) {
+        Swal.fire("Error", "Escriba una Sub Actividad valida.", "warning");
+        return false;
+    }
+
+    if (selectcumanp.options[selectcumanp.selectedIndex].disabled) {
+        Swal.fire("Error", "Seleccione si cumplío o no.", "warning");
+        return false;
+    } else {
+        if (selectcumanp.options[selectcumanp.selectedIndex].textContent === "No") {
+            if (selectcauanp.options[selectcauanp.selectedIndex].disabled) {
+                Swal.fire("Error", "Seleccione la causa del No Cumplimiento", "warning");
+                return false;
+            }
+        }
+    }
+
+    if (inputcranp.value === '') {
+        Swal.fire("Error", "Ingrese el avance diario", "warning");
+        return false;
+    } else {
+        if (validateDecimal(inputcranp.value) === false) {
+            Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+            return false;
+        }
+    }
+
+    if (inputcranp.value < 1) {
+        Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+        return false;
+    }
+
+    if (selectpreanp.options[selectpreanp.selectedIndex].disabled) {
+        Swal.fire("Error", "Ingrese un pre requisito", "warning");
+        return false;
+    }
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+    var td1 = document.createElement("td");
+    var td2 = document.createElement("td");
+    var td3 = document.createElement("td");
+    var td4 = document.createElement("td");
+    var td5 = document.createElement("td");
+    var td6 = document.createElement("td");
+    var td7 = document.createElement("td");
+    var td8 = document.createElement("td");
+    var td9 = document.createElement("td");
+    var td10 = document.createElement("td");
+    var td11 = document.createElement("td");
+    var td12 = document.createElement("td");
+
+    var button = document.createElement("input")
+
+    button.className = "btn btn-danger";
+    button.type = "button";
+    button.value = "Eliminar";
+
+    tr.id = "tr-anp" + i;
+
+    td.textContent = selectsubanp.value;
+    td.id = selectactanp.options[selectactanp.selectedIndex].id;
+    td1.textContent = selectactanp.options[selectactanp.selectedIndex].textContent;
+    td2.textContent = inputcranp.value;
+    td3.textContent = inputuanp.options[inputuanp.selectedIndex].value;
+    td4.textContent = inputteanp.value;
+    td5.textContent = inputrdanp.value;
+    td6.textContent = inputtaanp.value;
+    td7.textContent = selectcumanp.options[selectcumanp.selectedIndex].value;
+    td8.textContent = selectcauanp.options[selectcauanp.selectedIndex].value;
+    td12.textContent = selectpreanp.options[selectpreanp.selectedIndex].value;
+    td12.id = selectpreanp.options[selectpreanp.selectedIndex].id;
+    td9.textContent = selectdetanp.value;
+    td10.textContent = "Actividad NO Programada";
+    td1.className = "actividad";
+    td.className = "subactividad";
+    td4.className = "total";
+    td5.className = "referencia-diaria";
+    td6.className = "total_acumulado";
+    td3.id = inputuanp.options[inputuanp.selectedIndex].id;
+    td3.className = "medida";
+    td2.className = "cantidad";
+    td8.className = "causa-no";
+    td10.className = "activity_type";
+    td5.className = "refday";
+    td12.className = "precondition";
+
+    td1.id = selectactanp.options[selectactanp.selectedIndex].id;
+    td7.id = selectcumanp.options[selectcumanp.selectedIndex].id;
+    td8.id = selectcauanp.options[selectcauanp.selectedIndex].id;
+    td6.id = 0;
+    td10.id = 2;
+
+    if (selectcumanp.value != "No") {
+        td8.id = 1;
+        td8.textContent = "Cumplido";
+    }
+
+    tablegen.append(tr);
+    tr.appendChild(td1);
+    tr.appendChild(td);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    tr.appendChild(td5);
+    tr.appendChild(td8);
+    tr.appendChild(td6);
+    tr.appendChild(td10);
+    tr.appendChild(td12);
+    tr.appendChild(td11);
+    td11.append(button);
+
+    button.onclick = function () {
+        tablegen.removeChild(tr);
+        i = i - 1;
+        return i;
+    }
+
+}
+
+document.getElementById("id-nombre-equi-mod").onclick = function (e) {
+
+    debugger;
+    var select_causa = document.getElementById("id-nombre-equi-mod");
+    if ((select_causa.options[select_causa.selectedIndex].textContent != "Seleccione Equipo")
+        || (select_causa.options[select_causa.selectedIndex].textContent != "")) {
+        document.getElementById('id-cantidad-equi-mod').readOnly = false;
+        document.getElementById('id-dotdi-equi-mod').readOnly = false;
+        document.getElementById('id-dotref-equi-mod').readOnly = false;
+        document.getElementById('id-dotind-equi-mod').readOnly = false;
+
+    } else {
+        document.getElementById('id-cantidad-equi-mod').readOnly = true;
+        document.getElementById('id-dotdi-equi-mod').readOnly = true;
+        document.getElementById('id-dotref-equi-mod').readOnly = true;
+        document.getElementById('id-dotind-equi-mod').readOnly = true;
+
+        document.getElementById('id-cantidad-equi-mod').value = " ";
+        document.getElementById('id-dotdi-equi-mod').value = " ";
+        document.getElementById('id-dotref-equi-mod').value = " ";
+        document.getElementById('id-dotind-equi-mod').value = " ";
+    }
+};
+
+//Funcion para el boton de agregar Recursos EECC en Terreno
+
+function agregarEquipo() {
+
+    i = i + 1;
+
+    //Variablas elementos de recursos EECC
+    var idnombreequi = document.getElementById("id-nombre-equi-mod");
+    var idcantidadequi = document.getElementById("id-cantidad-equi-mod");
+    var inputcranp = document.getElementById("select-act-equi-mod");
+    var iddotdiequi = document.getElementById("id-dotdi-equi-mod");
+    var iddotrefequi = document.getElementById("id-dotref-equi-mod");
+    var iddotindequi = document.getElementById("id-dotind-equi-mod");
+    var tablaequipo = document.getElementById("tabla-equipo");
+
+    if (validateInt(idcantidadequi.value)) {
+        if (idcantidadequi.value < 0) {
+            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            return false;
+        }
+    } else {
+        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        return false;
+    }
+
+
+    if (validateInt(iddotdiequi.value)) {
+        if (iddotdiequi.value < 0) {
+            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            return false;
+        }
+    } else {
+        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        return false;
+    }
+
+
+    if (validateInt(iddotrefequi.value)) {
+        if (iddotrefequi.value < 0) {
+            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            return false;
+        }
+    } else {
+        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        return false;
+    }
+
+
+    if (validateInt(iddotindequi.value)) {
+        if (iddotindequi.value < 0) {
+            Swal.fire("Error", "Ingrese un valor númerico positivo", "warning");
+            return false;
+        }
+    } else {
+        Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
+        return false;
+    }
+
+
+    if (idnombreequi.value == "") {
+
+        alert("Seleccione una opción valida y/o Escriba el nombre");
+
+    } else {
+
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        var td5 = document.createElement("td");
+        var td6 = document.createElement("td");
+        var td7 = document.createElement("td");
+        var td8 = document.createElement("td");
+        var button = document.createElement("input")
+
+        button.className = "btn btn-danger";
+        button.type = "button";
+        button.value = "Eliminar";
+
+        tr.id = "tr-rec" + i;
+
+        td7.textContent = i;
+        td.textContent = idnombreequi.options[idnombreequi.selectedIndex].textContent;
+        td.className = "equipo";
+        td.id = idnombreequi.options[idnombreequi.selectedIndex].id;
+        td1.textContent = idcantidadequi.value;
+        td1.className = "cantidad";
+        td1.id = 0;
+        td2.textContent = inputcranp.options[inputcranp.selectedIndex].textContent;
+        td2.className = "actividad";
+        td2.id = inputcranp.options[inputcranp.selectedIndex].id;
+        td4.textContent = iddotdiequi.value;
+        td4.className = "dotacion-directa";
+        td5.textContent = iddotrefequi.value;
+        td5.className = "dotacion-referencial";
+        td6.textContent = iddotindequi.value;
+        td6.className = "dotacion-indirecta";
+
+        tablaequipo.append(tr);
+        tr.appendChild(td7);
+        tr.appendChild(td);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        tr.appendChild(td6);
+        tr.appendChild(td8);
+        td8.append(button);
+
+        button.onclick = function () {
+            tablaequipo.removeChild(tr);
+            i = i - 1;
+            return i;
+        }
+    }
+};
