@@ -8,12 +8,12 @@
 
         {#Antecedentes generales del informe de caminata#}
         <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
-               <div class="row">
+        <div class="row">
             <div class="col-md-6 form-report">
            
                <div class="field-form">
                     <label>N° de API:</label>
-                    <select name="api" id="api_antgen_id" class="form-control" required>
+                    <select name="api" id="ant-api-walk" class="form-control" required>
                         <option disabled selected>Seleccione API</option>
                         {% for api in apis %}
                         <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
@@ -23,7 +23,13 @@
 
                <div class="field-form">
                     <label>N° de Contrato:</label>
-                    <select name="contract" class="form-control" id="contr_antgen_id" required>
+                    <select name="contract" class="form-control" id="ant-contract-walk" required>
+                    </select>
+               </div>
+
+               <div class="field-form">
+                    <label>WBS:</label>
+                    <select name="contract" class="form-control" id="ant-wbs-walk" required>
                     </select>
                </div>
 
@@ -31,40 +37,154 @@
                     <label>Fecha de Inicio:</label>
                     <label name="start_date"></label>
                </div>
-
-                <div class="field-form">
-                    <label>Especialidad:</label>
-                    <select id="especialidad_id" class="form-control" required>
-                        <option disabled selected>Seleccione Especialidad</option>
-                        {% for specialty in specialties %}
-                        <option value="{{specialty.id}}" id="{{specialty.id}}">{{ specialty.specialty_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
             
+                <div class="field-form">
+                    <label>Area: </label>
+                    <input class="form-control" id="ant-area-walk">
+
+               </div>
+
+               <div class="field-form">
+                    <label>Sistema: </label>
+                    <input class="form-control" id="ant-area-walk">
+
+               </div>
+
+               <div class="field-form">
+                    <label>Caminata N°: </label>
+                    <input class="form-control" id="ant-area-walk">
+               </div>
             </div>
 
             <div class="col-md-6 form-report">
 
-                <div class="field-form">
-                    <label>Nombre del Proyecto:</label>
-                    <label name="project_name"></label>
-                </div>
+               <div class="field-form">
+                   <label>Nombre del Proyecto:</label>
+                   <label name="project_name"></label>
+               </div>
 
-                <div class="field-form">
-                    <label>Empresa Contratista:</label>
-                    <label name="enterprise"></label>
-                </div>
+               <div class="field-form">
+                   <label>Empresa Contratista:</label>
+                   <label name="enterprise"></label>
+               </div>
 
-                <div class="field-form">
-                    <label>Fecha de Termino:</label>
-                    <label name="finish_date"></label>
-                </div>
+               <div class="field-form">
+                   <label>Fecha de Termino:</label>
+                   <label name="finish_date"></label>
+               </div>
 
+               <div class="field-form">
+                    <label>TOP: </label>
+                    <input class="form-control" id="ant-area-walk">
+               </div>
+
+               <div class="field-form">
+                    <label>Sub Sistema: </label>
+                    <input class="form-control" id="ant-area-walk">
+               </div>
+
+               <div class="field-form">
+                    <label>Fecha y Hora: </label>
+                    <input class="form-control" id="ant-area-walk">
+               </div>
             </div>
         </div>
 
-¿       <h2 class="title-page">{{ title }}</h2>
+       <h2 class="title-page">{{ title }}</h2>
+       <h3 class="section-title"> CONTROL DE OBSERVACIONES EN CAMINATA </h3>
+       <h4 class="subsection-title"> REGISTRO DE OBSERVACIONES REALIZADAS EN TERRENO </h4>
+
+       <div class="row">
+            <div class="row">
+                <div class="col-md-6 form-report">
+                    <label>Descripcion Accion Pendiente:</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="section-md-field">
+                <div class="col-md-4">
+                    <label>Ubicación:</label>
+                    <input name="place" class="form-control" id="con-place-walk" required>
+                </div>       
+                
+                <div class="col-md-4">
+                    <label>N de Plano:</label>
+                    <input name="plane" class="form-control" id="con-plane-walk" required>
+                </div>         
+
+                <div class="col-md-4">
+                    <label>Codigo de Equipo:</label>
+                    <input name="plane" class="form-control" id="con-plane-walk" required>
+                </div>        
+                
+                <div class="col-md-4">
+                    <label>Disciplina:</label>
+                    <select name="contract" class="form-control" id="ant-contract-walk" required>
+                    </select>
+                </div>         
+                <div class="col-md-4">
+                    <label>Originado por:</label>
+                    <input name="plane" class="form-control" id="con-plane-walk" required>
+                </div>           
+                <div class="col-md-4">
+                    <label>Resp. Construcción:</label>
+                    <input name="plane" class="form-control" id="con-plane-walk" required>
+                </div>        
+                <div class="col-md-4">
+                    <label>Lider Caminata:</label>
+                    <select name="contract" class="form-control" id="ant-contract-walk" required>
+                    </select>
+                </div>        
+                <div class="col-md-4">
+                    <label>Prioridad:</label>
+                    <select name="contract" class="form-control" id="ant-contract-walk" required>
+                    </select>
+                </div>         
+                <div class="col-md-4">
+                    <label>Fecha de Compromiso de Cierre:</label>
+                    <input type="datetime-local" name="plane" class="form-control" id="con-plane-walk" required>
+                </div>
+            </div> 
+       </div>
+        <div class="btn-save">
+                <input id="btn-save_report" class="btn btn-danger" type="button" value="Agregar"/>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="table-container--load">
+            <table class="display" width="100%" id="">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Ubicacion</th>
+                        <th>Codigo Equipo</th>
+                        <th>Disciplina</th>
+                        <th>Descripcion</th>
+                        <th>Originado por</th>
+                        <th>Resp.Construccion</th>
+                        <th>Lider Caminata</th>
+                        <th>Prioridad</th>
+                        <th>Fecha Cierre</th>
+                        <th>Fecha Cierre Real</th>
+                    </tr>
+                </thead>
+                
+            </table>
+        </div>
+       <h2 class="title-page">{{ title }}</h2>
+       <h3 class="section-title"> ARCHIVOS ADJUNTOS </h3>
+        <div>
+            <div class="field-form">
+                <input class="" id="file" type="file" value="Subir Archivo" multiple/>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="btn-save">
+                <input id="btn-save_report" class="btn btn-danger" type="button" value="Guardar"/>
+        </div>
 
     </form>
 </div>
