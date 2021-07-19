@@ -112,6 +112,7 @@
     <Content Include="app\static\app\scripts\jquery.chained.min.js" />
     <Content Include="app\static\app\scripts\loadfiles.js" />
     <Content Include="app\static\app\scripts\modifiedreport.js" />
+    <Content Include="app\static\app\scripts\registerwalkreport.js" />
     <Content Include="app\static\app\scripts\searchactivities.js" />
     <Content Include="report\templates\form-report\modifiedreport.html" />
     <Content Include="report\templates\form-report\generatereport.html" />

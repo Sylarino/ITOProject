@@ -104,8 +104,8 @@ class Contract(models.Model):
     contract_number = models.IntegerField(verbose_name="Número de Contrato")
     enterprise = models.CharField(blank=True, null=True, max_length=150, verbose_name="Empresa Contratista")
     rut = models.CharField(blank=True, null=True, max_length=12, verbose_name="RUT")
-    project_boss = models.CharField(blank=True, null=True, max_length=12, verbose_name="Jefe de Proyecto")
-    email = models.CharField(blank=True, null=True, max_length=12, verbose_name="Correo")
+    project_boss = models.CharField(blank=True, null=True, max_length=200, verbose_name="Jefe de Proyecto")
+    email = models.EmailField(max_length = 254, blank=True, null=True, verbose_name="Correo")
     cellphone = models.CharField(blank=True, null=True, max_length=12, verbose_name="Celular")
     start_date = models.DateField(verbose_name="Comienza el")
     finish_date = models.DateField(verbose_name="Finaliza el")
@@ -187,6 +187,7 @@ class SubActivity(models.Model):
 
 
 class Report(models.Model):
+
     deviation_detected = models.TextField(blank=True, verbose_name="Desviación detectada", default="")
     action_plan = models.TextField(blank=True, verbose_name="Plan de Acción", default="")
     evidence_obs = models.TextField(blank=True, verbose_name="Observación de Fotografías", default="")
@@ -202,7 +203,6 @@ class Report(models.Model):
 
     def __str__(self):
         return str(self.id)
-
 
 class Historical(models.Model):
 
@@ -238,7 +238,6 @@ class EquipmentAmount(models.Model):
     direct_endowment = models.IntegerField(verbose_name="Dotación Directa")
     direct_reference = models.IntegerField(verbose_name="Dotacion Referencial")
     indirect_endowment = models.IntegerField(verbose_name="Dotacion Indirecta")
-
     activity = models.ForeignKey(Activity, verbose_name="Actividad", on_delete=models.CASCADE, default="")
     equipment = models.ForeignKey(Equipment, verbose_name="Equipo", on_delete=models.CASCADE)
     #Nuevo
@@ -252,6 +251,7 @@ class EquipmentAmount(models.Model):
         return str(self.equipment_amount)
 
 class HistoricalReference(models.Model):
+
     description = models.CharField(max_length=500, verbose_name="Prerequisito")
 
     #Llaves
