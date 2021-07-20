@@ -3,7 +3,9 @@
 {% block content %}
 
 <div class="container">
-    <form>
+    <form action="">
+        {% csrf_token %}
+
         <h2 class="title-page">{{ title }}</h2>
 
         {#Antecedentes generales del informe de caminata#}
@@ -221,7 +223,7 @@
        <h3 class="section-title"> ARCHIVOS ADJUNTOS </h3>
         <div>
             <div class="field-form">
-                <input class="" id="file" type="file" value="Subir Archivo" multiple/>
+                <input class="" id="file_walk" type="file" value="Subir Archivo" multiple/>
             </div>
         </div>
 

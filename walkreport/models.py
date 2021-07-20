@@ -44,7 +44,7 @@ class Priority(models.Model):
 
 class EvidenceFile(models.Model):
 
-    upload = models.FileField(default='null', verbose_name="Acta Escaneado de Caminata", upload_to='')
+    upload = models.FileField(default='null', verbose_name="Acta Escaneado de Caminata", upload_to='files_walk_report')
     pdf_register = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro")
 
     class Meta:
@@ -56,6 +56,7 @@ class EvidenceFile(models.Model):
 
 class WalkReport(models.Model):
 
+    #agregar fecha 
     historic_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro")
     top = models.CharField(max_length=200, verbose_name="TOP")
     sistem = models.CharField(max_length=200, verbose_name="Sistema")
