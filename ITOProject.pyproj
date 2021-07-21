@@ -114,6 +114,7 @@
     <Content Include="app\static\app\scripts\modifiedreport.js" />
     <Content Include="app\static\app\scripts\registerwalkreport.js" />
     <Content Include="app\static\app\scripts\searchactivities.js" />
+    <Content Include="app\static\app\scripts\searchwalkreports.js" />
     <Content Include="report\templates\form-report\modifiedreport.html" />
     <Content Include="report\templates\form-report\generatereport.html" />
     <Content Include="report\templates\form-report\loadfiles.html" />

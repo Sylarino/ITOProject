@@ -305,3 +305,4 @@ class PDFReport(models.Model):
 
     def __str__(self):
         return str(self.inspection_date)
+

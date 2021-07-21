@@ -77,7 +77,8 @@
                               Observacion de Caminata
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'registerwalkreport' %}">Registro de Observacion de Caminata</a>
+                                <a class="dropdown-item" href="{% url 'registerwalkreport' %}">Registro de Observacion en Caminata</a>
+                                <a class="dropdown-item" href="{% url 'searchwalkreport' %}">Consulta de Observacion en Caminata</a>
                             </div>
                         </li>  
                         {% if request.user|has_group:"P&C" %}

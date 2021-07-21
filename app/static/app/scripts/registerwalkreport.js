@@ -107,11 +107,11 @@ $(function () {
         }
 
         if (inputfiles.files.length > 0) {
-            var file_val = 0;
-            var file_exist = 0;
-        } else {
             var file_val = 1;
             var file_exist = 1;
+        } else {
+            var file_val = 0;
+            var file_exist = 0;
         }
 
         document.querySelectorAll('#tbody-walk tr').forEach(function (e) {
@@ -135,11 +135,11 @@ $(function () {
             api_id: selectapi.options[selectapi.selectedIndex].id,
             contrato_id: selectcontrato.options[selectcontrato.selectedIndex].id,
             area_id: selectarea.options[selectarea.selectedIndex].id,
-            sistema: inputsistema.textContent,
-            subsistema: inputsubsistema.textContent,
-            caminata: inputcaminata.textContent,
-            top: inputtop.textContent,
-            fecha: inputfechayhora.textContent,
+            sistema: inputsistema.value,
+            subsistema: inputsubsistema.value,
+            caminata: inputcaminata.value,
+            top: inputtop.value,
+            fecha: inputfechayhora.value,
             exist_file: file_exist
         }
 

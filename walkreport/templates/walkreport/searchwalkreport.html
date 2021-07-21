@@ -1,11 +1,148 @@
-<!DOCTYPE html>
+{% extends "app/layout.html" %}
+{% load staticfiles %}
+{% block content %}
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+<form action="">
+    <div class="container">
 
-</body>
-</html>
+    <h2 class="title-page">{{ title }}</h2>
+
+    <div class="row form-search-act">
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label class="form-search-label">Proyecto:</label>
+                <select name="api" id="api_walk_select" class="form-control form-search-control" required>
+                    <option id="0" disabled selected>Seleccione API</option>
+                    {% for api in apis %}
+                    <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label class="form-search-label">Contrato:</label>
+                <select name="contract" class="form-control form-search-control" id="con_walk_select" required>
+                    <option id="0" disabled selected>Seleccione Contrato</option>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label class="form-search-label">Area:</label>
+                <select name="area" class="form-control form-search-control" id="area_walk_select" required>
+                    <option id="0" disabled selected>Seleccione Area</option>
+                    {% for wb in wbs %}
+                    <option id="{{wb.id}}" value="{{wb.id}}">{{ wb.wbs_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label class="form-search-label">Disciplina:</label>
+                <select name="discipline" class="form-control form-search-control" id="disi_walk_select" required>
+                    <option id="0" disabled selected>Seleccione Disciplina</option>
+                    {% for discipline in disciplines %}
+                    <option id="{{discipline.id}}" value="{{discipline.id}}">{{ discipline.discipline_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label class="form-search-label">Prioridad:</label>
+                <select name="priority" class="form-control form-search-control" id="prio_walk_select" required>
+                    <option id="0" disabled selected>Seleccione Prioridad</option>
+                    {% for priority in priorities %}
+                    <option id="{{priority.id}}" value="{{priority.id}}">{{ priority.priority_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label class="form-search-label">Autor:</label>
+                <select name="autor" class="form-control form-search-control" id="autor_walk_select" required>
+                    <option id="0" disabled selected>Seleccione Autor</option>
+                    {% for user in users %}
+                    <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>    
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label class="form-search-label">Lider de Caminata:</label>
+                <select name="leader" class="form-control form-search-control" id="leader_walk_select" required>
+                    <option id="0" disabled selected>Seleccione Lider</option>
+                    {% for user in users %}
+                    <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3 form-report">
+            <div class="field-form">
+                <label class="form-search-label">Rango de Fechas de Cierre:</label>
+                <input class="form-control form-search-control" type="text" id="daterange" name="daterange"/>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="btn-section-container">
+        <div class="btn-save">
+            <input id="btn-buscar-walk" class="btn btn-danger" type="button" value="Buscar"/>
+        </div>
+
+        <div class="btn-save">
+            <input id="btn-recargar" class="btn btn-danger" type="button" value="Limpiar"/>
+        </div>
+
+        <div id="export" class="btn-save">
+
+        </div>
+    </div>
+    </div>
+    
+
+    <div class="col-md-12 hidden" id="divTabla">
+        <div class="table-container--load">
+            <table class="display" width="100%" id="tableActivities">
+                <thead>
+                    <tr>
+                        <th>Reporte</th>
+                        <th>Caminata</th>
+                        <th>Ubicacion</th>
+                        <th>N Plano</th>
+                        <th>Codigo Equipo</th>
+                        <th>Disciplina</th>
+                        <th>Descripcion</th>
+                        <th>Originado por</th>
+                        <th>Resp. Construccion</th>
+                        <th>Lider caminata</th>
+                        <th>Prioridad</th>
+                        <th>Fecha Compromiso</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>  
+    </div>
+
+</form>
+
+
+<script src="{% static 'app/scripts/searchactivities.js' %}"></script>
+<script src="{% static 'app/scripts/searchwalkreports.js' %}"></script>
+
+{% endblock %}

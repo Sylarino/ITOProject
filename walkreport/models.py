@@ -111,3 +111,29 @@ class FileWalkReport(models.Model):
 
     def __str__(self):
         return self.inspection_date    
+
+class PDFWalkReport(models.Model):
+
+    upload = models.FileField(default='null', verbose_name="PDF", upload_to='pdf_walk_reports')
+    pdf_register = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro de PDF")
+
+    class Meta:
+        verbose_name = 'PDF Acta de Observaciones en Caminata'
+        verbose_name_plural = 'Archivos PDF Acta de Observaciones en Caminata'
+
+    def __str__(self):
+        return str(self.pdf_register)
+
+class WalkReportPDFFile(models.Model):
+
+    inspection_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro de PDF")
+    #Llaves
+    walk_report = models.ForeignKey(WalkReport, verbose_name="Reporte de Caminata", on_delete=models.CASCADE)
+    pdf = models.ForeignKey(PDFWalkReport, verbose_name="PDF de Acta de Caminata", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Repertorio de PDF de Acta'
+        verbose_name_plural = 'Repertorios de Archivos PDF Actas de Caminata'
+
+    def __str__(self):
+        return str(self.walk_report)  

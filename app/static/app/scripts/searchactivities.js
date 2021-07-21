@@ -42,9 +42,12 @@ $(function () {
 //Accion para ejecutar cuando hay un cambio en el select del proyecto
 $(function () {
     $('select[name="api"]').on('change', function () {
-        var id = $('#api_antgen_id').val();//$(this).val();
+
+        var id_select = this.id;
+
+        var id = $('#' + id_select).val();
         var select_contracts = $('select[name="contract"]');
-        var options = '<option id="0" disabled selected>Seleccione N° de Contrato</option>';
+        var options = '';
 
         if (id === '') {
             select_contracts.html(options);

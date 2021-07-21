@@ -10,10 +10,25 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from reportlab.pdfgen import canvas
+from django.conf import settings
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image, Paragraph
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter, landscape, portrait, A4
+from reportlab.lib import utils 
+import io
+from django.core.files.base import ContentFile
+from report.models import Image as ImgReport
+from report.forms import UploadFileForm, HistoricalForm
+from reportlab.lib.units import cm
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER
+from reportlab.pdfbase.pdfmetrics import stringWidth
 
 
 # Create your views here.
 
+#Vista para ir a la ventana de registro de reporte de caminata
 def registerwalkreport(request):
     
     apis = API.objects.all()
@@ -38,8 +53,15 @@ def registerwalkreport(request):
             'users': users 
         })
 
+#Vista para ir a la ventana de consulta de reporte de caminata
 def searchwalkreport(request):
-    
+
+    apis = API.objects.all()
+    disciplines = Discipline.objects.all()
+    wbs = WBS.objects.all()
+    priorities = Priority.objects.all()
+    users = User.objects.all()
+
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -47,8 +69,14 @@ def searchwalkreport(request):
         {
             'title':'Busqueda de Observacion de Caminata',
             'year': datetime.now().year,
+            'apis': apis,
+            'disciplines': disciplines,
+            'wbs': wbs,
+            'priorities': priorities,
+            'users': users 
         })
 
+#Vista para buscar el WBS
 def searchwbs(request):
 
     try:
@@ -67,6 +95,7 @@ def searchwbs(request):
         data['error'] = str(e)
     return JsonResponse(data, safe=False)
 
+#Vista para guardar el reporte y observaciones de caminatas
 @csrf_exempt
 @login_required(login_url="login")
 def savewalkreport(request,*args, **kwargs):
@@ -114,7 +143,6 @@ def savewalkreport(request,*args, **kwargs):
                 leader_data = User.objects.get(pk = int(ob['lider_caminata']))
                 prioridad_data = Priority.objects.get(pk = int(ob['prioridad']))
 
-                #Revisar fechas
                 observacion = WalkObservation(
                         ubication = ob['ubicacion'],
                         plane_number = int(ob['num_plano']),
@@ -151,7 +179,7 @@ def savewalkreport(request,*args, **kwargs):
                     'submitted': 0
                     }
 
-            return JsonResponse(data)}
+            return JsonResponse(data)
 
         if len(request.FILES.getlist('files')) > 0:
 
@@ -189,3 +217,339 @@ def savewalkreport(request,*args, **kwargs):
 
             return JsonResponse(data)
 
+#Función para crear el pdf del Acta de Observaciones de Caminatas
+@csrf_exempt
+@login_required(login_url="login")
+def createwalkpdf(request):
+
+    id_report = 2
+    #Llamar datos relacionados al reporte a crear
+    reportecaminata = WalkReport.objects.filter(id=int(id_report))
+    observaciones = WalkObservation.objects.filter(walk_report_id=int(id_report))
+    evidencia_reporte = FileWalkReport.objects.filter(walk_report_id=int(id_report)) 
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename=OBS-CAMINATA N°'+ str(id_report)+'.pdf'
+    stream = io.BytesIO()
+
+    #Creación de hoja en blanco
+    c = canvas.Canvas(
+                      stream,
+                      pagesize=landscape(letter)
+                      )
+    width, height = landscape(letter) 
+
+    styles = getSampleStyleSheet()
+    styleN = styles["BodyText"]
+    styleN.alignment = TA_LEFT
+    styleBH = styles["Normal"]
+    styleBH.alignment = TA_CENTER
+    styleN.fontSize = 8
+    styleBH.fontSize = 8
+
+    #Cabezera PDF
+    archivo_imagen = settings.STATIC_ROOT +'/app/img/logo.jpg'
+    height_pdf = height
+    url_img = settings.STATIC_ROOT + "/app/img/report_banners/bannercaminata/banner_cabezera.png" 
+    im_banner = Image(url_img, width=792, height=76)
+    im_banner.drawOn(c, 0, 530)
+
+    c.setFont('Helvetica', 18)
+    title_report = stringWidth("ACTA N°"+str(id_report), 'Helvetica', 18)
+
+    c.drawString((width/2)-(title_report/2), 570,"ACTA N°"+str(id_report))
+
+    #Antecedentes Generales
+
+    c.setFont('Helvetica', 14)
+    title_report = stringWidth("ANTECEDENTES GENERALES", 'Helvetica', 14)
+    c.drawString((width/2)-(title_report/2), 518,"ANTECEDENTES GENERALES")
+
+    c.setFont('Helvetica', 8)
+    c.drawString(25, 500,"Proyecto: " + reportecaminata[0].api.project_name)
+    c.drawString(25, 485,"WBS: " + str(reportecaminata[0].wbs.number))
+    c.drawString(25, 470,"Área: " + reportecaminata[0].wbs.wbs_name)
+    c.drawString(25, 455,"TOP: " + reportecaminata[0].top)
+    c.drawString(25, 440,"Sistema: " + reportecaminata[0].sistem)
+
+    c.drawString(396, 500,"Empresa: " + reportecaminata[0].contract.enterprise)
+    c.drawString(396, 485,"Contrato: " + str(reportecaminata[0].contract.contract_name))
+    c.drawString(396, 470,"Fecha Inicio Contrato: " + str(reportecaminata[0].contract.start_date.day) + "/"
+                               + str(reportecaminata[0].contract.start_date.month) + "/"
+                               + str(reportecaminata[0].contract.start_date.year))
+    c.drawString(396, 455,"Caminata N°: " + str(reportecaminata[0].walk_number))
+    c.drawString(396, 440,"Fecha y Hora: " + str(reportecaminata[0].historic_date.day) + "/"
+                                     + str(reportecaminata[0].historic_date.month) + "/"
+                                     + str(reportecaminata[0].historic_date.year))
+
+    ##Separador
+    height_pdf -= 200
+    url_img = settings.STATIC_ROOT + "/app/img/report_banners/bannercaminata/separador.png" 
+    im_banner = Image(url_img, width=792, height=16)
+    im_banner.drawOn(c, 0, height_pdf)
+    height_pdf -= 20
+
+    #Observaciones
+
+    c.setFont('Helvetica', 14)
+    title_report = stringWidth("ANTECEDENTES GENERALES", 'Helvetica', 14)
+    c.drawString((width/2)-(title_report/2), 399,"OBSERVACIONES EN CAMINATA")
+
+    ###Primer trozo del parrafo
+    info = Paragraph("1.- PRIORIDAD  01: Son detalle de terminación críticos que deben ser cerrados antes de la pruebas. (Construcción o preparación o Comisionamiento), PRIORIDAD  02: Son detalle de terminación criticidad moderada que pueden ser cerrados durante las pruebas por etapa, pero no las traspasarán al proceso sgte. PRIORIDAD 03: Son ítems adicionales que no están incluidos en el alcance del trabajo (presente contrato), pero son alcance de proyecto. PRIORIDAD 04: Son ítems adicionales que no están incluidos en el alcance del proyecto."
+                    , styleN)  
+    info.wrapOn(c, width, height)
+    w, h = info.wrap(772, 100)
+    height_pdf -= h
+    info.drawOn(c, 15, height_pdf, 0)
+
+    ###Segundo trozo del parrafo
+    info = Paragraph("2.- El contratista es responsable de que este documento y el acta de asistencia sea firmado por asistentes a la caminata. Debe entregar una copia del listado de punch firmado en terreno y acta al líder de caminata."
+                    , styleN)
+    info.wrapOn(c, width, height)
+    w, h = info.wrap(772, 100)
+    height_pdf -= h
+    info.drawOn(c, 15, height_pdf, 0)
+
+
+
+    height_pdf -= 10
+    
+    n_ubicacion = Paragraph('''<b>UBICACIÓN</b>''', styleBH)
+    n_plano = Paragraph('''<b>N° PLANO</b>''', styleBH)
+    n_equipo = Paragraph('''<b>CÓDIGO EQUIPO</b>''', styleBH)
+    n_disciplina = Paragraph('''<b>DISCIPLINA</b>''', styleBH)
+    n_descripcion = Paragraph('''<b>DESCRIPCIÓN ACCIÓN PENDIENTE</b>''', styleBH)
+    n_originador = Paragraph('''<b>ORIGINADOR POR</b>''', styleBH)
+    n_responsable = Paragraph('''<b>RESP. CONSTRUCCIÓN</b>''', styleBH)
+    n_lider = Paragraph('''<b>LIDER CAMINATA</b>''', styleBH)
+    n_prioridad = Paragraph('''<b>PRIORIDAD</b>''', styleBH)
+    n_fecha_compromiso = Paragraph('''<b>FECHA DE COMPROMISO DE CIERRE</b>''', styleBH)
+    n_fecha_real = Paragraph('''<b>FECHA REAL DE CIERRE</b>''', styleBH)
+
+    obs = []
+
+    obs = [[n_ubicacion, 
+            n_plano, 
+            n_equipo, 
+            n_disciplina, 
+            n_descripcion, 
+            n_originador, 
+            n_responsable, 
+            n_lider, 
+            n_prioridad,
+            n_fecha_compromiso,
+            n_fecha_real]]
+
+    for ob in observaciones:
+        obs += [[Paragraph(ob.ubication , styleN),
+                     Paragraph(str(ob.plane_number), styleN),
+                     Paragraph(str(ob.equipment_code), styleN),
+                     Paragraph(str(ob.discipline.discipline_name), styleN),
+                     Paragraph(ob.action_description, styleN),
+                     Paragraph(ob.register_by.first_name + " " + ob.register_by.last_name, styleN),
+                     Paragraph(ob.responsable.first_name + " " + ob.responsable.last_name, styleN),
+                     Paragraph(ob.leader.first_name + " " + ob.leader.last_name, styleN),
+                     Paragraph(ob.priority.priority_name, styleN),
+                     Paragraph(str(ob.stipulated_date.day) + "/"
+                                     + str(ob.stipulated_date.month) + "/"
+                                     + str(ob.stipulated_date.year), styleN),
+                     Paragraph(str(ob.real_close_date.day) + "/"
+                                     + str(ob.real_close_date.month) + "/"
+                                     + str(ob.real_close_date.year), styleN),
+                     ]]
+    
+    t=Table(obs, colWidths= 2.45 * cm)
+    t.setStyle(TableStyle([ ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                            ('FONTSIZE', (0,0), (-1, -1), 8),
+                            ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
+                            ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
+                            ('ALIGN', (0,0), (1,-1), 'LEFT'),
+                            ('ALIGN', (2,0), (-1,-1), 'RIGHT')]))
+
+    t.wrapOn(c, width, height)
+    w, h = t.wrap(100, 100)
+    height_pdf -= h
+    t.drawOn(c, 15, height_pdf, 0)
+
+    #Procesar y Guardar Reporte
+    c.save()
+
+    stream.seek(0)
+    pdf: bytes = stream.getvalue()
+
+    response.write(pdf)
+    file_data = ContentFile(pdf)
+
+    reportpdf = PDFWalkReport()
+    reportpdf.upload.save('REPORTE N°'+ str(id_report)+'.pdf', file_data, save=False)
+    reportpdf.save()
+
+    pdfrelation = WalkReportPDFFile(
+        pdf = reportpdf,
+        walk_report = reportecaminata[0]
+        )
+
+    pdfrelation.save()
+
+    return response
+
+search = []
+#Vista para buscar los datos requeridos en la consulta de caminatas
+@csrf_exempt
+@login_required(login_url="login")
+def searchwalks(request):
+
+    try:
+
+        if request.method == 'GET':
+
+            search.clear()
+
+            listar = request.GET.getlist('listar[]')
+            busqueda = json.loads(listar[0])
+
+            walk_rep = WalkReport.objects.filter(api_id=int(busqueda[0]['id_api']))
+
+            for report in walk_rep:
+
+                observaciones = WalkObservation.objects.filter(walk_report_id=int(busqueda[0]['id_api']))
+
+                for obs in observaciones:
+
+                    search.append({
+                        'id_reporte': report.id,
+                        'id_observacion': obs.id,
+                        'top':report.top,
+                        'sistema': report.sistem,
+                        'subsistema': report.subsistem,
+                        'caminata': report.walk_number,
+                        'area': report.wbs.wbs_name,
+                        'contrato_id': report.contract_id,
+                        'api_id': report.api_id,
+                        'ubicacion': obs.ubication,
+                        'plano': obs.plane_number,
+                        'equipo': obs.equipment_code,
+                        'accion': obs.action_description,
+                        'historico_fecha': obs.historic_date,
+                        'fecha_compromiso': obs.stipulated_date,
+                        'fecha_compromiso_real': obs.real_close_date,
+                        'disciplina': obs.discipline.discipline_name,
+                        'disciplina_id': obs.discipline_id,
+                        'responsable': obs.responsable.first_name + " " + obs.responsable.last_name,
+                        'responsable_id': obs.responsable_id,
+                        'originador': obs.register_by.first_name + " " + obs.register_by.last_name,
+                        'originador_id': obs.register_by_id,
+                        'lider': obs.leader.first_name + " " + obs.leader.last_name,
+                        'lider_id': obs.leader_id,
+                        'prioridad': obs.priority.priority_name,
+                        'prioridad_id': obs.priority_id,
+                        })
+
+            if int(busqueda[0]['id_contrato']) != 0:
+                        
+                large = len(search)  
+                inc = 0
+                while inc < large:
+                
+                    if (search[inc]['contrato_id'] != int(busqueda[0]['id_contrato'])):
+
+                        search.pop(inc)
+
+                        inc = inc
+                        large -= 1
+                    else:
+                        inc += 1
+
+            if int(busqueda[0]['id_autor']) != 0:
+                        
+                large = len(search)  
+                inc = 0
+                while inc < large:
+                
+                    if (search[inc]['originador_id'] != int(busqueda[0]['id_autor'])):
+
+                        search.pop(inc)
+
+                        inc = inc
+                        large -= 1
+                    else:
+                        inc += 1     
+
+            if int(busqueda[0]['id_lider']) != 0:
+                        
+                large = len(search)  
+                inc = 0
+                while inc < large:
+                
+                    if (search[inc]['lider_id'] != int(busqueda[0]['id_lider'])):
+
+                        search.pop(inc)
+
+                        inc = inc
+                        large -= 1
+                    else:
+                        inc += 1      
+                  
+            if int(busqueda[0]['id_disciplina']) != 0:
+                        
+                large = len(search)  
+                inc = 0
+                while inc < large:
+                
+                    if (search[inc]['disciplina_id'] != int(busqueda[0]['id_disciplina'])):
+
+                        search.pop(inc)
+
+                        inc = inc
+                        large -= 1
+                    else:
+                        inc += 1     
+
+            if int(busqueda[0]['id_prioridad']) != 0:
+                        
+                large = len(search)  
+                inc = 0
+                while inc < large:
+                
+                    if (search[inc]['prioridad_id'] != int(busqueda[0]['id_prioridad'])):
+
+                        search.pop(inc)
+
+                        inc = inc
+                        large -= 1
+                    else:
+                        inc += 1
+
+            if busqueda[0]['fecha_inicio'] != "" and busqueda[0]['fecha_termino'] != "":
+                        
+                large = len(search)  
+                inc = 0
+
+                startdate = busqueda[inc]['fecha_inicio']
+                fecha_st = datetime.strptime(startdate, '%d/%m/%Y')
+
+                finishdate = busqueda[inc]['fecha_termino']
+                fecha_ed = datetime.strptime(finishdate, '%d/%m/%Y')
+
+                while inc < large:
+                    
+                    report_date = search[inc]['fecha_compromiso']
+                    fecha_rp = datetime.strptime(report_date, '%d/%m/%Y')
+
+                    if fecha_rp < fecha_st or fecha_rp > fecha_ed:
+
+                        search.pop(inc)
+
+                        inc = inc
+                        large -= 1
+                    else:
+                        inc += 1
+
+
+    except Exception as e:
+
+        respuesta = e
+
+    return JsonResponse(search, safe=False)
