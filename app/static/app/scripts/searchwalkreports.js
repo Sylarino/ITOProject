@@ -27,7 +27,7 @@ $('input[id="btn-buscar-walk"]').on('click', function () {
 
     let fila = {
         id_api: api.options[api.selectedIndex].id,
-        id_contrato: 0,
+        id_contrato: contrato.options[contrato.selectedIndex].id,
         id_autor: autor.options[autor.selectedIndex].id,
         id_lider: lider.options[lider.selectedIndex].id,
         id_disciplina: disciplina.options[disciplina.selectedIndex].id,
@@ -68,7 +68,7 @@ function cargarTablaCaminatas(response) {
         return false;
     }
     $("#divTabla").removeClass("hidden");
-
+    var url = "modifiedwalkreport/"
     var tablaActividades = "";
     /*    if (!$.fn.dataTable.fnIsDataTable($('#tableActivities'))) {*/
     tablaActividades = $('#tableActivities').DataTable({
@@ -102,11 +102,11 @@ function cargarTablaCaminatas(response) {
             { "data": "lider", "name": "Lider_caminata" },
             { "data": "prioridad", "name": "Prioridad" },
             { "data": "fecha_compromiso", "name": "Fecha_compromiso" },
-            //{
-            //    "data": "reporte", "render": function (data, type, full, meta) {
-            //        return '<a onclick="Modificar(' + data + ');" class="form-control btn-danger"><i class="glyphicon glyphicon-pencil"></i></a>';
-            //    }
-            //}
+            {
+                "data": "id_observacion", "render": function (data, type, full, meta) {
+                    return '<a onclick="abrir_modal_edicion('+data+');" class="form-control btn-danger"><i class="glyphicon glyphicon-pencil"></i></a>';
+                }
+            },
             
         ]
     });
@@ -123,4 +123,14 @@ function cargarTablaCaminatas(response) {
     return false;
 
 
+}
+
+function abrir_modal_edicion( id) {
+    debugger;
+    var $ = jQuery.noConflict();
+
+    $('#edicion').load('modifiedwalkreport/', function () {
+
+        $(this).modal('show');
+    });
 }

@@ -607,7 +607,7 @@ $(function () {
 
         var id = $('#' + id_select).val();
         var select_contracts = $('select[name="contract"]');
-        var options = '<option disabled selected>Seleccione N° de Contrato</option>';
+        var options = '<option id="0" disabled selected>Seleccione N° de Contrato</option>';
 
         if (id === '') {
             select_contracts.html(options);

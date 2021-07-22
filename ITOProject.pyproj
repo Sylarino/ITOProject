@@ -152,6 +152,7 @@
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
     <Content Include="walkreport\templates\walkreport\index.html" />
+    <Content Include="walkreport\templates\walkreport\observation.html" />
     <Content Include="walkreport\templates\walkreport\registerwalkreport.html" />
     <Content Include="walkreport\templates\walkreport\searchwalkreport.html" />
   </ItemGroup>

@@ -27,6 +27,29 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 
 
 # Create your views here.
+def modifiedwalkreport(request):
+    
+    apis = API.objects.all()
+    contracts = Contract.objects.all()
+    disciplines = Discipline.objects.all()
+    wbs = WBS.objects.all()
+    priorities = Priority.objects.all()
+    users = User.objects.all()
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'walkreport/observation.html',
+        {
+            'title':'Modificacón de Observacion de Caminata',
+            'year': datetime.now().year,
+            'apis': apis,
+            'contracts': contracts,
+            'disciplines': disciplines,
+            'wbs': wbs,
+            'priorities': priorities,
+            'users': users 
+        })
 
 #Vista para ir a la ventana de registro de reporte de caminata
 def registerwalkreport(request):
@@ -414,7 +437,7 @@ def searchwalks(request):
 
             for report in walk_rep:
 
-                observaciones = WalkObservation.objects.filter(walk_report_id=int(busqueda[0]['id_api']))
+                observaciones = WalkObservation.objects.filter(walk_report_id=int(report.id))
 
                 for obs in observaciones:
 

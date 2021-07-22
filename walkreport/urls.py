@@ -9,4 +9,5 @@ urlpatterns = [
         path('registerwalkreport/savefiles/', views.savewalkreport, name='savefiles'),
         path('registerwalkreport/createwalkpdf/', views.createwalkpdf, name='createwalkpdf'),
         path('searchwalks/', views.searchwalks, name='searchwalks'),
+        path('modifiedwalkreport/', views.modifiedwalkreport, name='modifiedwalkreport'),
     ]
