@@ -104,33 +104,47 @@ function cargarTablaCaminatas(response) {
             { "data": "fecha_compromiso", "name": "Fecha_compromiso" },
             {
                 "data": "id_observacion", "render": function (data, type, full, meta) {
-                    return '<a onclick="abrir_modal_edicion('+data+');" class="form-control btn-danger"><i class="glyphicon glyphicon-pencil"></i></a>';
+                    return '<a onclick="abrir_modal_edicion('+ data +');" class="form-control btn-danger"><i class="glyphicon glyphicon-pencil"></i></a>';
                 }
             },
             
         ]
     });
-
-    //var divexport = document.getElementById('export');
-    //var exportar = document.createElement('a');
-    //exportar.className = 'btn btn-danger';
-    //exportar.type = 'button';
-    //exportar.textContent = 'Exportar a Excel';
-    //exportar.id = 'exportarexcel';
-    //exportar.href = 'downloadexcelsearch/excelconfiltro';
-    //divexport.appendChild(exportar);
-
+    
     return false;
-
-
 }
 
-function abrir_modal_edicion( id) {
+function abrir_modal_edicion(id_report) {
     debugger;
     var $ = jQuery.noConflict();
 
     $('#edicion').load('modifiedwalkreport/', function () {
 
-        $(this).modal('show');
+        $.ajax({
+
+            type: 'GET',
+            data: {
+                action: 'search_data',
+                id: id_report,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            url: "/getwalkreportformodified",
+            dataType: 'json',
+
+        }).done(function (search) {
+
+            $(this).modal('show');
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            alert(textStatus + ': ' + errorThrown);
+
+        }).always(function (data) {
+
+
+
+        });
+
     });
+
 }

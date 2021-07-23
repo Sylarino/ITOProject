@@ -158,7 +158,7 @@ $(function () {
         }).done(function (data) {
 
             if (file_val === 0) {
-                messageSucces(data);
+                messageSuccessPDF(data);
             }
 
         }).fail(function (data) {
@@ -176,7 +176,7 @@ $(function () {
                 dataType: 'json',
             }).done(function (data) {
 
-                messageSucces(data);
+                messageSuccessPDF(data);
 
             }).fail(function (data) {
                 Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
@@ -186,3 +186,45 @@ $(function () {
 
     });
 });
+
+function downloadwalkreport(id_pdf) {
+    $.ajax({
+        type: 'POST',
+        data: { 'id': id_pdf, csrfmiddlewaretoken: '{{ csrf_token }}' },
+        url: "downloadwalkpdf/",
+        success: function (response) {
+            var blob = new Blob([response], { type: 'application/pdf' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "REPORT_N" + id_pdf + ".pdf";
+            link.click();
+        }
+    });
+}
+
+function messageSuccessPDF(data) {
+
+    if (data.submitted == 1) {
+
+        swal.fire("Guardado", "Reporte N°" + data.id_report + " agregado satisfactoriamente", "success", {
+            confirmButtonText: "Descargar"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                downloadwalkreport(data.id_report);
+                Swal.fire('Descargado!', '', 'success', {
+                    confirmButtonText: "Ok"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                        window.scrollTo(0, 0);
+                    } else {
+                        window.location.reload();
+                        window.scrollTo(0, 0);
+                    }
+                });
+            }
+        });
+
+    }
+}

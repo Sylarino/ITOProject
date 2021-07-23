@@ -24,32 +24,63 @@ from reportlab.lib.units import cm
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER
 from reportlab.pdfbase.pdfmetrics import stringWidth
-
+import os
 
 # Create your views here.
 def modifiedwalkreport(request):
-    
-    apis = API.objects.all()
-    contracts = Contract.objects.all()
-    disciplines = Discipline.objects.all()
-    wbs = WBS.objects.all()
-    priorities = Priority.objects.all()
-    users = User.objects.all()
 
     assert isinstance(request, HttpRequest)
     return render(
         request,
         'walkreport/observation.html',
         {
-            'title':'Modificacón de Observacion de Caminata',
+            'title':'Modificacion de Observacion de Caminata',
             'year': datetime.now().year,
-            'apis': apis,
-            'contracts': contracts,
-            'disciplines': disciplines,
-            'wbs': wbs,
-            'priorities': priorities,
-            'users': users 
         })
+
+@csrf_exempt
+@login_required(login_url="login")
+def getwalkreportformodified(request):
+    try:
+       if request.method == 'GET':
+           Id = request.GET['id']
+           action = request.GET['action']
+           data = []
+
+           if action == 'search_data':
+
+               wo = WalkObservation.objects.get(pk=int(Id))
+               wr = WalkReport.objects.get(pk=int(wo.walk_report_id))
+
+               data.append({
+                    'id_reporte': wr.id,
+                    'fecha_historico': wr.historic_date,
+                    'top': wr.top,
+                    'sistema': wr.sistem,
+                    'subsistema': wr.subsistem,
+                    'num_caminata': wr.walk_number,
+                    'area': wr.wbs.wbs_name,
+                    'wbs': wr.wbs.area,
+                    'contrato': wr.contract.contract_name,
+                    'api': wr.api.project_name,
+                    'ubicacion': str(wo.ubication),
+                    'numero_plano': str(wo.plane_number),
+                    'codigo_equipo': str(wo.equipment_code),
+                    'accion_descripcion': wo.action_description,
+                    'disciplina': wo.discipline.discipline_name,
+                    'responsable': wo.responsable.first_name + " " + wo.responsable.last_name,
+                    'registrado_por': wo.register_by.first_name + " " + wo.register_by.last_name,
+                    'lider': wo.leader.first_name + " " + wo.leader.last_name,
+                    'prioridad': wo.priority.priority_name,
+                    'fecha_compromiso': wo.stipulated_date,
+                    'fecha_compromiso_real': wo.real_close_date,
+                   }) 
+
+               print("hola")
+                    
+    except Exception as e:
+        data['error'] = str(e)
+    return JsonResponse(data, safe=False)
 
 #Vista para ir a la ventana de registro de reporte de caminata
 def registerwalkreport(request):
@@ -193,9 +224,7 @@ def savewalkreport(request,*args, **kwargs):
 
                 if reportdata[0]['exist_file'] == 0:
 
-                    print("holas")
-                    #create_pdf(rp_id)
-
+                    createwalkpdf(id_rep_walk)
             else:
 
                 data = {
@@ -208,7 +237,7 @@ def savewalkreport(request,*args, **kwargs):
 
             files_report = request.FILES.getlist('files')
             report_for_id = WalkReport.objects.last()
-            id_rep_walk = 0
+            id_rep_walk = report_for_id.id
 
             for file in files_report:
 
@@ -232,6 +261,9 @@ def savewalkreport(request,*args, **kwargs):
                     'id_report': id_rep_walk
                     }
 
+                createwalkpdf(id_rep_walk)
+
+
             else:
 
                 data = {
@@ -241,11 +273,8 @@ def savewalkreport(request,*args, **kwargs):
             return JsonResponse(data)
 
 #Función para crear el pdf del Acta de Observaciones de Caminatas
-@csrf_exempt
-@login_required(login_url="login")
-def createwalkpdf(request):
+def createwalkpdf(id_report):
 
-    id_report = 2
     #Llamar datos relacionados al reporte a crear
     reportecaminata = WalkReport.objects.filter(id=int(id_report))
     observaciones = WalkObservation.objects.filter(walk_report_id=int(id_report))
@@ -416,14 +445,12 @@ def createwalkpdf(request):
 
     pdfrelation.save()
 
-    return response
-
 search = []
 #Vista para buscar los datos requeridos en la consulta de caminatas
 @csrf_exempt
 @login_required(login_url="login")
 def searchwalks(request):
-
+    
     try:
 
         if request.method == 'GET':
@@ -576,3 +603,28 @@ def searchwalks(request):
         respuesta = e
 
     return JsonResponse(search, safe=False)
+
+# DESCARGA DE PDF AL REGISTRAR UN INFORME DIARIO
+@csrf_exempt
+@login_required(login_url="login")
+def downloadwalkpdf(request):
+
+    if request.method == 'POST':
+        rep_id = request.POST['id']
+        file_path = settings.MEDIA_ROOT + "/pdf_walk_reports/REPORTE_N" +  rep_id + ".pdf"
+
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type="application/pdf")
+                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+                buffer = io.BytesIO()
+
+                buffer.seek(0)
+                pdf: bytes = buffer.getvalue()
+
+                response.write(pdf)
+                file_data = ContentFile(pdf)
+
+                return response
+
+        raise Http404
