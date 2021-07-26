@@ -1,4 +1,4 @@
-///Elección de filtros y búsqueda de datos
+///Elecciï¿½n de filtros y bï¿½squeda de datos
 $('input[id="btn-buscar-walk"]').on('click', function () {
 
     var exportexist = document.getElementById("export");
@@ -85,7 +85,7 @@ function cargarTablaCaminatas(response) {
                 "previous": "Anterior",
                 "next": "Siguiente",
                 "first": "Primero",
-                "last": "Último"
+                "last": "Ãšltimo"
             }
         },
         "data": response,
@@ -118,33 +118,102 @@ function abrir_modal_edicion(id_report) {
     debugger;
     var $ = jQuery.noConflict();
 
-    $('#edicion').load('modifiedwalkreport/', function () {
 
-        $.ajax({
+    $('#edicion').load('modifiedwalkreport/' + id_report, function () {
 
-            type: 'GET',
-            data: {
-                action: 'search_data',
-                id: id_report,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
-            url: "/getwalkreportformodified",
-            dataType: 'json',
-
-        }).done(function (search) {
-
-            $(this).modal('show');
-
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-
-            alert(textStatus + ': ' + errorThrown);
-
-        }).always(function (data) {
-
-
-
-        });
+        $(this).modal('show');
 
     });
 
 }
+
+function modificarObservacion(id) {
+
+    var fecha_compromiso = document.getElementById("mod-fecha-walk");
+    var archivos_nuevos = document.getElementById("file_walk");
+    var data = new FormData();
+
+    for (var x = 0; x < archivos_nuevos.files.length; x++) {
+        var file = archivos_nuevos.files[x];
+        data.append('files', file);
+    }
+
+    data.append('id_observation', id);
+
+    if (archivos_nuevos.files.length > 0) {
+        var file_val = 1;
+        var file_exist = 1;
+    } else {
+        var file_val = 0;
+        var file_exist = 0;
+    }
+
+    debugger;
+    $.ajax({
+        url: 'savemodifiedwalkreport/',
+        type: 'POST',
+        data: {
+            action: 'save_walk_report',
+            id: id,
+            fecha_compromiso_real: fecha_compromiso.value,
+            existe: file_exist
+        },
+        dataType: 'JSON',
+
+    }).done(function (data) {
+
+        if (file_val === 0) {
+            messageSuccessPDF(data);
+        }
+
+    }).fail(function (data) {
+        Swal.fire("Reporte de Caminata No Agregado", "Verifique los datos a ingresar", "warning");
+        return false;
+    });
+
+    if (file_val === 1) {
+        $.ajax({
+            url: 'savemodifiedwalkreport/',
+            type: 'POST',
+            data: data,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+        }).done(function (data) {
+
+            messageSuccessPDF(data);
+
+        }).fail(function (data) {
+            Swal.fire("Reporte No Agregado", "Verifique que imagenÃ©s esten correctas", "warning");
+            return false;
+        });
+    }
+}
+
+function messageSuccessPDF(data) {
+
+    if (data.submitted == 1) {
+
+        swal.fire("Guardado", "Reporte NÂ°" + data.id_report + " agregado satisfactoriamente", "success", {
+            confirmButtonText: "Descargar"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                downloadwalkreport(data.id_report);
+                Swal.fire('Descargado!', '', 'success', {
+                    confirmButtonText: "Ok"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                        window.scrollTo(0, 0);
+                    } else {
+                        window.location.reload();
+                        window.scrollTo(0, 0);
+                    }
+                });
+            }
+        });
+
+    }
+}
+

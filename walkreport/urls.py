@@ -9,7 +9,7 @@ urlpatterns = [
         path('registerwalkreport/savefiles/', views.savewalkreport, name='savefiles'),
         path('registerwalkreport/createwalkpdf/', views.createwalkpdf, name='createwalkpdf'),
         path('searchwalks/', views.searchwalks, name='searchwalks'),
-        path('searchwalkreport/modifiedwalkreport/', views.modifiedwalkreport, name='modifiedwalkreport'),
+        path('searchwalkreport/modifiedwalkreport/<str:id>', views.modifiedwalkreport, name='modifiedwalkreport'),
         path('registerwalkreport/downloadwalkpdf/', views.downloadwalkpdf, name='downloadwalkpdf'),
-        path('getwalkreportformodified/', views.getwalkreportformodified, name='getwalkreportformodified'),
+        path('searchwalkreport/savemodifiedwalkreport/', views.savemodifiedwalkreport, name='savemodifiedwalkreport'),
     ]

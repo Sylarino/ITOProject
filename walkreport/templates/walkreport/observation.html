@@ -1,100 +1,136 @@
+{% load staticfiles %}
+
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 class="modal-title">
-                Editar Observacion de Caminata
+            <h2 class="modal-title title-page">
+                {{ title }}
             </h2>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             <div class="modal-body">
                 <form action="">
+                    <div class="separator"></div>
                     <div class="row">
                         <div class="col-md-6 form-report">
            
                            <div class="field-form">
-                                <label id="mod-report" ></label>
+                               <label>Reporte:</label>
+                               <label id="mod-report" >{{ reporte.id }}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-fecha-registro"></label>
+                               <label>Fecha de Registro:</label>
+                               <label id="mod-fecha-registro">{{ reporte.historic_date }}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-top"></label>
+                               <label>TOP:</label>
+                               <label id="mod-top">{{ reporte.top }}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-sistem"></label>
+                               <label>Sistema:</label>
+                               <label id="mod-sistem">{{ reporte.sistem }}</label>
                            </div>
             
                             <div class="field-form">
-                                <label id="mod-subsistem"></label>
+                               <label>Sub Sistema:</label>
+                               <label id="mod-subsistem">{{ reporte.subsistem}}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-num-caminata"></label>
+                               <label>N de Caminata:</label>
+                               <label id="mod-num-caminata">{{ reporte.walk_number }}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-area"></label>
+                               <label>WBS:</label>
+                               <label id="mod-area">{{ reporte.wbs.area }}</label>
                            </div>
 
                            <div class="field-form">
-                               <label id="mod-lider"></label>
+                               <label>Lider:</label>
+                               <label id="mod-lider">{{ observacion.leader.first_name }} {{ observacion.leader.last_name }}</label>
                            </div>           
 
                            <div class="field-form">
-                               <label id="mod-prioridad"></label>
+                               <label>Prioridad:</label>
+                               <label id="mod-prioridad">{{ observacion.priority.priority_name }}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="fecha-compromiso"></label>
+                               <label>Fecha de Compromiso:</label>
+                               <label id="fecha-compromiso">{{ observacion.stipulated_date }}</label>
                            </div>
 
+                            <div class="field-form">
+                                <label>Archivos Subidos</label>
+                                {% for archivo in archivos %}
+                                <a class="link-danger" href="{{archivo.evidence_file.upload.url}}"> {{archivo.evidence_file.upload.name}} </a> <br />
+                                {% endfor %}
+                            </div>
                         </div>
                         
                         <div class="col-md-6 form-report">
            
                            <div class="field-form">
-                                <label id="mod-contrato"></label>
+                               <label>Contrato:</label>
+                               <label id="mod-contrato">{{reporte.contract.contract_name}}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-api"></label>
+                               <label>API:</label>
+                                <label id="mod-api">{{reporte.api.project_name}}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-ubicacion"></label>
+                               <label>Ubicacion:</label>
+                                <label id="mod-ubicacion">{{observacion.ubication}}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-num-plano"></label>
+                               <label>N de Plano:</label>
+                                <label id="mod-num-plano">{{observacion.plane_number}}</label>
                            </div>
             
                             <div class="field-form">
-                                <label id="mod-cod-equi"></label>
+                               <label>Codigo Equipo:</label>
+                                <label id="mod-cod-equi">{{observacion.equipment_code}}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="mod-accion"></label>
+                               <label>Descripcion:</label>
+                                <label id="mod-accion">{{observacion.action_description}}</label>
                            </div>
 
                            <div class="field-form">
-                                <label id="disciplina"></label>
+                               <label>Disciplina:</label>
+                                <label id="disciplina">{{observacion.discipline.discipline_name}}</label>
                            </div>
 
                            <div class="field-form">
-                               <label id="responsable"></label>
+                               <label>Responsable:</label>
+                               <label id="responsable">{{ observacion.responsable.first_name }} {{ observacion.responsable.last_name }}</label>
                            </div>
 
                            <div class="field-form">
-                               <label id="registrado"></label>
+                               <label>Registrado por:</label>
+                               <label id="registrado">{{ observacion.register_by.first_name }} {{ observacion.register_by.last_name }}</label>
                            </div>
 
                            <div class="field-form">
-                               <label id="fecha-compromiso-real"></label>
+                                <label id="fecha-compromiso-real">Fecha de Compromiso Real:</label>
+                                <input type="date" class="form-control" id="mod-fecha-walk" value="{{observacion.real_close_date|date:'Y-m-d'}}"/>
                            </div>
+
+                            <div class="field-form">
+                                <label>Nuevos Archivos:</label>
+                                <div class="field-form">
+                                    <input id="file_walk" type="file" value="Subir Archivo" multiple/>
+                                </div>
+                            </div>
 
                         </div>
 
@@ -103,12 +139,13 @@
                 </form>
 
             </div>
+            <div class="separator"></div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-danger" type="submit"></button>
+                <button onclick="modificarObservacion('{{observacion.id}}');" class="btn btn-danger" type="button">Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src=""></script>
+<script src="{% static 'app/scripts/searchwalkreports.js' %}"></script>

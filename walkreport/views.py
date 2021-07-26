@@ -27,7 +27,11 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 import os
 
 # Create your views here.
-def modifiedwalkreport(request):
+def modifiedwalkreport(request, id):
+
+    wo = WalkObservation.objects.get(pk=int(id))
+    wr = WalkReport.objects.get(pk=int(wo.walk_report_id))
+    wrr = FileWalkReport.objects.filter(walk_report_id = int(wo.walk_report_id))
 
     assert isinstance(request, HttpRequest)
     return render(
@@ -36,51 +40,90 @@ def modifiedwalkreport(request):
         {
             'title':'Modificacion de Observacion de Caminata',
             'year': datetime.now().year,
+            'reporte': wr,
+            'archivos': wrr,
+            'observacion': wo
         })
 
 @csrf_exempt
 @login_required(login_url="login")
-def getwalkreportformodified(request):
-    try:
-       if request.method == 'GET':
-           Id = request.GET['id']
-           action = request.GET['action']
-           data = []
+def savemodifiedwalkreport(request):
 
-           if action == 'search_data':
+    if request.method == 'POST':
 
-               wo = WalkObservation.objects.get(pk=int(Id))
-               wr = WalkReport.objects.get(pk=int(wo.walk_report_id))
+        action = request.POST.get('action')
+        data = {}
 
-               data.append({
-                    'id_reporte': wr.id,
-                    'fecha_historico': wr.historic_date,
-                    'top': wr.top,
-                    'sistema': wr.sistem,
-                    'subsistema': wr.subsistem,
-                    'num_caminata': wr.walk_number,
-                    'area': wr.wbs.wbs_name,
-                    'wbs': wr.wbs.area,
-                    'contrato': wr.contract.contract_name,
-                    'api': wr.api.project_name,
-                    'ubicacion': str(wo.ubication),
-                    'numero_plano': str(wo.plane_number),
-                    'codigo_equipo': str(wo.equipment_code),
-                    'accion_descripcion': wo.action_description,
-                    'disciplina': wo.discipline.discipline_name,
-                    'responsable': wo.responsable.first_name + " " + wo.responsable.last_name,
-                    'registrado_por': wo.register_by.first_name + " " + wo.register_by.last_name,
-                    'lider': wo.leader.first_name + " " + wo.leader.last_name,
-                    'prioridad': wo.priority.priority_name,
-                    'fecha_compromiso': wo.stipulated_date,
-                    'fecha_compromiso_real': wo.real_close_date,
-                   }) 
+        if action  == 'save_walk_report':
 
-               print("hola")
+            id_obs = 0
+            id_obs = request.POST.get('id')
+            fecha_compromiso_real = request.POST.get('fecha_compromiso_real')
+            exist = request.POST.get('existe')
+
+            wo = WalkObservation.objects.get(pk=int(id_obs))
+
+            if wo.real_close_date  != datetime.strptime(fecha_compromiso_real, "%Y-%m-%d"):
+
+                wo.real_close_date = datetime.strptime(fecha_compromiso_real, "%Y-%m-%d")
+
+                wo.save()
+
+            if int(id_obs) > 0:
                     
-    except Exception as e:
-        data['error'] = str(e)
-    return JsonResponse(data, safe=False)
+                data = {
+                    'submitted': 1,
+                    'id_observacion': int(id_obs)
+                    }
+
+                if exist[0] == 0:
+
+                    createwalkpdf(int(wo.walk_report_id))
+
+            else:
+                data = {
+                    'submitted': 0
+                    }
+
+            return JsonResponse(data)
+
+        if len(request.FILES.getlist('files')) > 0:
+
+            files_get = request.FILES.getlist('files')
+            id_obs = request.POST.getlist('id_observation')
+
+            wr = WalkObservation.objects.get(pk=int(id_obs[0]))
+            wo = WalkReport.objects.get(pk=int(wr.walk_report_id))
+
+            for file in files_get:
+
+                wrr = EvidenceFile(
+                        upload = file
+                    )
+                wrr.save()
+
+                wrrf = FileWalkReport(
+                        walk_report = wo,
+                        evidence_file =  wrr
+                    )
+
+                wrrf.save()
+
+            if int(id_obs[0]) > 0:
+                    
+                data = {
+                    'submitted': 1,
+                    'id_report': int(wo.id)
+                    }
+
+                createwalkpdf(int(wo.id))
+
+            else:
+                data = {
+                    'submitted': 0
+                    }
+
+            return JsonResponse(data)
 
 #Vista para ir a la ventana de registro de reporte de caminata
 def registerwalkreport(request):
