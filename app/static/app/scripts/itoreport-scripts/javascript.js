@@ -1,7 +1,5 @@
 //Funcion para agregar una imagen en el formulario
 
-//const { data } = require("jquery");
-
 i = 0;
 var dataimg = {};
 var obsimg = {};
@@ -654,6 +652,9 @@ $(function () {
         }
 
         if (id_select == "ant-contract-walk") {
+            var id = $('#' + id_select).val();
+        }
+        if (id_select == "noncon_con_id") {
             var id = $('#' + id_select).val();
         }
 

@@ -128,10 +128,13 @@
     <Content Include="app\static\app\scripts\jquery.chained.min.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\loadfiles.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\modifiedreport.js" />
+    <Content Include="app\static\app\scripts\nonconformotiereport-scripts\registernoncoformity.js" />
+    <Content Include="app\static\app\scripts\nonconformotiereport-scripts\searchnonconformity.js" />
     <Content Include="app\static\app\scripts\walkreport-scripts\registerwalkreport.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\searchactivities.js" />
     <Content Include="app\static\app\scripts\walkreport-scripts\searchwalkreports.js" />
     <Content Include="nonconformityreport\templates\nonconformityreport\registernonconformities.html" />
+    <Content Include="nonconformityreport\templates\nonconformityreport\searchnonconformity.html" />
     <Content Include="report\templates\form-report\modifiedreport.html" />
     <Content Include="report\templates\form-report\generatereport.html" />
     <Content Include="report\templates\form-report\loadfiles.html" />
