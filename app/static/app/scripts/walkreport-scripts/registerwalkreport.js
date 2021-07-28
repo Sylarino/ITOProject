@@ -228,3 +228,53 @@ function messageSuccessPDF(data) {
 
     }
 }
+
+function abrir_modal_registro() {
+    var $ = jQuery.noConflict();
+
+
+    $('#registro').load('registeruser/', function () {
+
+        $(this).modal('show');
+
+    });
+
+}
+
+
+function agregarUsuario() {
+
+    var usuario = document.getElementById("username");
+    var nombres = document.getElementById("names");
+    var apellidos = document.getElementById("email-user");
+    var correo = document.getElementById("last-names");
+
+    $.ajax({
+        url: 'registernewuser/',
+        type: 'POST',
+        data: {
+            action: 'save_user',
+            user: usuario.value,
+            names: nombres.value,
+            last_name: apellidos.value,
+            email: correo.value
+        },
+        dataType: 'JSON',
+
+    }).done(function (data) {
+
+        messageSuccessPDF(data);
+
+    }).fail(function (data) {
+        Swal.fire("Usuario No Agregado", "Verifique los datos a ingresar", "warning");
+        return false;
+    });
+
+}
+
+function messageSuccessPDF(data) {
+
+    if (data.submitted == 1) {
+        Swal.fire("Usuario Agregado", "Se ha agregado un usuario satisfactoriamente", "success");
+    }
+}

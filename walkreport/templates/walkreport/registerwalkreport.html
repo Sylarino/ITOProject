@@ -140,7 +140,7 @@
                             <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
                             {% endfor %}
                         </select>
-                        <a class="glyphicon glyphicon-plus"></a>
+                        <a class="glyphicon glyphicon-plus" onclick="abrir_modal_registro();"></a>
                     </div>
 
                 </div>           
@@ -149,11 +149,11 @@
                     <div class="select-a-container">
                         <select name="responsable" class="form-control" id="con-rescon-walk" required>
                             <option disabled selected>Seleccione Responsable </option>
-                            {% for user in users %}
+                            {% for user in extern_users %}
                             <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
                             {% endfor %}
                         </select>
-                        <a class="glyphicon glyphicon-plus"></a>
+                        <a class="glyphicon glyphicon-plus" onclick="abrir_modal_registro();"></a>
                     </div>
 
                 </div>        
@@ -162,11 +162,11 @@
                     <div class="select-a-container">
                         <select name="leader" class="form-control" id="con-lider-walk" required>
                             <option disabled selected>Seleccione Lider </option>
-                            {% for user in users %}
+                            {% for user in extern_users %}
                             <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
                             {% endfor %}
                         </select>
-                        <a class="glyphicon glyphicon-plus"></a>
+                        <a class="glyphicon glyphicon-plus" onclick="abrir_modal_registro();"></a>
                     </div>
 
                 </div>        
@@ -239,11 +239,15 @@
                 <a href="{% url 'createwalkpdf' %}" class="btn btn-danger">PDF</a>
         </div>
         -->
-        <script src="{% static 'app/scripts/registerwalkreport.js' %}"></script>
-        <script src="{% static 'app/scripts/javascript.js' %}"></script>
+        <script src="{% static 'app/scripts/walkreport-scripts/registerwalkreport.js' %}"></script>
+        <script src="{% static 'app/scripts/itoreport-scripts/javascript.js' %}"></script>
 
     </form>
 
+</div>
+
+<div class="modal fade" id="registro" role="dialog">
+    
 </div>
 
 {% endblock %}

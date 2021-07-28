@@ -10,6 +10,8 @@ urlpatterns = [
         path('registerwalkreport/createwalkpdf/', views.createwalkpdf, name='createwalkpdf'),
         path('searchwalks/', views.searchwalks, name='searchwalks'),
         path('searchwalkreport/modifiedwalkreport/<str:id>', views.modifiedwalkreport, name='modifiedwalkreport'),
+        path('registerwalkreport/registeruser/', views.registeruser, name='registeruser'),
+        path('registerwalkreport/registernewuser/', views.registernewuser, name='registernewuser'),
         path('registerwalkreport/downloadwalkpdf/', views.downloadwalkpdf, name='downloadwalkpdf'),
         path('searchwalkreport/savemodifiedwalkreport/', views.savemodifiedwalkreport, name='savemodifiedwalkreport'),
     ]

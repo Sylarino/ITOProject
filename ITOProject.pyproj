@@ -49,6 +49,16 @@
     <Compile Include="ITOProject\settings.py" />
     <Compile Include="ITOProject\urls.py" />
     <Compile Include="ITOProject\wsgi.py" />
+    <Compile Include="nonconformityreport\admin.py" />
+    <Compile Include="nonconformityreport\apps.py" />
+    <Compile Include="nonconformityreport\migrations\__init__.py" />
+    <Compile Include="nonconformityreport\models.py" />
+    <Compile Include="nonconformityreport\tests.py" />
+    <Compile Include="nonconformityreport\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="nonconformityreport\views.py" />
+    <Compile Include="nonconformityreport\__init__.py" />
     <Compile Include="report\admin.py" />
     <Compile Include="report\apps.py" />
     <Compile Include="report\forms.py">
@@ -74,6 +84,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
+    <Folder Include="app\static\app\scripts\itoreport-scripts\" />
+    <Folder Include="app\static\app\scripts\nonconformotiereport-scripts\" />
+    <Folder Include="app\static\app\scripts\walkreport-scripts\" />
     <Folder Include="app\templatetags\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
@@ -87,10 +100,13 @@
     <Folder Include="ITOProject\" />
     <Folder Include="media\" />
     <Folder Include="media\pdf_reports\" />
+    <Folder Include="nonconformityreport\" />
+    <Folder Include="nonconformityreport\migrations\" />
+    <Folder Include="nonconformityreport\templates\" />
+    <Folder Include="nonconformityreport\templates\nonconformityreport\" />
     <Folder Include="report\" />
     <Folder Include="report\templates\" />
     <Folder Include="report\templates\form-report\" />
-    <Folder Include="report\templates\report\" />
     <Folder Include="walkreport\" />
     <Folder Include="walkreport\migrations\" />
     <Folder Include="walkreport\templates\" />
@@ -106,21 +122,21 @@
       <Publish>True</Publish>
     </Content>
     <Content Include="app\static\app\scripts\datatables.min.js" />
-    <Content Include="app\static\app\scripts\javascript.js">
+    <Content Include="app\static\app\scripts\itoreport-scripts\javascript.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="app\static\app\scripts\jquery.chained.min.js" />
-    <Content Include="app\static\app\scripts\loadfiles.js" />
-    <Content Include="app\static\app\scripts\modifiedreport.js" />
-    <Content Include="app\static\app\scripts\registerwalkreport.js" />
-    <Content Include="app\static\app\scripts\searchactivities.js" />
-    <Content Include="app\static\app\scripts\searchwalkreports.js" />
+    <Content Include="app\static\app\scripts\itoreport-scripts\loadfiles.js" />
+    <Content Include="app\static\app\scripts\itoreport-scripts\modifiedreport.js" />
+    <Content Include="app\static\app\scripts\walkreport-scripts\registerwalkreport.js" />
+    <Content Include="app\static\app\scripts\itoreport-scripts\searchactivities.js" />
+    <Content Include="app\static\app\scripts\walkreport-scripts\searchwalkreports.js" />
+    <Content Include="nonconformityreport\templates\nonconformityreport\registernonconformities.html" />
     <Content Include="report\templates\form-report\modifiedreport.html" />
     <Content Include="report\templates\form-report\generatereport.html" />
     <Content Include="report\templates\form-report\loadfiles.html" />
     <Content Include="report\templates\form-report\pagination.html" />
     <Content Include="report\templates\form-report\searchactivities.html" />
-    <Content Include="report\templates\report\index.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
@@ -151,10 +167,10 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
-    <Content Include="walkreport\templates\walkreport\index.html" />
     <Content Include="walkreport\templates\walkreport\observation.html" />
     <Content Include="walkreport\templates\walkreport\registerwalkreport.html" />
     <Content Include="walkreport\templates\walkreport\searchwalkreport.html" />
+    <Content Include="walkreport\templates\walkreport\userregister.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.html">

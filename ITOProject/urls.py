@@ -30,6 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('report.urls')),
     path('', include('walkreport.urls')),
+    path('', include('nonconformityreport.urls')),
 ]
 
 #Configuracion para cargar imagenes

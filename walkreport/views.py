@@ -25,6 +25,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER
 from reportlab.pdfbase.pdfmetrics import stringWidth
 import os
+from django.contrib.auth.models import User, Group
 
 # Create your views here.
 def modifiedwalkreport(request, id):
@@ -44,6 +45,66 @@ def modifiedwalkreport(request, id):
             'archivos': wrr,
             'observacion': wo
         })
+
+def registeruser(request):
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'walkreport/userregister.html',
+        {
+            'title':'Registro de Usuario',
+            'year': datetime.now().year
+        })
+
+@csrf_exempt
+@login_required(login_url="login")
+def registernewuser(request):
+
+    if request.method == 'POST':
+
+        action = request.POST.get('action')
+        data = {}
+
+        if action  == 'save_user':
+
+            usuario = request.POST.get('user')
+            nombres = request.POST.get('names')
+            apellidos = request.POST.get('last_name')
+            email = request.POST.get('email')
+            id_user = 0
+
+            new_user = User(
+                    password = "Inicio2021",
+                    is_superuser = 0,
+                    username = usuario,
+                    first_name = nombres,
+                    last_name = apellidos,
+                    email = email,
+                    is_staff = 0,
+                    is_active = 1
+                )
+
+            new_user.save()
+            
+            id_user = new_user.id
+
+            group = Group.objects.get(name='Externo')
+            new_user.groups.add(group)
+
+            if int(id_user) > 0:
+                    
+                data = {
+                    'submitted': 1,
+                    'id_user': int(id_user)
+                    }
+
+            else:
+                data = {
+                    'submitted': 0
+                    }
+
+            return JsonResponse(data)
 
 @csrf_exempt
 @login_required(login_url="login")
@@ -134,6 +195,9 @@ def registerwalkreport(request):
     wbs = WBS.objects.all()
     priorities = Priority.objects.all()
     users = User.objects.all()
+    extern_users = User.objects.filter(groups__name='Externo')
+
+
 
     assert isinstance(request, HttpRequest)
     return render(
@@ -147,7 +211,8 @@ def registerwalkreport(request):
             'disciplines': disciplines,
             'wbs': wbs,
             'priorities': priorities,
-            'users': users 
+            'users': users,
+            'extern_users': extern_users
         })
 
 #Vista para ir a la ventana de consulta de reporte de caminata
