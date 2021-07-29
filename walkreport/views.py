@@ -158,8 +158,8 @@ def savemodifiedwalkreport(request):
 
             for file in files_get:
 
-                wrr = EvidenceFile(
-                        upload = file
+                wrr = NonConformityImage(
+                        image = file
                     )
                 wrr.save()
 

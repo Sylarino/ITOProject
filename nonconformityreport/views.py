@@ -87,33 +87,33 @@ def savenonconformityreport(request, *args, **kwargs):
 
             reportdata = json.loads(rep[0])
 
-            wbs_non = WBS.objects.get(pk=int(reportdata[0].area_non))
-            contract_non = Contract.objects.get(pk=int(reportdata[0].id_contrato))
-            api_non = API.objects.get(pk=int(reportdata[0].id_api))
-            discipline_non = Discipline.objects.get(pk=int(reportdata[0].discipline))
-            register_non = User.objects.get(pk=int(reportdata[0].register_by))
+            wbs_non = WBS.objects.get(pk=int(reportdata['area_non']))
+            contract_non = Contract.objects.get(pk=int(reportdata['id_contrato']))
+            api_non = API.objects.get(pk=int(reportdata['id_api']))
+            discipline_non = Discipline.objects.get(pk=int(reportdata['discipline']))
+            register_non = User.objects.get(pk=int(reportdata['register_by']))
 
             nonconformity_report = NonConformityReport(
-                    num_audit = int(reportdata[0].audit),
-                    item = int(reportdata[0].item_non),
-                    correlative = int(reportdata[0].correlative),
-                    creation_date = reportdata[0].created_at,
-                    criticality = int(reportdata[0].critical),
-                    sistem = reportdata[0].sistem,
-                    subsistem = reportdata[0].subsistem,
-                    origin = reportdata[0].origin,
-                    clasification = reportdata[0].clasification, 
-                    infringement_requirement = reportdata[0].requirement, 
-                    details = reportdata[0].description,
-                    observations = reportdata[0].observation,
-                    reference_documents = reportdata[0].reference_standar, 
-                    ncr_standar = reportdata[0].specific_standar,
-                    num_transmital_ncr = int(reportdata[0].num_envio),
-                    num_transmital_action = int(reportdata[0].num_accion),
-                    num_ncr = int(reportdata[0].num_ncr),
-                    status = reportdata[0].status,
-                    stipulated_date = reportdata[0].stipulated_date,
-                    real_close_date = reportdata[0].close_date,
+                    num_audit = int(reportdata['audit']),
+                    item = int(reportdata['item_non']),
+                    correlative = int(reportdata['correlative']),
+                    creation_date = reportdata['created_at'],
+                    criticality = int(reportdata['critical']),
+                    sistem = reportdata['sistem'],
+                    subsistem = reportdata['subsistem'],
+                    origin = reportdata['origin'],
+                    clasification = reportdata['clasification'], 
+                    infringement_requirement = reportdata['requirement'], 
+                    details = reportdata['description'],
+                    observations = reportdata['observation'],
+                    reference_documents = reportdata['reference_standar'], 
+                    ncr_standar = reportdata['specific_standar'],
+                    num_transmital_ncr = int(reportdata['num_envio']),
+                    num_transmital_action = int(reportdata['num_accion']),
+                    num_ncr = int(reportdata['num_ncr']),
+                    status = reportdata['status'],
+                    stipulated_date = reportdata['stipulated_date'],
+                    real_close_date = reportdata['close_date'],
                     wbs = wbs_non,
                     contract = contract_non, 
                     api = api_non,
@@ -121,5 +121,61 @@ def savenonconformityreport(request, *args, **kwargs):
                     register_by = register_non
                 )
 
-            nonconformity.save()
+            nonconformity_report.save()
 
+            id_rep_noncon = nonconformity_report.id
+
+            if id_rep_noncon > 0:
+                    
+                data = {
+                    'submitted': 1,
+                    'id_report': id_rep_noncon
+                    }
+
+                #if reportdata['exist_file'] == 0:
+
+                    #createwalkpdf(id_rep_walk)
+            else:
+
+                data = {
+                    'submitted': 0
+                    }
+
+            return JsonResponse(data)
+
+        if len(request.FILES.getlist('images')) > 0:
+
+            imagenes = request.FILES.getlist('images')
+            report_for_id = NonConformityReport.objects.last()
+            id_rep_noncon = report_for_id.id
+
+            for img in imagenes:
+
+                wrr = NonConformityImage(
+                        image = img
+                    )
+                wrr.save()
+
+                wrrf = NonConformityReportImage(
+                        report = report_for_id,
+                        image = wrr 
+                        )
+
+                wrrf.save()
+
+            if id_rep_noncon > 0:
+                    
+                data = {
+                    'submitted': 1,
+                    'id_report': id_rep_noncon
+                    }
+
+                #createwalkpdf(id_rep_walk)
+
+            else:
+
+                data = {
+                    'submitted': 0
+                    }
+
+            return JsonResponse(data)

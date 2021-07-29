@@ -1,17 +1,27 @@
 var i = 0;
-var dataImgNonCon = {};
+var dataImgNonCon = [];
 
 $(function () {
     document.getElementById("file-noncon").onchange = function (e) {
 
-        debugger;
-        for (var x = 0; x < e.target.files.length; x++) {
+        var largo = 0;
+        var largo_temp = 0;
+        if (dataImgNonCon.length > 0) {
+
+            largo = dataImgNonCon.length;
+            largo_temp = largo + 1;
+
+        }
+
+        var inc = 0;
+
+        for (var x = 0; x < (e.target.files.length); x++) {
 
             let reader = new FileReader();
 
             reader.readAsDataURL(e.target.files[x]);
 
-            dataImgNonCon[i] = e.target.files[x];
+            dataImgNonCon[largo_temp + x] = e.target.files[x];
 
             reader.onload = function () {
 
@@ -21,13 +31,13 @@ $(function () {
                 var div = document.createElement('div');
 
                 div.setAttribute("class", "col-md-4 form-report");
-                div.setAttribute("id", "div_" + i);
+                div.setAttribute("id", "div_" + (largo_temp + inc));
                 but.setAttribute("class", "btn btn-danger");
                 but.setAttribute("value", "Borrar");
                 but.setAttribute("type", "button");
-                image.setAttribute("id", "img_" + i);
+                image.setAttribute("id", "img_" + (largo_temp + inc));
                 image.setAttribute("class", "img-thumbnail");
-                but.setAttribute("onclick","eliminarImg("+ i +");")
+                but.setAttribute("onclick", "eliminarImg(" + (largo_temp + inc) +");")
 
                 image.src = reader.result;
 
@@ -35,21 +45,8 @@ $(function () {
                 div.append(image);
                 div.insertBefore(but, image);
 
-                //but.onclick = function () {
-
-                //    var ultimo = document.getElementById("div_" + i);
-                //    section.removeChild(ultimo);
-                //    /*Incrementable*/
-                //    i = i - 1;
-                //    dataImgNonCon[i].remove();
-
-                //    return dataImgNonCon;
-
-                //}
-
-                i = i + 1;
+                inc++;
             }
-
         }
 
         return dataImgNonCon;
@@ -64,17 +61,9 @@ function eliminarImg(id) {
 
     deleteDiv.removeChild(imgDiv);
 
-    id_img_div = imgDiv.id.replace('div_mod_', '');
-
-    for (var m = 0; m < dataImgNonCon.length; m++) {
-
-        if (dataImgNonCon[m][0] == id_img_div) {
-
-            dataImgNonCon[m].splice(m, 1);
-
-        }
-
-    }
+    id_img_div = parseInt(imgDiv.id.replace('div_', ''));
+    
+    dataImgNonCon.splice(id_img_div, 1);
 
 }
 
@@ -116,9 +105,16 @@ $(function () {
 
         var data = new FormData();
 
-        for (var x = 0; x < dataImgNonCon.length; x++) {
-            var file = dataImgNonCon[x];
-            data.append('images', file);
+        for (var key in dataImgNonCon) {
+            data.append('images', dataImgNonCon[key]);
+        }
+
+        var largo = dataImgNonCon.length;
+
+        if (largo > 0) {
+            val_img = 1;
+        } else {
+            val_img = 0;
         }
 
         debugger;
@@ -149,7 +145,8 @@ $(function () {
             num_ncr: n_ncr_emitida.value,
             status: estatus.value,
             stipulated_date: fecha_compromiso.value,
-            close_date: fecha_cierre.value
+            close_date: fecha_cierre.value,
+            exist_file: val_img
         }
 
         debugger;
@@ -164,7 +161,7 @@ $(function () {
             dataType: 'JSON',
         }).done(function (data) {
 
-            if (file_val === 0) {
+            if (val_img === 0) {
                 messageSuccessPDF(data);
             }
 
@@ -175,5 +172,22 @@ $(function () {
             return false;
         });
 
+        if (val_img === 1) {
+            $.ajax({
+                url: 'saveimages/',
+                type: 'POST',
+                data: data,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+            }).done(function (data) {
+
+                messageSuccessPDF(data);
+
+            }).fail(function (data) {
+                Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
+                return false;
+            });
+        }
     }
 });
