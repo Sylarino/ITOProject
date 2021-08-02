@@ -1680,7 +1680,6 @@ def create_pdf(id):
                 height_pdf = height
                 height_pdf -= 115
 
-                
                 c.setFont('Helvetica', 10)
 
                 pagina += 1

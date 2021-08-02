@@ -24,6 +24,7 @@ class NonConformityReport(models.Model):
     ncr_standar = models.CharField(max_length=200, verbose_name="Criterio Específico de NCR")
     num_transmital_ncr = models.IntegerField(verbose_name="N° Transmital Envio NCR")
     num_transmital_action = models.IntegerField(verbose_name="N° Transmital Envío Acción Correctiva")
+    tag = models.CharField(max_length=200,verbose_name="Tag",default="")
     num_ncr = models.IntegerField(verbose_name="N° NCR Emitida")
     status = models.CharField(max_length=200, verbose_name="Estatus")
     stipulated_date = models.DateField(verbose_name="Fecha de Compromiso de Cierre")

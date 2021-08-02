@@ -471,8 +471,6 @@ def createwalkpdf(id_report):
     height_pdf -= h
     info.drawOn(c, 15, height_pdf, 0)
 
-
-
     height_pdf -= 10
     
     n_ubicacion = Paragraph('''<b>UBICACIÓN</b>''', styleBH)

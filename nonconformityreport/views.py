@@ -78,50 +78,66 @@ def savenonconformityreport(request, *args, **kwargs):
 
     if request.method == "POST":
 
-        action = request.POST.get('action')
+        rep = request.POST.getlist('reporte[]')
+        data = {}
 
-        if action == 'save_data_report':
+        reportdata = json.loads(rep[0])
 
-            rep = request.POST.getlist('reporte[]')
-            data = {}
+        wbs_non = WBS.objects.get(pk=int(reportdata['area_non']))
+        contract_non = Contract.objects.get(pk=int(reportdata['id_contrato']))
+        api_non = API.objects.get(pk=int(reportdata['id_api']))
+        discipline_non = Discipline.objects.get(pk=int(reportdata['discipline']))
+        register_non = User.objects.get(pk=int(reportdata['register_by']))
 
-            reportdata = json.loads(rep[0])
+        nonconformity_report = NonConformityReport(
+                num_audit = int(reportdata['audit']),
+                item = int(reportdata['item_non']),
+                correlative = int(reportdata['correlative']),
+                creation_date = reportdata['created_at'],
+                criticality = int(reportdata['critical']),
+                sistem = reportdata['sistem'],
+                subsistem = reportdata['subsistem'],
+                origin = reportdata['origin'],
+                clasification = reportdata['clasification'], 
+                infringement_requirement = reportdata['requirement'], 
+                details = reportdata['description'],
+                observations = reportdata['observation'],
+                reference_documents = reportdata['reference_standar'], 
+                ncr_standar = reportdata['specific_standar'],
+                num_transmital_ncr = int(reportdata['num_envio']),
+                num_transmital_action = int(reportdata['num_accion']),
+                num_ncr = int(reportdata['num_ncr']),
+                status = reportdata['status'],
+                stipulated_date = reportdata['stipulated_date'],
+                real_close_date = reportdata['close_date'],
+                wbs = wbs_non,
+                contract = contract_non, 
+                api = api_non,
+                discipline = discipline_non, 
+                register_by = register_non
+            )
 
-            wbs_non = WBS.objects.get(pk=int(reportdata['area_non']))
-            contract_non = Contract.objects.get(pk=int(reportdata['id_contrato']))
-            api_non = API.objects.get(pk=int(reportdata['id_api']))
-            discipline_non = Discipline.objects.get(pk=int(reportdata['discipline']))
-            register_non = User.objects.get(pk=int(reportdata['register_by']))
+        nonconformity_report.save()
+        
+        if len(request.FILES.getlist('images')) > 0:
 
-            nonconformity_report = NonConformityReport(
-                    num_audit = int(reportdata['audit']),
-                    item = int(reportdata['item_non']),
-                    correlative = int(reportdata['correlative']),
-                    creation_date = reportdata['created_at'],
-                    criticality = int(reportdata['critical']),
-                    sistem = reportdata['sistem'],
-                    subsistem = reportdata['subsistem'],
-                    origin = reportdata['origin'],
-                    clasification = reportdata['clasification'], 
-                    infringement_requirement = reportdata['requirement'], 
-                    details = reportdata['description'],
-                    observations = reportdata['observation'],
-                    reference_documents = reportdata['reference_standar'], 
-                    ncr_standar = reportdata['specific_standar'],
-                    num_transmital_ncr = int(reportdata['num_envio']),
-                    num_transmital_action = int(reportdata['num_accion']),
-                    num_ncr = int(reportdata['num_ncr']),
-                    status = reportdata['status'],
-                    stipulated_date = reportdata['stipulated_date'],
-                    real_close_date = reportdata['close_date'],
-                    wbs = wbs_non,
-                    contract = contract_non, 
-                    api = api_non,
-                    discipline = discipline_non, 
-                    register_by = register_non
-                )
+            imagenes = request.FILES.getlist('images')
+            id_rep_noncon = nonconformity_report.id
 
-            nonconformity_report.save()
+            for img in imagenes:
+
+                wrr = NonConformityImage(
+                        image = img
+                    )
+
+                wrr.save()
+
+                wrrf = NonConformityReportImage(
+                        report = nonconformity_report,
+                        image = wrr 
+                        )
+
+                wrrf.save()
 
             id_rep_noncon = nonconformity_report.id
 
@@ -143,39 +159,245 @@ def savenonconformityreport(request, *args, **kwargs):
 
             return JsonResponse(data)
 
-        if len(request.FILES.getlist('images')) > 0:
+def setParagraph(height_pdf, text, style, c):
+    width, height = portrait(letter) 
 
-            imagenes = request.FILES.getlist('images')
-            report_for_id = NonConformityReport.objects.last()
-            id_rep_noncon = report_for_id.id
+    height_pdf -= 25
+    info = Paragraph(text, style)  
+    info.wrapOn(c, width, height)
+    w, h = info.wrap(600, 50)
+    height_pdf -= h
+    info.drawOn(c, 15, height_pdf, 0)
 
-            for img in imagenes:
+    return height_pdf
 
-                wrr = NonConformityImage(
-                        image = img
-                    )
-                wrr.save()
+def separator(c, height_pdf):
 
-                wrrf = NonConformityReportImage(
-                        report = report_for_id,
-                        image = wrr 
-                        )
+    url_img = settings.STATIC_ROOT + "/app/img/report_banners/bannercaminata/separador.png" 
+    im_banner = Image(url_img, width=600, height=16)
+    im_banner.drawOn(c, 4, height_pdf)
+    height_pdf -= 20
+    
+    return height_pdf
 
-                wrrf.save()
+def principalBanner(next_page, height_pdf, c):
 
-            if id_rep_noncon > 0:
-                    
-                data = {
-                    'submitted': 1,
-                    'id_report': id_rep_noncon
-                    }
+    width, height = portrait(letter) 
+    archivo_imagen = settings.STATIC_ROOT +'/app/img/logo.jpg'
+    height_pdf = height
+    url_img = settings.STATIC_ROOT + "/app/img/report_banners/bannernoconformidad/bannernoconformidad.png" 
+    im_banner = Image(url_img, width=600, height=47)
+    im_banner.drawOn(c, 5, 680)
+    height_pdf -= 115
+    next_page = 1
 
-                #createwalkpdf(id_rep_walk)
+    return height_pdf, next_page
 
-            else:
+@csrf_exempt
+@login_required(login_url="login")
+def createpdfnonconformity(request):
 
-                data = {
-                    'submitted': 0
-                    }
+    id_rep = 4
 
-            return JsonResponse(data)
+    reporte_noncon =  NonConformityReport.objects.get(pk=id_rep)
+    reporte_imagen = NonConformityReportImage.objects.filter(report_id=id_rep)
+    
+    #Configuración de Response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename=REPORTE N°'+ str(id_rep)+'.pdf'
+
+    buffer = io.BytesIO()
+
+    c = canvas.Canvas(
+                      buffer,
+                      pagesize=portrait(letter)
+                      )
+
+    width, height = portrait(letter) 
+
+    styles = getSampleStyleSheet()
+    styleN = styles["BodyText"]
+    styleN.alignment = TA_LEFT
+    styleBH = styles["Normal"]
+    styleBH.alignment = TA_CENTER
+
+    #Cabezera PDF
+    archivo_imagen = settings.STATIC_ROOT +'/app/img/logo.jpg'
+    height_pdf = height
+    url_img = settings.STATIC_ROOT + "/app/img/report_banners/bannernoconformidad/bannernoconformidad.png" 
+    im_banner = Image(url_img, width=600, height=47)
+    im_banner.drawOn(c, 5, 680)
+
+    c.setFont('Helvetica', 18)
+    title_report = stringWidth("REPORTE N°"+str(id_rep), 'Helvetica', 18)
+
+    c.drawString((width/2)-(title_report/2), 740,"REPORTE N°"+str(id_rep))
+
+    height_pdf -= 115
+
+    #Antecedentes generales
+    c.setFont('Helvetica', 14)
+    title_report = stringWidth("ANTECEDENTES GENERALES", 'Helvetica', 14)
+    c.drawString((width/2)-(title_report/2), 670,"ANTECEDENTES GENERALES")
+
+    c.setFont('Helvetica', 8)
+    c.drawString(25, 650,"N° Contrato: " + str(reporte_noncon.contract.contract_number))
+    c.drawString(25, 635,"Proyecto: " + reporte_noncon.contract.contract_name)
+    c.drawString(25, 620,"Empresa Responsable: " + reporte_noncon.contract.enterprise)
+    c.drawString(25, 605,"Área: " + reporte_noncon.wbs.wbs_name)
+    c.drawString(25, 590,"Sistema: " + reporte_noncon.sistem)
+    c.drawString(25, 575,"Subsistema: " + reporte_noncon.subsistem)
+
+    c.drawString(396, 650,"N° Auditoría: " + str(reporte_noncon.num_audit))
+    c.drawString(396, 635,"Correlativo: " + str(reporte_noncon.correlative))
+    c.drawString(396, 620,"Disciplina: " + reporte_noncon.discipline.discipline_name)
+    c.drawString(396, 605,"Item: " + str(reporte_noncon.item))
+    c.drawString(396, 590,"Fecha de Creación: " + str(reporte_noncon.creation_date.day) + "/"
+                             + str(reporte_noncon.creation_date.month) + "/"
+                             + str(reporte_noncon.creation_date.year))
+    c.drawString(396, 575,"Tag: " + str(reporte_noncon.tag))
+
+    ##Separador
+    height_pdf -= 140
+    height_pdf = separator(c, height_pdf)
+
+    #DETALLE NO CONFORMIDAD
+    c.setFont('Helvetica', 14)
+    title_report = stringWidth("DETALLE NO CONFORMIDAD", 'Helvetica', 14)
+    c.drawString((width/2)-(title_report/2), height_pdf,"DETALLE NO CONFORMIDAD")
+    
+    height_pdf -= 25
+    c.setFont('Helvetica', 8)
+    c.drawString(25, height_pdf,"Criticidad de No Conformidad: " + str(reporte_noncon.criticality))
+    c.drawString(280, height_pdf,"Origen: " + reporte_noncon.origin)
+    c.drawString(475, height_pdf,"Clasificación: " + reporte_noncon.clasification)
+
+    height_pdf -= 10
+
+    height_pdf = setParagraph(height_pdf,
+                              "Criterio / Documentos de Referencia (E.T, Planos, Normas, etc.)",
+                              styleBH,
+                              c)
+    height_pdf = setParagraph(
+        height_pdf, reporte_noncon.reference_documents, styleN, c
+        )
+
+    height_pdf = setParagraph(height_pdf,
+                              "Requisito Incumplido (Punto Especifico de la norma, EE.TT, o documento aplicable.)",
+                              styleBH,
+                              c)
+
+    height_pdf = setParagraph(
+        height_pdf, reporte_noncon.infringement_requirement, styleN, c
+        )
+
+    height_pdf = setParagraph(height_pdf,
+                              "Descripción detallada de la No Conformidad.)", 
+                              styleBH,
+                              c)
+    height_pdf = setParagraph(
+        height_pdf, reporte_noncon.details, styleN, c
+        )
+
+    height_pdf = setParagraph(height_pdf,
+                              "Observaciones",
+                              styleBH,
+                              c)
+
+    height_pdf = setParagraph(
+        height_pdf, reporte_noncon.observations, styleN, c
+        )
+
+    next_page = 0
+
+    if height_pdf < 200:
+        c.showPage()
+
+
+    #DETALLE ORIGEN Y SEGUIMIENTO
+    height_pdf -= 30
+    height_pdf = separator(c, height_pdf)
+
+    c.setFont('Helvetica', 14)
+    title_report = stringWidth("DETALLE ORIGEN Y SEGUIMIENTO", 'Helvetica', 14)
+    c.drawString((width/2)-(title_report/2), height_pdf,"DETALLE ORIGEN Y SEGUIMIENTO")
+    height_pdf -= 20
+
+    c.setFont('Helvetica', 8)
+    c.drawString(25, height_pdf,"Originador: " + reporte_noncon.register_by.first_name + " " + reporte_noncon.register_by.last_name)
+    c.drawString(396, height_pdf,"Criterio Especifico de NCR: " + reporte_noncon.ncr_standar)    
+    height_pdf -= 15
+    c.drawString(25, height_pdf,"N° Trnsmital Envío NCR: " + str(reporte_noncon.num_transmital_ncr))
+    c.drawString(396, height_pdf,"N° Transmital Envío Acción Correctiva: " + str(reporte_noncon.num_transmital_action))    
+    height_pdf -= 15
+    c.drawString(25, height_pdf,"N° NCR Emitida: " + str(reporte_noncon.num_ncr))
+    c.drawString(396, height_pdf,"Estatus: " + reporte_noncon.status)    
+    height_pdf -= 15    
+    c.drawString(25, height_pdf,"Fecha de Compromiso de Cierre: " + str(reporte_noncon.stipulated_date.day) + "/"
+                             + str(reporte_noncon.stipulated_date.month) + "/"
+                             + str(reporte_noncon.stipulated_date.year))     
+    c.drawString(396, height_pdf,"Fecha de Cierre: " + str(reporte_noncon.real_close_date.day) + "/"
+                             + str(reporte_noncon.real_close_date.month) + "/"
+                             + str(reporte_noncon.real_close_date.year))
+
+    #Respaldo Fotografico
+    img_len = len(hist_img)
+
+    if next_page == 1:
+
+        c.showPage()
+        height_pdf, next_page = principalBanner(next_page, height_pdf, c)
+        
+
+    if img_len == 0:
+
+        url_img = settings.STATIC_ROOT + "/app/img/report_banners/noimage.png" 
+        im_banner = Image(url_img, width=100, height=100)
+        im_banner.drawOn(c, (width/2)-50, height_pdf + 60)
+
+        c.setFont('Helvetica', 15)
+        width_text = stringWidth("No se registro imágenes", 'Helvetica', 15)
+        c.drawString((width/2)-(width_text/2), height_pdf + 40, "No se registro imágenes")
+
+
+    for img in hist_img:
+
+        if inc_img > 2:
+
+            inc_img = 0
+            height_pdf -= 310
+            img_space = 40
+            
+            if inc_page > 5:
+
+                height_pdf = height
+                height_pdf -= 115
+
+                c.showPage()
+                url_img = settings.STATIC_ROOT + "/app/img/report_banners/FotosBanner.png" 
+                im_banner = Image(url_img, width=600, height=47)
+                im_banner.drawOn(c, 5, height_pdf)
+                height_pdf = height
+                height_pdf -= 115
+
+                inc_page = 0
+
+        url_img = settings.MEDIA_ROOT + "/" + img.image.image.name
+
+        im = Image(url_img, width=150, height=150, hAlign='CENTER')
+        im.drawOn(c, img_space, height_pdf)
+
+        inc_img += 1
+        img_space += 170
+        inc_page += 1
+
+    c.save()
+
+    buffer.seek(0)
+    pdf: bytes = buffer.getvalue()
+
+    response.write(pdf)
+    file_data = ContentFile(pdf)
+
+    return response
+

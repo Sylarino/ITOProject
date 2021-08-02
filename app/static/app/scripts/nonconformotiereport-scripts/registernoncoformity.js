@@ -1,3 +1,5 @@
+//const { json } = require("modernizr");
+
 var i = 0;
 var dataImgNonCon = [];
 
@@ -149,45 +151,47 @@ $(function () {
             exist_file: val_img
         }
 
+        data.append('reporte[]', JSON.stringify(reporte));
+
         debugger;
 
+        //$.ajax({
+        //    url: 'savenonconformityreport/',
+        //    type: 'POST',
+        //    data: {
+        //        action: 'save_data_report',
+        //        'reporte[]': JSON.stringify(reporte), csrfmiddlewaretoken: '{{ csrf_token }}',
+        //    },
+        //    dataType: 'JSON',
+        //}).done(function (data) {
+
+        //    if (val_img === 0) {
+        //        messageSuccessPDF(data);
+        //    }
+
+        //}).fail(function (data) {
+        //    Swal.fire("Reporte de No Conformidad No Agregado",
+        //                "Verifique los datos a ingresar",
+        //                "warning");
+        //    return false;
+        //});
+
+        //if (val_img === 1) {
         $.ajax({
-            url: 'savenonconformityreport/',
+            url: 'saveimages/',
             type: 'POST',
-            data: {
-                action: 'save_data_report',
-                'reporte[]': JSON.stringify(reporte), csrfmiddlewaretoken: '{{ csrf_token }}',
-            },
-            dataType: 'JSON',
+            data: data,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
         }).done(function (data) {
 
-            if (val_img === 0) {
-                messageSuccessPDF(data);
-            }
+            messageSuccessPDF(data);
 
         }).fail(function (data) {
-            Swal.fire("Reporte de No Conformidad No Agregado",
-                        "Verifique los datos a ingresar",
-                        "warning");
+            Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
             return false;
         });
-
-        if (val_img === 1) {
-            $.ajax({
-                url: 'saveimages/',
-                type: 'POST',
-                data: data,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-            }).done(function (data) {
-
-                messageSuccessPDF(data);
-
-            }).fail(function (data) {
-                Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
-                return false;
-            });
-        }
+        //}
     }
 });
