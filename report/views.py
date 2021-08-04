@@ -1661,9 +1661,11 @@ def create_pdf(id):
         c.setFont('Helvetica', 15)
         width_text = stringWidth("No se registro imágenes", 'Helvetica', 15)
         c.drawString((width/2)-(width_text/2), height_pdf + 40, "No se registro imágenes")
+    
     for img in hist_img:
 
         if inc_img > 2:
+
             inc_img = 0
             height_pdf -= 310
             img_space = 40 

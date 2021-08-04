@@ -69,3 +69,27 @@ class NonConformityReportImage(models.Model):
 
     def __str__(self):
         return "Reporte N°" + str(self.report)
+
+class NonConformityPDF(models.Model):
+    upload = models.FileField(default='null', verbose_name="PDF", upload_to='pdf_nonconformity_reports')
+    pdf_register = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro de PDF")
+
+    class Meta:
+        verbose_name = 'PDF Reporte de No Conformidad'
+        verbose_name_plural = 'Archivos PDF Reporte de No Conformidad'
+
+    def __str__(self):
+        return str(self.pdf_register)
+
+class NonConformityReportPDF(models.Model):
+    inspection_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro de PDF")
+    #Llaves
+    noncon_report = models.ForeignKey(NonConformityReport, verbose_name="Reporte de No Conformidad", on_delete=models.CASCADE)
+    pdf = models.ForeignKey(NonConformityPDF, verbose_name="PDF de Reporte de No Conformidad", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Repertorio de PDF de Reporte de No Conformidad'
+        verbose_name_plural = 'Repertorios de Archivos PDF Reporte de No Conformidad'
+
+    def __str__(self):
+        return str(self.noncon_report)  

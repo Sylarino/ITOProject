@@ -4,6 +4,7 @@ var i = 0;
 var dataImgNonCon = [];
 
 $(function () {
+
     document.getElementById("file-noncon").onchange = function (e) {
 
         var largo = 0;
@@ -54,6 +55,7 @@ $(function () {
         return dataImgNonCon;
     
     };
+
 });
 
 function eliminarImg(id) {
@@ -75,7 +77,65 @@ $(function () {
     }
 });
 
+function downloadrecentlypdf(id_pdf) {
+
+    $.ajax({
+
+        type: 'POST',
+        data: { 'id': id_pdf, csrfmiddlewaretoken: '{{ csrf_token }}' },
+        url: "downloadpdfnoncon/",
+        success: function (response) {
+
+            var blob = new Blob([response], { type: 'application/pdf' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "REPORTE_NO_CON_N°" + id_pdf + ".pdf";
+            link.click();
+
+        }
+
+    });
+
+}
+
+function messageSuccesNonCon(data) {
+
+    if (data.submitted == 1) {
+
+        swal.fire("Guardado", "Reporte de No Conformidad N°" + data.id_report + " agregado satisfactoriamente", "success", {
+
+            confirmButtonText: "Descargar"
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                downloadrecentlypdf(data.id_report);
+
+                Swal.fire('Descargado!', '', 'success', {
+
+                    confirmButtonText: "Ok"
+
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                        window.scrollTo(0, 0);
+                    } else {
+                        window.location.reload();
+                        window.scrollTo(0, 0);
+                    }
+
+                });
+            }
+        });
+
+    }
+
+}
+
 $(function () {
+
     document.getElementById("btn_save_noncor_report").onclick = function () {
 
         var api = document.querySelector("#noncon_api_id");
@@ -119,9 +179,8 @@ $(function () {
             val_img = 0;
         }
 
-        debugger;
-
         let reporte = {
+
             id_api: api.options[api.selectedIndex].id,
             id_contrato: contrato.options[contrato.selectedIndex].id,
             audit: auditoria.value,
@@ -149,49 +208,31 @@ $(function () {
             stipulated_date: fecha_compromiso.value,
             close_date: fecha_cierre.value,
             exist_file: val_img
+
         }
 
         data.append('reporte[]', JSON.stringify(reporte));
 
-        debugger;
-
-        //$.ajax({
-        //    url: 'savenonconformityreport/',
-        //    type: 'POST',
-        //    data: {
-        //        action: 'save_data_report',
-        //        'reporte[]': JSON.stringify(reporte), csrfmiddlewaretoken: '{{ csrf_token }}',
-        //    },
-        //    dataType: 'JSON',
-        //}).done(function (data) {
-
-        //    if (val_img === 0) {
-        //        messageSuccessPDF(data);
-        //    }
-
-        //}).fail(function (data) {
-        //    Swal.fire("Reporte de No Conformidad No Agregado",
-        //                "Verifique los datos a ingresar",
-        //                "warning");
-        //    return false;
-        //});
-
-        //if (val_img === 1) {
         $.ajax({
+
             url: 'saveimages/',
             type: 'POST',
             data: data,
             contentType: false,
             processData: false,
             dataType: 'json',
+
         }).done(function (data) {
 
-            messageSuccessPDF(data);
+            messageSuccesNonCon(data);
 
         }).fail(function (data) {
+
             Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
             return false;
+
         });
-        //}
+
     }
+
 });

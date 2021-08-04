@@ -85,6 +85,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\static\app\scripts\itoreport-scripts\" />
+    <Folder Include="app\static\app\scripts\common-scripts\" />
     <Folder Include="app\static\app\scripts\nonconformotiereport-scripts\" />
     <Folder Include="app\static\app\scripts\walkreport-scripts\" />
     <Folder Include="app\templatetags\" />
@@ -133,6 +134,7 @@
     <Content Include="app\static\app\scripts\walkreport-scripts\registerwalkreport.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\searchactivities.js" />
     <Content Include="app\static\app\scripts\walkreport-scripts\searchwalkreports.js" />
+    <Content Include="nonconformityreport\templates\nonconformityreport\nonconformity.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\registernonconformities.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\searchnonconformity.html" />
     <Content Include="report\templates\form-report\modifiedreport.html" />

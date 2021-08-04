@@ -11,7 +11,7 @@
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label class="form-search-label">Proyecto:</label>
-                <select name="api" id="api_walk_select" class="form-control form-search-control" required>
+                <select name="api" id="api_noncon_select" class="form-control form-search-control" required>
                     <option id="0" disabled selected>Seleccione API</option>
                     {% for api in apis %}
                     <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
@@ -23,7 +23,7 @@
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label class="form-search-label">Contrato:</label>
-                <select name="contract" class="form-control form-search-control" id="con_walk_select" required>
+                <select name="contract" class="form-control form-search-control" id="con_noncon_select" required>
                     <option id="0" disabled selected>Seleccione Contrato</option>
                     
                 </select>
@@ -33,7 +33,7 @@
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label class="form-search-label">Area:</label>
-                <select name="area" class="form-control form-search-control" id="area_walk_select" required>
+                <select name="area" class="form-control form-search-control" id="area_noncon_select" required>
                     <option id="0" disabled selected>Seleccione Area</option>
                     {% for wb in wbs %}
                     <option id="{{wb.id}}" value="{{wb.id}}">{{ wb.wbs_name }}</option>
@@ -45,7 +45,7 @@
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label class="form-search-label">Disciplina:</label>
-                <select name="discipline" class="form-control form-search-control" id="disi_walk_select" required>
+                <select name="discipline" class="form-control form-search-control" id="disi_noncon_select" required>
                     <option id="0" disabled selected>Seleccione Disciplina</option>
                     {% for discipline in disciplines %}
                     <option id="{{discipline.id}}" value="{{discipline.id}}">{{ discipline.discipline_name }}</option>
@@ -57,7 +57,7 @@
         <div class="col-md-3 form-report">
             <div class="field-form">
                 <label class="form-search-label">Autor:</label>
-                <select name="autor" class="form-control form-search-control" id="autor_walk_select" required>
+                <select name="autor" class="form-control form-search-control" id="autor_noncon_select" required>
                     <option id="0" disabled selected>Seleccione Autor</option>
                     {% for user in users %}
                     <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
@@ -78,7 +78,7 @@
 
     <div class="btn-section-container">
         <div class="btn-save">
-            <input id="btn-buscar-walk" class="btn btn-danger" type="button" value="Buscar"/>
+            <input id="btn-buscar-noncon" class="btn btn-danger" type="button" value="Buscar"/>
         </div>
 
         <div class="btn-save">
@@ -98,18 +98,16 @@
                 <thead>
                     <tr>
                         <th>Reporte</th>
-                        <th>Caminata</th>
-                        <th>Ubicación</th>
-                        <th>N° Plano</th>
-                        <th>Código Equipo</th>
+                        <th>Area</th>
                         <th>Disciplina</th>
-                        <th>Descripción</th>
-                        <th>Originado por</th>
-                        <th>Resp. Construcción</th>
-                        <th>Lider caminata</th>
-                        <th>Prioridad</th>
-                        <th>Fecha Compromiso</th>
-                        <th>Modificar</th>
+                        <th>Fecha Compromiso Cierre</th>
+                        <th>Fecha Compromiso Cierre</th>
+                        <th>Originador</th>
+                        <th>N Auditoria</th>
+                        <th>Sistema</th>
+                        <th>SubSistema</th>
+                        <th>¿Modificar?</th>
+                        <th>Descargar Reporte</th>
                     </tr>
                 </thead>
             </table>
@@ -124,7 +122,7 @@
 
 {% block extrajs %}
 <script src="{% static 'app/scripts/itoreport-scripts/searchactivities.js' %}"></script>
-<script src="{% static 'app/scripts/walkreport-scripts/searchwalkreports.js' %}"></script>
+<script src="{% static 'app/scripts/nonconformotiereport-scripts/searchnonconformity.js' %}"></script>
 {% endblock %}
 
 {% endblock %}
