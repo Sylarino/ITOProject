@@ -10,14 +10,16 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             <div class="modal-body">
-                <form action="">
+                <form>
                     <div class="separator"></div>
                     <div class="row">
+
                         <div class="col-md-6 form-report">
-           
+         
                            <div class="field-form">
                                <label>Reporte:</label>
                                <label id="mod-report" >{{ reporte.id }}</label>
+
                            </div>
 
                            <div class="field-form">
@@ -139,17 +141,24 @@
                 </form>
 
             </div>
+
             <div class="separator"></div>
+
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
                 <button onclick="modificarObservacion('{{observacion.id}}');" class="btn btn-danger" type="button">Guardar</button>
             </div>
+
             <div class="separator"></div>
+
             <div class="row">
 
             </div>
+
         </div>
+
     </div>
+
 </div>
 
 <script src="{% static 'app/scripts/walkreport-scripts/searchwalkreports.js' %}"></script>

@@ -10,6 +10,7 @@ urlpatterns = [
         path('registernonconformityreport/downloadpdfnoncon/', views.downloadpdfnoncon, name='downloadpdfnoncon'),
         path('searchnonconformity/downloadpdfnoncon/<str:rep_id>', views.downloadpdfnoncon, name='downloadpdfnoncon'),
         path('searchnonconformity/modifiednonconformityreport/<str:id>', views.modifiednonconformityreport, name='modifiednonconformityreport'),
+        path('searchnonconformity/savemodifiednonconformity/', views.savemodifiednonconformity, name='savemodifiednonconformity'),
         path('searchnonconformityingrid/', views.searchnonconformityingrid, name='searchnonconformityingrid'),
 ]
 

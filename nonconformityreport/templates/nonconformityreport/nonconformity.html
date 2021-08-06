@@ -177,7 +177,7 @@
                     </div>
                     <div class="separator"></div>
                     <div class="row">
-                        <section id="section-img-noncon">
+                        <section id="section-img-static">
                             {% for img in imgs %}
                             <div class="col-md-4 form-report">
                                 <img class="img-thumbnail" src="{{img.image.image.url}}"/>
@@ -190,25 +190,32 @@
                         <div class="col-md-6 form-report">
                             <div class="field-form">
                                 <label>Fecha Real de Cierre:</label>
-                                <input type="date" value="{{report.real_close_date|date:'Y-m-d'}}"/>
+                                <input id="date-noncon-real" type="date" value="{{report.real_close_date|date:'Y-m-d'}}"/>
                             </div>
                         </div>
                         <div class="col-md-6 form-report">
                             <div class="field-form">
                                 <label>Adjuntar Imagenes:</label>
-                                <input type="file"/>
+                                <input type="file" id="file-noncon" multiple/>
                             </div>
                         </div>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="row">
+                        <section id="section-img-noncon">
+
+                        </section>
                     </div>
                 </form>
             </div>
             <div class="separator"></div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
-                <button onclick="modificarObservacion('{{observacion.id}}');" class="btn btn-danger" type="button">Guardar</button>
+                <button onclick="modificarNoConformidad('{{report.id}}');" class="btn btn-danger" type="button">Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="{% static 'app/scripts/walkreport-scripts/searchwalkreports.js' %}"></script>
+<script src="{% static 'app/scripts/nonconformotiereport-scripts/searchnonconformity.js' %}"></script>
+

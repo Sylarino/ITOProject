@@ -62,7 +62,7 @@ def modifiednonconformityreport(request, id):
         request,
         'nonconformityreport/nonconformity.html',
         {
-            'title':'Registro de Reporte de No Conformidad',
+            'title':'Modificacion de Reporte de No Conformidad',
             'year': datetime.now().year,
             'report': report,
             'imgs': report_img
@@ -576,3 +576,51 @@ def searchnonconformityingrid(request):
         respuesta = e
 
     return JsonResponse(search, safe=False)        
+
+# GUARDAR MODIFICACIÓN DE REPORTE
+@csrf_exempt
+@login_required(login_url="login")
+def savemodifiednonconformity(request):
+
+    if request.method == "POST":
+
+        id_rep = request.POST.get('id_reporte')
+        close_date = request.POST.get('real_close_date')
+        new_imgs = request.FILES.getlist('files')
+
+        rep_noncon = NonConformityReport.objects.get(pk=int(id_rep))
+
+        if rep_noncon.real_close_date  != datetime.strptime(close_date, "%Y-%m-%d"):
+
+            rep_noncon.real_close_date = datetime.strptime(close_date, "%Y-%m-%d")
+            rep_noncon.save()
+
+        for img in new_imgs:
+
+            new_image = NonConformityImage(
+                    image = img
+                )
+            new_image.save()
+
+            new_rep_img = NonConformityReportImage(
+                    image = new_image,
+                    report = rep_noncon
+                )
+            new_rep_img.save()
+
+        if int(id_rep) > 0:
+                    
+            data = {
+                'submitted': 1,
+                'id_reporte': int(id_rep)
+                }
+
+            #createwalkpdf(int(rep_noncon.id))
+
+        else:
+
+            data = {
+                'submitted': 0
+                }
+
+        return JsonResponse(data)

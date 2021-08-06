@@ -81,7 +81,6 @@ $(function () {
 });
 
 //Funcion para el boton de agregar referencias 
-
 $(function () {
     document.getElementById("btn-reference").onclick = function (e) {
 
@@ -155,7 +154,6 @@ function validateInt(valor) {
 
 
 //Funcion para el boton de agregar actividades programadas
-
 $(function () {
     document.getElementById("act-pro").onclick = function (e) {
 
@@ -474,7 +472,6 @@ $(function () {
 });
 
 //Funcion para el boton de agregar Recursos EECC en Terreno
-
 $(function () {
     document.getElementById("but-rec-save").onclick = function (e) {
 
@@ -499,7 +496,6 @@ $(function () {
             Swal.fire("Error", "Ingrese un valor númerico correcto", "warning");
             return false;
         }
-
 
         if (validateInt(iddotdiequi.value)) {
             if (iddotdiequi.value < 0) {

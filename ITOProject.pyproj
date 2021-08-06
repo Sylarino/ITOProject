@@ -44,6 +44,16 @@
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
+    <Compile Include="iscreport\admin.py" />
+    <Compile Include="iscreport\apps.py" />
+    <Compile Include="iscreport\migrations\__init__.py" />
+    <Compile Include="iscreport\models.py" />
+    <Compile Include="iscreport\tests.py" />
+    <Compile Include="iscreport\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="iscreport\views.py" />
+    <Compile Include="iscreport\__init__.py" />
     <Compile Include="manage.py" />
     <Compile Include="ITOProject\__init__.py" />
     <Compile Include="ITOProject\settings.py" />
@@ -98,6 +108,10 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="iscreport\" />
+    <Folder Include="iscreport\migrations\" />
+    <Folder Include="iscreport\templates\" />
+    <Folder Include="iscreport\templates\iscreport\" />
     <Folder Include="ITOProject\" />
     <Folder Include="media\" />
     <Folder Include="media\pdf_reports\" />
@@ -122,6 +136,8 @@
     <Content Include="app\static\app\img\logo.png">
       <Publish>True</Publish>
     </Content>
+    <Content Include="app\static\app\scripts\common-scripts\inputdaterange.js" />
+    <Content Include="app\static\app\scripts\common-scripts\selectprojectapi.js" />
     <Content Include="app\static\app\scripts\datatables.min.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\javascript.js">
       <SubType>Code</SubType>
@@ -134,6 +150,7 @@
     <Content Include="app\static\app\scripts\walkreport-scripts\registerwalkreport.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\searchactivities.js" />
     <Content Include="app\static\app\scripts\walkreport-scripts\searchwalkreports.js" />
+    <Content Include="iscreport\templates\iscreport\registeriscreport.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\nonconformity.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\registernonconformities.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\searchnonconformity.html" />

@@ -1,80 +1,3 @@
-var startDate = "";
-var endDate = "";
-
-$(function () {
-    $('input[name="daterange"]').daterangepicker({
-        startDate: moment().subtract('days', 29),
-        endDate: moment(),
-        "locale": {
-            "daysOfWeek": [
-                "Dom",
-                "Lun",
-                "Mar",
-                "Mie",
-                "Jue",
-                "Vie",
-                "Sáb"
-            ],
-            "monthNames": [
-                "Enero",
-                "Febrero",
-                "Marzo",
-                "Abril",
-                "Mayo",
-                "Junio",
-                "Julio",
-                "Agosto",
-                "Septiembre",
-                "Octubre",
-                "Noviembre",
-                "Diciembre"
-            ],
-            format: 'DD/MM/YYYY'
-        },
-        opens: 'left'
-    }, function (start, end, label) {
-        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-        startDate = start;
-        endDate = end;
-    });
-});
-
-//Accion para ejecutar cuando hay un cambio en el select del proyecto
-$(function () {
-    $('select[name="api"]').on('change', function () {
-
-        var id_select = this.id;
-
-        var id = $('#' + id_select).val();
-        var select_contracts = $('select[name="contract"]');
-        var options = '';
-
-        if (id === '') {
-            select_contracts.html(options);
-            return false;
-        }
-        $.ajax({
-            type: 'GET',
-            data: { action: 'search_contract_id', id: id },
-            url: "/buscarcontratos",
-            dataType: 'json',
-        }).done(function (data) {
-            if (!data.hasOwnProperty('error')) {
-                $.each(data, function (key, value) {
-                    options += '<option id="' + value.id + '" value="' + value.id + '">' + value.contract_number + '</option>';
-                });
-
-                return false;
-            }
-            message_error(data.error);
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(textStatus + ': ' + errorThrown);
-        }).always(function (data) {
-            select_contracts.html(options);
-        });
-    });
-});
-
 //Accion a realizar al seleccionar un contrato
 $(function () {
     $('select[name="contract"]').on('change', function () {
@@ -164,8 +87,6 @@ document.getElementById("select-sub-ap").onchange = function (e) {
 //Accion para realizar la búsqueda con los filtros elegidos.
 $('input[id="btn-buscar"]').on('click', function () {
 
-    //var Table = document.getElementById("table-actividad");
-    //Table.innerHTML = "";
     var exportexist = document.getElementById("export");
     var exportexcelexist = document.getElementById("exportarexcel");
     debugger;
@@ -184,8 +105,6 @@ $('input[id="btn-buscar"]').on('click', function () {
     var contrato = document.getElementById("contr_antgen_id");
     var actividad = document.getElementById("select-act-ap");
     var subactividad = document.getElementById("select-sub-ap");
-    //var cumplimiento = document.getElementById("select-pre-ap");
-    //var historico 
     var seguimiento = document.getElementById("select-seguimiento");
     var tipoactividad = document.getElementById("select-tip-act");
     var conformidad = document.getElementById("select-confor");
@@ -308,44 +227,9 @@ function Modificar(id) {
 
 }
 
-//function modifiedHist(id) {
-//    $.ajax({
-//        type: 'POST',
-//        data: { 'id': id },
-//        url: "modifiedreport/",
-//        dataType: 'json',
-//    }).done(function (data, search) {
-
-//        Swal.fire('Saved!', '', 'success')
-//        cargarTabla(search);
-
-//    }).fail(function (jqXHR, textStatus, errorThrown) {
-//        Swal.fire('Changes are not saved', '', 'info')
-//    });
-//}
-
-
 //Evento para refrescar pagina
 $('input[id="btn-recargar"]').on('click', function () {
 
     window.location.reload();
 
 });
-
-
-//Evento al hacer click en exportar excel.
-//$('main').on('click', "#exportarexcel", function () {
-
-//    const tabla = document.querySelector("#selectactivities");
-//    const fecha = new Date();
-//    let tableExport = new TableExport(tabla, {
-//        exportButtons: false, // No queremos botones
-//        filename: "busqueda-(" + fecha.getDate() + "/" + fecha.getMonth() + "/" + fecha.getFullYear() + ")", //Nombre del archivo de Excel
-//        sheetname: "Búsqueda (ITO Project)", //Título de la hoja
-//    });
-//    let datos = tableExport.getExportData();
-//    debugger;
-
-//    let preferenciasDocumento = datos.selectactivities.xlsx;
-//    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
-//});

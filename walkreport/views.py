@@ -158,8 +158,8 @@ def savemodifiedwalkreport(request):
 
             for file in files_get:
 
-                wrr = NonConformityImage(
-                        image = file
+                wrr = EvidenceFile(
+                        upload = file
                     )
                 wrr.save()
 
@@ -552,6 +552,7 @@ def createwalkpdf(id_report):
     pdfrelation.save()
 
 search = []
+
 #Vista para buscar los datos requeridos en la consulta de caminatas
 @csrf_exempt
 @login_required(login_url="login")
@@ -734,3 +735,4 @@ def downloadwalkpdf(request):
                 return response
 
         raise Http404
+

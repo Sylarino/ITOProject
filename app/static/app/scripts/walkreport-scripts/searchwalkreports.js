@@ -1,4 +1,4 @@
-///Elecci�n de filtros y b�squeda de datos
+///Eleccion de filtros y busqueda de datos
 $('input[id="btn-buscar-walk"]').on('click', function () {
 
     var exportexist = document.getElementById("export");
@@ -110,7 +110,6 @@ function cargarTablaCaminatas(response) {
             
         ]
     });
-    
     return false;
 }
 
