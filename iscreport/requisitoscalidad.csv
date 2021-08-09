@@ -1,0 +1,90 @@
+id_qualityrequirementgroup;requirement_name;reference
+1;Está actualizada su norma.;ISO 9001:2015 Prólogo séptimo párrafo.
+1;Tiene Política de Calidad.;ISO 9001:2015 Pto. 5.2.1
+1;AseguraqueestádifundidayentendidaenlaOrganización.;ISO 9001:2015 Pto. 5.2.2
+2;Tiene Plan de Calidad el Contrato.;ISO 9001:2015 Pto. 6
+2;Está basado en la Norma ISO 9001-2008.;ISO 9001:2015 Prólogo séptimo párrafo.
+2;Está revisados en observaciones el Plan de Calidad por el Agente.;ISO 9001:2015 Pto. 7.5.2 letra c) y 9.2
+2;Están revisados en observaciones los Procedimientos de Gestión por el Agente.;ISO 9001:2015 Pto. 7.5.2 letra c) y 9.2
+2;Existen Procedimientos Específicos de las actividades que son críticas para asegurar la calidad de los servicios.;"ISO 9001:2015 Pto. 6.1.1 letra a); 5.1 letras g)"
+2;Todo el personal tiene conocimiento de la existencia del Plan de Calidad (Registros de capacitación Interna);ISO 9001:2015 Pto. 6.2.1 letra f) y 6.2.2
+2;Existe un responsable a cargo de distribuir el Plan de Calidad y procedimientos.;ISO 9001:2015 Pto. 5.3 
+2;Existe un registro que identifique que parte de la Organización tiene copia controlada del Plan de Calidad y procedimientos.;ISO 9001:2015 Pto. 7.5
+2;Contienenlistadosdeencabezadosdedocumentación (LOGs) por departamentos.;ISO 9001:2015 Pto. 7.5.2 letras a) y b)
+2;Se encuentran distribuidos los documentos.;ISO 9001:2015 Pto. 7.5.3.2 letra a)
+2;ElpersonalauditadoconocelosconceptosdeAseguramiento de Calidad.;ISO 9001:2015 Pto. 7.1.6 y 7.3
+2;Existe un Organigrama, está publicado.;ISO 9001:2015 Pto. 6.2.1
+2;Está de acuerdo a lo establecido en el contrato.;ISO 9001:2015 Pto. 8.1 y 8.2
+2;Se observa que la Organización es suficiente y cumple con el organigrama.;ISO 9001:2015 Pto. 8.1
+2;Elpersonal tiene clara su función, responsabilidad, dependencia.;ISO 9001:2015 Pto.  5.3
+2;Existe un responsable de implementar el Programa de aseguramiento y Control de calidad en este contrato.¿es éste independiente de la sáreasdeproducción / depende exclusivamente del Adc de Contrato?;ISO 9001:2015 Pto. 5.3
+2;Existe un responsable de monitorear el Sistema de Calidad de la Obra.;ISO 9001:2015 Pto. 5.3
+3;Existen procedimientos documentados para Control de Documentos y revisados en observaciones por el Agente.;ISO 9001:2015 Pto. 7.5.3.2 y 9.2
+3;Se cuenta con un responsable de la implementación y cumplimiento de este procedimiento.;ISO 9001:2015 Pto. 5.3
+3;Existe una matriz de distribución de documentos.;ISO 9001:2015 Pto. 7.5.3.2
+3;Están los documentos técnicos del contratos timbrados como copia controlada.;ISO 9001:2015 Pto. 7.5.3.2 letra c)
+3;Cuentan los documentos técnicos con timbre de Documento de cambio y RFI.;ISO 9001:2015 Pto. 7.5.3.2
+3;Los planos y documentos técnicos se encuentran distribuidos y en buen estado.;ISO 9001:2015 Pto. 7.5.3.2
+3;Los documentos obsoletos están segregados e identificados apropiadamente.;ISO 9001:2015 Pto. 7.5.2
+3;Se encuentran los documentos disponibles en los puntos de uso.;ISO 9001:2015 Pto 7.5.3.1
+4;Existe procedimiento documentado de Retiro de Materiales revisados en observaciones por el Agente.;ISO 9001:2015 Pto. 7.5 y 9.2
+4;Existen procedimientos documentado de Recepción de Materiales revisados en observaciones por el Agente.;ISO 9001:2015 Pto 7.5 y 9.2
+4;Existe un responsable de recepción y retiro de materiales.;ISO 9001:2015 Pto. 5.3
+4;Existe un registro de recepción de material y su implementación.;ISO 9001:2015 Pto.  7.5
+4;Existe un registro de retiro de materiales y su implementación.;ISO 9001:2015 Pto.  7.5
+4;Existe un plan de inspección de los materiales recibidos.;ISO 9001:2015 Pto. 8.1
+4;Existen registros de inspección de materiales recepcionados.;ISO 9001:2015 Pto. 7.5
+4;Existe un responsable del control de inventario.;ISO 9001:2015 Pto. 5.3
+4;Existe un sistema de conservación de materiales.;ISO 9001:2015 Pto. 8.5.4
+4;Existe un método para informar y dar cuenta de condiciones deficientes de los materiales recibidos.;ISO 9001:2015 Pto. 8.2.3.1
+4;Existe un método para asegurar que los materiales deficientes no sean utilizados.;ISO 9001:2015 Pto. 8.2.3.1
+5;Existe un procedimiento documentado y revisados en observ aciones por el Agente.;"ISO 9001:2015 Pto. 7.5; 8.3.2 ; 8.5.1 y 9.2"
+5;Existe un responsable de asegurar el cumplimiento de este procedimiento.;ISO 9001:2015 Pto. 5.3
+5;Existe un sistema para informar las actividades de construcción deficiente.;ISO 9001:2015 Pto. 8.3.4  letras b), c), d) y e)
+5;Se cuenta con Procedimiento para realizar las acciones correctivas y preventivas, cierre y tendencias de las deficiencias y NCR;ISO 9001:2015 Pto. 8.7.1 y 10.2
+5;Existe un sistema para registrar las deficiencias y NCR encontradas.;ISO 9001:2015 Pto. 8.7.2 y 10.2.2
+5;Existe un sistema de seguimiento de las NCRs.;ISO  9001:2015 Pto. 9
+6;Existe procedimiento documentado de Equipos de Medición y Ensayosrevisados en observaciones por el Agente.;ISO 9001:2015 Pto. 7.5 y 9.2
+6;Existe un responsable del control de equipos de medición y pruebas.;ISO 9001:2015 Pto. 5.3
+6;Existe un catastro de la trazabilidad de todos los equipos con su certificación y fecha de calibración y verificación.;ISO 9001:2015 Pto. 7.1.5.2
+6;Se tiene especificada la frecuencia de calibración para los diferentes instrumentos y equipos de medición y ensayes.;ISO 9001:2015 Pto. 7.1.5.2
+6;Existe un sistema de identificación para los instrumentos defectuosos y calibración vencida.;ISO 9001:2015 Pto. 7.1.5.1
+7;Existe procedimiento documentado y revisados en observaciones por el Agente,para asegurar la calidad del proceso de construcción.;ISO 9001:2015 Pto. 7.5 y 9.2
+7;Se tiene un Plan de Inspección y Ensaye que incorpore los puntos de inspección y espera de acuerdo a los procedimientos del Agente y las especificaciones técnicas.;ISO 9001:2015 Pto. 8.1 y 9.2
+7;Existe un responsable de hacer cumplir el plan de inspección y ensayos.;ISO 9001:2015 Pto. 5.3
+7;Se tiene determinado quién realiza los ensayos.;ISO 9001:2015 Pto. 5.3
+7;Existe dentro del procedimiento los criterios de aceptación y rechazo de los ensayos.;ISO 9001:2015 Pto. 7.5
+7;Se lleva una lista de registros y trazabilidad de protocolos y certificación.;ISO 9001:2015 Pto. 7.5
+7;Se realiza inspección y ensayos en los procesos de fabricación.;ISO 9001:2015 Pto. 8.3.4 letras b), c), d) y e)
+7;Se cuenta con certificados de calidad de los productos utilizados.;ISO 9001:2015 Pto. 8.4
+8;Existe Procedimiento de conservación de Registros documentado y revisados en observaciones por el Agente.;ISO 9001:2015 Pto. 7.5.3 y 9.2
+8;Existe un responsable de implementar este procedimiento.;ISO 9001:2015 Pto. 5.3
+8;Se mantienen al día los archivos y quienes el responsable de esta acción;ISO 9001:2015 Pto. 5.3 y 7.5.3.2 letra c)
+8;Existe un sistema que mantenga todos los registros generados y como están organizados.;ISO 9001:2015 Pto.  7.5.3.2
+8;Existe un listado de retención y entrega de registros.;ISO 9001:2015 Pto. 7.5.3.2
+8;Se define ubicación, acceso oportuno,tiempo de retención y disposición final de los registros.;ISO 9001:2015 Pto. 7.5.3.2 
+9;Existe procedimiento documentado y revisados en observaciones por el Agente.;ISO 9001:2015 Pto. 7.5 y 9.2
+9;Existe un programa de Auditorias Internas.;ISO 9001:2015 Pto. 9.2.2
+9;Existe un responsable de hacer cumplir el programade auditorias.;ISO 9001:2015 Pto. 5.3
+9;Se encuentra designado y capacitado el personal que realizará las auditorias.;ISO 9001:2015 Pto. 9.2.2 letra c)
+9;Existen registros de las auditorias realizadas y las desviaciones encontradas.;ISO 9001:2015 Pto. 9.2.2 letra f)
+10;Existe procedimiento documentado de capacitación y revisado sin observaciones por el Agente.;ISO 9001:2015 Pto. 7.5 y 9.2
+10;Existe un responsable de coordinar e implementar los programas de capacitación.;ISO 9001:2015 Pto. 5.3
+10;Existe la manera de detectar las necesidades de capacitación.;ISO 9001:2015 Pto. 7.2 letra b)
+10;Se han definido los niveles y competencia del personal relevante en la organización.;ISO 9001:2015 Pto. 7.2 
+10;Existe un mecanismo que evalúe la efectividad de la capacitación.;ISO 9001:2015 Pto. 10.1 
+10;Se llevan registros personalizados con los cursos realizados.;ISO 9001:2015 Pto.  7.5
+11;Se mide de alguna forma la satisfacción del Cliente.;ISO 9001:2015 Pto.  7.1.5.1 y  9.1.2
+11;Se tiene un procedimiento documentado para la realización de las medidas y mejoras.;ISO 9001:2015 Pto. 10.3
+11;Existe un responsable de implementar este procedimiento.;ISO 9001:2015 Pto. 5.3
+11;Se lleva un registro de no conformidades y auditorias.;ISO 9001:2015 Pto. 9.2.2 y 10.2.2
+11;Existe un método estadístico que permita evaluar las  desviaciones de las no conformidades.;ISO 9001:2015 Pto. 9.1.3
+11;Existe un proceso para la evaluación y mejoras de las no conformidades.;ISO  9001:2015 Pto. 9.1.3
+12;Existe un procedimiento o método que asegure el control de los procesos externos;ISO 9001:2015 Pto. 8.4.1
+12;Está definido, tipo y grado de control a aplicar en los proceso contratados externamente;ISO 9001:2015 Pto. 8.4.2
+12;Existe responsable de controlar estos procesos;ISO 9001:2015 Pto. 5.3
+12;Existen criterios para la selección, evaluación y re-evaluación de los externos;ISO 9001:2015 Pto. 8.4.1
+12;Se mantienen registros de los resultados de las evaluaciones;ISO 9001:2015 Pto. 8.4
+12;Cuales son los requisitos de calificación para el personal externo;ISO 9001:2015 Pto. 8.4.2
+13;¿Se tiene identificad o el producto en todas las etapas de fabricación y construcción?;ISO 9001:2015 Pto. 8.5.2
+13;¿Se mantienen los registros e identificación en todas las etapas?;ISO 9001:2015 Pto. 8.5.2
