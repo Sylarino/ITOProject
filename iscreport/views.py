@@ -27,6 +27,7 @@ from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER
 from reportlab.pdfbase.pdfmetrics import stringWidth
 import os
 from django.contrib.auth.models import User, Group
+from iscreport.models import *
 
 # Create your views here.
 
@@ -36,6 +37,8 @@ def registeriscreport(request):
     apis = API.objects.all()
     contracts = Contract.objects.all()
     users = User.objects.all()
+    requirement = QualityRequirement.objects.all()
+    grouprequirement = QualityRequirementGroup.objects.all()
 
     assert isinstance(request, HttpRequest)
     return render(
@@ -46,5 +49,8 @@ def registeriscreport(request):
             'year': datetime.now().year,
             'apis': apis,
             'contracts': contracts,
-            'users': users
+            'users': users,
+            'requirement':requirement,
+            'grouprequirement':grouprequirement
+
         })

@@ -15,20 +15,34 @@ class Migration(migrations.Migration):
 
     def insert_init_data(apps, schema_editor):
 
+        dfgroup = pd.read_csv('iscreport/grouprequisitos.csv', encoding='latin-1',sep=";")
         df = pd.read_csv('iscreport/requisitoscalidad.csv', encoding='latin-1',sep=";")
 
         QualityRequirement = apps.get_model('iscreport', 'QualityRequirement')
+        QualityGroup = apps.get_model('iscreport', 'QualityRequirementGroup')
+
+        for g in dfgroup:
+            QualityGroup.objects.create(
+                    requirement_group_name = i['requirement_group_name']
+                )
 
         for i in df:
             QualityRequirement.objects.create(
                     requirement_name = i['requirement_name'],
-                    reference = i['reference']
+                    reference = i['reference'],
+                    group = int(i['id_qualityrequirementgroup'])
                 )
 
 
     def undo_insert_data(apps, schema_editor):
+
         QualityRequirement = apps.get_model('iscreport', 'QualityRequirement')
         QualityRequirement.objects.all().delete()
+
+        QualityGroup = apps.get_model('iscreport', 'QualityRequirementGroup')
+        QualityGroup.objects.all().delete()
+
+
 
     operations = [
         migrations.CreateModel(
@@ -81,7 +95,9 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Grupo de requisitos de Calidad',
                 'verbose_name_plural': 'Grupos de requisitos de Calidad',
             },
+            
         ),
+        migrations.RunPython(insert_init_data, reverse_code=undo_insert_data),
         migrations.CreateModel(
             name='QualityContract',
             fields=[
