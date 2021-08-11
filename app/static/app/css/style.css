@@ -46,7 +46,7 @@ body {
 
 .logo-brand {
     left: 2rem;
-    max-width: 10rem;
+    max-width: 7rem;
     padding-top: 10px;
     padding-left: 10px;
     padding-bottom: 10px;
@@ -644,9 +644,9 @@ article .careful {
     background-color: #5d4f4f !important;
 }
 
-.form-control {
+/*.form-control {
     width: 60% !important;
-}
+}*/
 
 .btn-ref {
     width: 40%;
@@ -724,4 +724,8 @@ body > .container-fluid {
 .div-buttons--container .btn-danger {
     max-width: 80px;
     margin: auto 0;
+}
+
+.row-quality-style {
+    max-width: 400px !important;
 }

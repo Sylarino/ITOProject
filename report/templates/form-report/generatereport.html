@@ -10,10 +10,10 @@
         {#Formulario Antecedentes Generales#}
         <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
         <div class="row">
-            <div class="col-md-6 form-report">
+            <div class="row g-3"">
            
-                <div class="field-form">
-                    <label>N° de API:</label>
+                <div class="col-md-6">
+                    <label class="form-label">N° de API:</label>
                     <select name="api" id="api_antgen_id" class="form-control" required>
                         <option disabled selected>Seleccione API</option>
                         {% for api in apis %}
@@ -22,19 +22,34 @@
                     </select>
                 </div>
 
-                <div class="field-form">
-                    <label>N° de Contrato:</label>
+                <div class="col-md-6">
+                    <label class="form-label">N° de Contrato:</label>
                     <select name="contract" class="form-control" id="contr_antgen_id" required>
                     </select>
                 </div>
 
-                <div class="field-form">
-                    <label>Fecha de Inicio:</label>
-                    <label name="start_date"></label>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre del Proyecto:</label>
+                    <label class="form-label" name="project_name"></label>
                 </div>
 
-                <div class="field-form">
-                    <label>Especialidad:</label>
+                <div class="col-md-6">
+                    <label class="form-label">Empresa Contratista:</label>
+                    <label class="form-label" name="enterprise"></label>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" >Fecha de Inicio:</label>
+                    <label class="form-label" name="start_date"></label>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Termino:</label>
+                    <label class="form-label" name="finish_date"></label>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label" >Especialidad:</label>
                     <select id="especialidad_id" class="form-control" required>
                         <option disabled selected>Seleccione Especialidad</option>
                         {% for specialty in specialties %}
@@ -43,8 +58,8 @@
                     </select>
                 </div>
 
-                <div class="field-form">
-                    <label>Referencia Utilizada:</label>
+                <div class="col-md-6">
+                    <label class="form-label">Referencia Utilizada:</label>
                     <select id="select-id" class="form-control" required>
                         <option disabled selected>Seleccione Referencia</option>
                         {% for reference in references %}
@@ -53,34 +68,13 @@
                     </select>
                 </div>
 
-                <div class="field-form">
-                    <label>Nombre Referencia:</label>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre Referencia:</label>
                     <input id="ref-name" class="form-control" required>
                 </div>
 
-                <input id="btn-reference" class="btn btn-danger btn-ref" type="button" value="Agregar Referencia"/>
-            
-            </div>
-
-            <div class="col-md-6 form-report">
-
-                <div class="field-form">
-                    <label>Nombre del Proyecto:</label>
-                    <label name="project_name"></label>
-                </div>
-
-                <div class="field-form">
-                    <label>Empresa Contratista:</label>
-                    <label name="enterprise"></label>
-                </div>
-
-                <div class="field-form">
-                    <label>Fecha de Termino:</label>
-                    <label name="finish_date"></label>
-                </div>
-
-                <div class="field-form">
-                    <label>Referencias Registradas:</label>
+                <div class="col-md-6 text-center">
+                    <input id="btn-reference" class="btn btn-danger btn-ref" type="button" value="Agregar Referencia"/>
                 </div>
 
                 <section class="table-container--load"> 
@@ -96,6 +90,12 @@
                         </tbody>
                     </table>
                 </section>
+
+            </div>
+
+            <div class="col-md-6 form-report">
+
+
 
             </div>
         </div>

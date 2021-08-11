@@ -144,6 +144,7 @@
       <Publish>True</Publish>
     </Content>
     <Content Include="app\static\app\scripts\common-scripts\inputdaterange.js" />
+    <Content Include="app\static\app\scripts\common-scripts\searchimgs.js" />
     <Content Include="app\static\app\scripts\common-scripts\selectprojectapi.js" />
     <Content Include="app\static\app\scripts\datatables.min.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\javascript.js">
