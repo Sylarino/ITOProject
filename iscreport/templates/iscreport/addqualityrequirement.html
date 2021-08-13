@@ -1,0 +1,65 @@
+{% extends "app/layout.html" %}
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+    <form action="">
+        {% csrf_token %}
+
+        <h2 class="title-page">{{ title }}</h2>
+
+        <h3 class="section-title"> SELECCIONE CONTRATO </h3>
+
+        <div class="row">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">N de API:</label>
+                        <select name="api" id="isc_api_id" class="form-control" required>
+                            <option disabled selected>Seleccione N de API</option>
+                            {% for api in apis %}                    
+                            <option value="{{api.id}}" id="{{api.id}}">{{api.api_number}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">N de Contrato:</label>                   
+                        <select name="contract" id="isc_con_id" class="form-control" required>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="title-page">{{ title }}</h2>
+        <h3 class="section-title"> SELECCIONE GRUPO DE REQUISITO DE CALIDAD </h3>
+
+        <div class="row">
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <div class="field-form">
+                        <label class="form-label">Grupo de Calidad:</label>    
+                        <select name="api" id="isc_api_id" class="form-control" required>
+                            <option disabled selected>Seleccione Grupo</option>
+                            {% for groupreq in grouprequirement %}                    
+                            <option value="{{groupreq.id}}" id="{{groupreq.id}}">{{groupreq.requirement_group_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <h2 class="title-page">{{ title }}</h2>
+    <h3 class="section-title">GUARDAR REPORTE</h3>
+    <div class="btn-save">
+            <input id="btn_save_noncor_report" class="btn btn-danger" type="button" value="Guardar"/>
+    </div>
+
+</div>
+
+{% endblock %}

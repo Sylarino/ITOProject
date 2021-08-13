@@ -146,6 +146,7 @@
     <Content Include="app\static\app\scripts\common-scripts\inputdaterange.js" />
     <Content Include="app\static\app\scripts\common-scripts\searchimgs.js" />
     <Content Include="app\static\app\scripts\common-scripts\selectprojectapi.js" />
+    <Content Include="app\static\app\scripts\common-scripts\selectprojectcontract.js" />
     <Content Include="app\static\app\scripts\datatables.min.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\javascript.js">
       <SubType>Code</SubType>
@@ -158,6 +159,7 @@
     <Content Include="app\static\app\scripts\walkreport-scripts\registerwalkreport.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\searchactivities.js" />
     <Content Include="app\static\app\scripts\walkreport-scripts\searchwalkreports.js" />
+    <Content Include="iscreport\templates\iscreport\addqualityrequirement.html" />
     <Content Include="iscreport\templates\iscreport\registeriscreport.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\nonconformity.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\registernonconformities.html" />

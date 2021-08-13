@@ -88,6 +88,7 @@
                             <li>Lista ISC</li>
                             <li><a class="dropdown-item" href="{% url 'registeriscreport' %}">Registro de Lista ISC</a></li>
                             <li><a class="dropdown-item" href="{% url 'searchwalkreport' %}">Consulta de Listas ISC</a></li>
+                            <li><a class="dropdown-item" href="{% url 'addqualityrequirement' %}">Agregar Requisito de Calidad</a></li>
                             </ul>
                         </li>
                         {% if request.user|has_group:"P&C" %}

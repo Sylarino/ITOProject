@@ -54,3 +54,26 @@ def registeriscreport(request):
             'grouprequirement':grouprequirement
 
         })
+
+def addqualityrequirement(request):
+
+    apis = API.objects.all()
+    contracts = Contract.objects.all()
+    users = User.objects.all()
+    requirement = QualityRequirement.objects.all()
+    grouprequirement = QualityRequirementGroup.objects.all()
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'iscreport/addqualityrequirement.html',
+        {
+            'title':'Agregar Requisitos de Calidad a Contrato',
+            'year': datetime.now().year,
+            'apis': apis,
+            'contracts': contracts,
+            'users': users,
+            'requirement':requirement,
+            'grouprequirement':grouprequirement
+
+        })

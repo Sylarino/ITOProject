@@ -148,10 +148,10 @@
             </section>
 
             <section class="section-md-field select-section--activities">
-}               <div class="row">
+                <div class="row">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <label>Cumplimiento:</label>
+                            <label class="form-label">Cumplimiento:</label>
                             <select id="select-cum-ap" class="form-control" required>
                                 <option disabled selected>Si o No</option>
                                 <option>Si</option>
@@ -160,7 +160,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label>Causa de NO Cumplimiento:</label>
+                            <label class="form-label">Causa de NO Cumplimiento:</label>
                             <select id="select-cau-ap" class="form-control" required disabled>
                                 <option disabled selected>Seleccione Causa</option>
                                 {% for nonconformity in nonconformities %}
@@ -170,12 +170,12 @@
                         </div>
                 
                         <div class="col-md-4">
-                            <label>Detalle:</label>
+                            <label class="form-label">Detalle:</label>
                             <input id="input-det-ap" class="form-control" required readonly="readonly"/>
                         </div>
 
                         <div class="col-md-4">
-                            <label>Pre Requisito:</label>
+                            <label class="form-label">Pre Requisito:</label>
                             <select id="select-pre-ap" class="form-control">
                                 <option disabled selected>Seleccione Pre Requisito</option>
                                 {% for precondition in preconditions %}
@@ -248,7 +248,7 @@
                 <div class="row">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <label>Cumplimiento:</label>
+                            <label class="form-label">Cumplimiento:</label>
                             <select id="select-cum-anp" class="form-control" required>
                                 <option disabled selected>Si o No</option>
                                 <option>Si</option>
@@ -257,7 +257,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label>Causa de NO Cumplimiento:</label>
+                            <label class="form-label">Causa de NO Cumplimiento:</label>
                             <select id="select-cau-anp" class="form-control" disabled>
                                 <option disabled selected>Seleccione Causa</option>
                                 {% for nonconformity in nonconformities %}
@@ -272,7 +272,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label>Pre Requisito:</label>
+                            <label class="form-label">Pre Requisito:</label>
                             <select id="select-pre-anp" class="form-control">
                                 <option disabled selected>Seleccione Pre Requisito</option>
                                 {% for precondition in preconditions %}
@@ -294,7 +294,7 @@
         <div class="separator"></div>
     
         <section class="table-container--load">
-            <table class="table table-load">
+            <table class="table table-load table-bordered border-secundary">
                 <thead>
                     <tr>
                         <th scope="col">Nombre SubActividad</th>
@@ -318,46 +318,54 @@
         <h2 class="title-page">{{ title }}</h2>
         <h3 class="section-title"> RECURSOS EECC EN TERRENO </h3>
         <div class="row">
-            <div class="col-md-6 form-report">
-                <label>Nombre de Actividad:</label>
-                <select name="select-act-equi" id="select-act-equi" class="form-control" required>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Nombre de Actividad:</label>
+                    <select name="select-act-equi" id="select-act-equi" class="form-control" required>
 
-                </select>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Nombre de Sub Actividad:</label>
+                    <select name="select-sub-equi" id="select-sub-equi" class="form-control" required>
+
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Nombre de Equipo:</label>
+                    <select name="id-nombre-equi" id="id-nombre-equi" class="form-control" required>
+                        <option disabled selected>Seleccione Equipo</option>
+                        {% for equipment in equipments %}
+                            <option id="{{equipment.id}}">{{equipment.equipment_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
-            <div class="col-md-6 form-report">
-                <label>Nombre de Sub Actividad:</label>
-                <select name="select-sub-equi" id="select-sub-equi" class="form-control" required>
-
-                </select>
-            </div>
-
-            <div class="col-md-4 form-report">
-                <label>Nombre <br /> de Equipo:</label>
-                <select name="id-nombre-equi" id="id-nombre-equi" class="form-control" required>
-                    <option disabled selected>Seleccione Equipo</option>
-                    {% for equipment in equipments %}
-                        <option id="{{equipment.id}}">{{equipment.equipment_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
             <section class="section-md-field">
-                <div class="col-md-2 form-report">
-                    <label>Cantidad <br /> de Equipos:</label>
-                    <input type="number" id="id-cantidad-equi" class="form-control" readonly="readonly"/>
+                <div class="row">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label>Cantidad de Equipos:</label>
+                            <input type="number" id="id-cantidad-equi" class="form-control" readonly="readonly"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Dotación Directa: </label>
+                            <input type="number" id="id-dotdi-equi" class="form-control" readonly="readonly"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Dotación Referencial: </label>
+                            <input type="number" id="id-dotref-equi" class="form-control" readonly="readonly"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Dotación Indirecta: </label>
+                            <input type="number" id="id-dotind-equi" class="form-control" readonly="readonly"/>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-2 form-report">
-                    <label>Dotación <br/> Directa: </label>
-                    <input type="number" id="id-dotdi-equi" class="form-control" readonly="readonly"/>
-                </div>
-                <div class="col-md-2 form-report">
-                    <label>Dotación <br /> Referencial: </label>
-                    <input type="number" id="id-dotref-equi" class="form-control" readonly="readonly"/>
-                </div>
-                <div class="col-md-2 form-report">
-                    <label>Dotación <br /> Indirecta: </label>
-                    <input type="number" id="id-dotind-equi" class="form-control" readonly="readonly"/>
-                </div>
+
             </section>
         </div>
 
@@ -366,7 +374,7 @@
         </div>
 
         <section class="table-container--load">
-            <table class="table table-load">
+            <table class="table table-load table-bordered border-secundary">
                 <thead>
                     <tr>
                         <th scope="col">N°</th>
@@ -389,18 +397,20 @@
         <div class="separator"></div>
 
         <div class="row">
-            <div class="col-md-6 form-report">
-                <h4 class="subsection-title"> DESVIACIONES DETECTADAS</h4>
-                <textarea id="desviacion" class="form-control medium-text">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <h4 class="subsection-title"> DESVIACIONES DETECTADAS</h4>
+                    <textarea id="desviacion" class="form-control medium-text">
                 
-                </textarea>
-            </div>
+                    </textarea>
+                </div>
 
-            <div class="col-md-6 form-report">
-                <h4 class="subsection-title"> PLAN DE ACCIÓN</h4>
-                <textarea id="plandeaccion" class="form-control medium-text">
+                <div class="col-md-6">
+                    <h4 class="subsection-title"> PLAN DE ACCIÓN</h4>
+                    <textarea id="plandeaccion" class="form-control medium-text">
 
-                </textarea>
+                    </textarea>
+                </div>
             </div>
         </div>
 
