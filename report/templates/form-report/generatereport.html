@@ -10,7 +10,7 @@
         {#Formulario Antecedentes Generales#}
         <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
         <div class="row">
-            <div class="row g-3"">
+            <div class="row g-3">
            
                 <div class="col-md-6">
                     <label class="form-label">N° de API:</label>
@@ -78,7 +78,7 @@
                 </div>
 
                 <section class="table-container--load"> 
-                    <table class="table table-load">
+                    <table class="table table-load table-bordered border-secundary">
                         <thead>
                             <tr>
                                 <th scope="col">Referencia</th>
@@ -106,16 +106,16 @@
 
             <h3 class="section-title"> CONTROL DE AVANCE POR ACTIVIDAD SEGÚN PROGRAMA </h3>
             <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES PROGRAMADAS </h4>
-            <div class="row">
-                <div class="col-md-6 form-report">
-                    <label>Nombre de Actividad:</label>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre de Actividad:</label>
                     <select name="select-act-ap" id="select-act-ap" class="form-control" required>
                         <option disabled selected>Seleccione Actividad</option>
                     </select>
                 </div>
 
-                <div class="col-md-6 form-report">
-                    <label>Nombre de Sub Actividad:</label>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre de Sub Actividad:</label>
                     <select name="select-sub-ap" id="select-sub-ap" class="form-control" required>
                         <option disabled selected>Seleccione Sub Actividad</option>
                     </select>
@@ -148,40 +148,43 @@
             </section>
 
             <section class="section-md-field select-section--activities">
-                <div class="col-md-4 form-report">
-                    <label>Cumplimiento:</label>
-                    <select id="select-cum-ap" class="form-control" required>
-                        <option disabled selected>Si o No</option>
-                        <option>Si</option>
-                        <option>No</option>
-                    </select>
-                </div>
+}               <div class="row">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label>Cumplimiento:</label>
+                            <select id="select-cum-ap" class="form-control" required>
+                                <option disabled selected>Si o No</option>
+                                <option>Si</option>
+                                <option>No</option>
+                            </select>
+                        </div>
 
-                <div class="col-md-4 form-report">
-                    <label>Causa de NO Cumplimiento:</label>
-                    <select id="select-cau-ap" class="form-control" required disabled>
-                        <option disabled selected>Seleccione Causa</option>
-                        {% for nonconformity in nonconformities %}
-                        <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                        <div class="col-md-4">
+                            <label>Causa de NO Cumplimiento:</label>
+                            <select id="select-cau-ap" class="form-control" required disabled>
+                                <option disabled selected>Seleccione Causa</option>
+                                {% for nonconformity in nonconformities %}
+                                <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                
+                        <div class="col-md-4">
+                            <label>Detalle:</label>
+                            <input id="input-det-ap" class="form-control" required readonly="readonly"/>
+                        </div>
 
-                <div class="col-md-4 form-report">
-                    <label>Detalle:</label>
-                    <input id="input-det-ap" class="form-control" required readonly="readonly"/>
+                        <div class="col-md-4">
+                            <label>Pre Requisito:</label>
+                            <select id="select-pre-ap" class="form-control">
+                                <option disabled selected>Seleccione Pre Requisito</option>
+                                {% for precondition in preconditions %}
+                                <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col-md-4 form-report">
-                    <label>Pre Requisito:</label>
-                    <select id="select-pre-ap" class="form-control">
-                        <option disabled selected>Seleccione Pre Requisito</option>
-                        {% for precondition in preconditions %}
-                        <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
             </section>
 
 
@@ -242,40 +245,43 @@
 
 
             <section class="section-md-field select-section--activities">
-                <div class="col-md-4 form-report">
-                    <label>Cumplimiento:</label>
-                    <select id="select-cum-anp" class="form-control" required>
-                        <option disabled selected>Si o No</option>
-                        <option>Si</option>
-                        <option>No</option>
-                    </select>
-                </div>
+                <div class="row">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label>Cumplimiento:</label>
+                            <select id="select-cum-anp" class="form-control" required>
+                                <option disabled selected>Si o No</option>
+                                <option>Si</option>
+                                <option>No</option>
+                            </select>
+                        </div>
 
-                <div class="col-md-4 form-report">
-                    <label>Causa de NO Cumplimiento:</label>
-                    <select id="select-cau-anp" class="form-control" disabled>
-                        <option disabled selected>Seleccione Causa</option>
-                        {% for nonconformity in nonconformities %}
-                        <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                        <div class="col-md-4">
+                            <label>Causa de NO Cumplimiento:</label>
+                            <select id="select-cau-anp" class="form-control" disabled>
+                                <option disabled selected>Seleccione Causa</option>
+                                {% for nonconformity in nonconformities %}
+                                <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-                <div class="col-md-4 form-report">
-                    <label>Detalle:</label>
-                    <input id="input-det-anp" class="form-control" readonly="readonly" />
-                </div>
+                        <div class="col-md-4">
+                            <label>Detalle:</label>
+                            <input id="input-det-anp" class="form-control" readonly="readonly" />
+                        </div>
 
-                <div class="col-md-4 form-report">
-                    <label>Pre Requisito:</label>
-                    <select id="select-pre-anp" class="form-control">
-                        <option disabled selected>Seleccione Pre Requisito</option>
-                        {% for precondition in preconditions %}
-                        <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
-                        {% endfor %}
-                    </select>
+                        <div class="col-md-4">
+                            <label>Pre Requisito:</label>
+                            <select id="select-pre-anp" class="form-control">
+                                <option disabled selected>Seleccione Pre Requisito</option>
+                                {% for precondition in preconditions %}
+                                <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                 </div>
-
             </section>
 
 
