@@ -1,0 +1,39 @@
+{% load staticfiles %}
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header"> 
+            <div class="col-md-12">
+                <h2 class="modal-title title-page">
+                    {{ title }}
+                </h2>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <h3 class="modal-title text-center h3">
+                {{group.requirement_group_name}}
+            </h3>
+            <ul class="list-group">
+              {% for requi in requirements %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">{{requi.requirement_name}}</div>
+                        {{requi.reference}}
+                    </div>
+                </li>
+              {% endfor %}
+            </ul>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" data-dismiss="modal">Cerrar</button>
+        </div>
+
+        <div class="row">
+
+        </div>
+
+    </div>
+
+</div>

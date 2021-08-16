@@ -1,8 +1,11 @@
 {% extends "app/layout.html" %}
 {% load staticfiles %}
 {% block content %}
+
 <div class="container">
+
     <form action="">
+
         {% csrf_token %}
 
         <h2 class="title-page">{{ title }}</h2>
@@ -10,6 +13,7 @@
         <h3 class="section-title"> SELECCIONE CONTRATO </h3>
 
         <div class="row">
+
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="field-form">
@@ -31,6 +35,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <h2 class="title-page">{{ title }}</h2>
@@ -38,28 +43,56 @@
 
         <div class="row">
             <div class="row g-3">
-                <div class="col-md-12">
+                <div class="col-md-10">
                     <div class="field-form">
                         <label class="form-label">Grupo de Calidad:</label>    
-                        <select name="api" id="isc_api_id" class="form-control" required>
+                        <select name="requirement" id="isc_requi_id" class="form-control" required>
                             <option disabled selected>Seleccione Grupo</option>
                             {% for groupreq in grouprequirement %}                    
                             <option value="{{groupreq.id}}" id="{{groupreq.id}}">{{groupreq.requirement_group_name}}</option>
                             {% endfor %}
                         </select>
+
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <button  type="button" id="btn-load-require" class="btn btn-primary">Agregar</button>
                 </div>
             </div>
         </div>
 
+        <div class="row">
+            <table class="table table-load table-bordered border-secundary">
+                <thead>
+                    <tr>
+                        <th>Grupo de Requisito de Calidad</th>
+                        <th>ISO o Normativa</th>
+                        <th>Ver Requisitos</th>
+                        <th>Eliminar?</th>
+                    </tr>
+                </thead>
+                <tbody id="table-requirement">
+                    
+                </tbody>
+            </table>
+        </div>
     </form>
 
     <h2 class="title-page">{{ title }}</h2>
-    <h3 class="section-title">GUARDAR REPORTE</h3>
+
+    <h3 class="section-title">GUARDAR CAMBIOS</h3>
+
     <div class="btn-save">
-            <input id="btn_save_noncor_report" class="btn btn-danger" type="button" value="Guardar"/>
+            <input id="btn-save-require" class="btn btn-danger" type="button" value="Guardar"/>
     </div>
 
 </div>
+
+<div class="modal fade" id="edicion" role="dialog">
+
+</div>
+
+<script src="{% static 'app/scripts/iscreport-scripts/addrequirement.js' %}"></script>
+<script src="{% static 'app/scripts/common-scripts/selectprojectapi.js' %}"></script>
 
 {% endblock %}

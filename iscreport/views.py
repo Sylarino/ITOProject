@@ -29,7 +29,23 @@ import os
 from django.contrib.auth.models import User, Group
 from iscreport.models import *
 
-# Create your views here.
+#Vista para buscar datos del modal de Requerimientos
+def searchrequirements(request, id):
+
+    requirements = QualityRequirement.objects.filter(group_id=int(id))
+    group = QualityRequirementGroup.objects.get(pk=int(id))
+
+    assert isinstance(request, HttpRequest)
+
+    return render(
+        request,
+        'iscreport/viewrequirements.html',
+        {
+            'title':'Lista de Requisitos',
+            'year': datetime.now().year,
+            'requirements': requirements,
+            'group': group
+        })
 
 #Vista para generar la ventana o formulario de registro de lista ISC de cada proyecto
 def registeriscreport(request):
@@ -77,3 +93,35 @@ def addqualityrequirement(request):
             'grouprequirement':grouprequirement
 
         })
+
+@csrf_exempt
+@login_required(login_url="login")
+def saverequirements(request):
+
+    if request.method == 'POST':
+
+        action = request.POST.get('action')
+        data = {}
+        id_requi = request.POST.get('id')
+        rpd = request.POST.getlist('qualities[]')
+        requirements = json.loads(rpd[0])
+
+        contrato = Contract.objects.get(pk=int(id_requi))
+
+        for requirement in requirements:
+            print(requirement)
+            find_group = QualityRequirementGroup.objects.get(pk=int(requirement))
+            grupo = GroupContract(
+                    contract = contrato,
+                    group = find_group
+                )
+
+            grupo.save()
+
+        data = {
+            'submit': 'success'
+            }
+
+        return JsonResponse(data)
+
+

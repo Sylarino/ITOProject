@@ -100,6 +100,7 @@
     <Folder Include="app\static\app\css\scss\" />
     <Folder Include="app\static\app\scripts\itoreport-scripts\" />
     <Folder Include="app\static\app\scripts\common-scripts\" />
+    <Folder Include="app\static\app\scripts\iscreport-scripts\" />
     <Folder Include="app\static\app\scripts\nonconformotiereport-scripts\" />
     <Folder Include="app\static\app\scripts\walkreport-scripts\" />
     <Folder Include="app\templatetags\" />
@@ -148,6 +149,7 @@
     <Content Include="app\static\app\scripts\common-scripts\selectprojectapi.js" />
     <Content Include="app\static\app\scripts\common-scripts\selectprojectcontract.js" />
     <Content Include="app\static\app\scripts\datatables.min.js" />
+    <Content Include="app\static\app\scripts\iscreport-scripts\addrequirement.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\javascript.js">
       <SubType>Code</SubType>
     </Content>
@@ -161,6 +163,7 @@
     <Content Include="app\static\app\scripts\walkreport-scripts\searchwalkreports.js" />
     <Content Include="iscreport\templates\iscreport\addqualityrequirement.html" />
     <Content Include="iscreport\templates\iscreport\registeriscreport.html" />
+    <Content Include="iscreport\templates\iscreport\viewrequirements.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\nonconformity.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\registernonconformities.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\searchnonconformity.html" />

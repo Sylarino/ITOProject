@@ -6,208 +6,210 @@
             <h2 class="modal-title title-page">
                 {{ title }}
             </h2>
+            <!--
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>N Api:</label>
-                                <label>{{report.api.api_number}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>N Contrato:</label>
-                                <label>{{report.contract.contract_number}}:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>N Auditoria:</label>
-                                <label>{{report.num_audit}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Correlativo:</label>
-                                <label>{{report.correlative}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Proyecto:</label>
-                                <label>{{report.contract.project_name}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Empresa Responsable:</label>
-                                <label>{{report.contract.enterprise}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Item:</label>
-                                <label>{{report.item}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Area:</label>
-                                <label>{{report.wbs.wbs_name}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Disciplina:</label>
-                                <label>{{report.discipline.discipline_name}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Fecha de Creacion:</label>
-                                <label>{{report.creation_date}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Sistema:</label>
-                                <label>{{report.sistem}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Subsistema:</label>
-                                <label>{{report.subsistem}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Tag:</label>
-                                <label>{{report.tag}}:</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Criticidad de No Conformidad:</label>
-                                <p>{{report.criticality}}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Origen:</label>
-                                <label>{{report.origin}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Clasificacion:</label>
-                                <label>{{report.clasification}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Criterio / Documentos de Referencia: </label>
-                                <p>{{report.reference_document}}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Requisito Incumplido:</label>
-                                <p>{{report.infringement_requirement}}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Descripcion detallada de la No Conformidad:</label>
-                                <p>{{report.details}}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Observaciones:</label>
-                                <p>{{report.observations}}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Originador:</label>
-                                <label>{{report.register_by.first_name}} {{report.register_by.last_name}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Criterio Especifico de NCR:</label>
-                                <label>{{report.ncr_standar}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>N Transmital Envio NCR:</label>
-                                <label>{{report.num_transmital_ncr}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>N Transmital Envio Accion Correctiva:</label>
-                                <label>{{report.num_transmital_action}}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>N NCR Emitida:</label>
-                                <label>{{report.num_ncr}}</label>
-                            </div>
-                        </div>           
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Status:</label>
-                                <label>{{report.status}}</label>
-                            </div>
-                        </div>           
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Fecha de Compromiso Cierre:</label>
-                                <label>{{report.stipulated_date}}</label>
-                            </div>
+-->
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row">
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>N Api:</label>
+                            <label>{{report.api.api_number}}</label>
                         </div>
                     </div>
-                    <div class="separator"></div>
-                    <div class="row">
-                        <section id="section-img-static">
-                            {% for img in imgs %}
-                            <div class="col-md-4 form-report">
-                                <img class="img-thumbnail" src="{{img.image.image.url}}"/>
-                            </div>
-                            {% endfor %}
-                        </section>
-                    </div>
-                    <div class="separator"></div>
-                    <div class="row">
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Fecha Real de Cierre:</label>
-                                <input id="date-noncon-real" type="date" value="{{report.real_close_date|date:'Y-m-d'}}"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-report">
-                            <div class="field-form">
-                                <label>Adjuntar Imagenes:</label>
-                                <input type="file" id="file-noncon" multiple/>
-                            </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>N Contrato:</label>
+                            <label>{{report.contract.contract_number}}:</label>
                         </div>
                     </div>
-                    <div class="separator"></div>
-                    <div class="row">
-                        <section id="section-img-noncon">
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>N Auditoria:</label>
+                            <label>{{report.num_audit}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Correlativo:</label>
+                            <label>{{report.correlative}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Proyecto:</label>
+                            <label>{{report.contract.project_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Empresa Responsable:</label>
+                            <label>{{report.contract.enterprise}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Item:</label>
+                            <label>{{report.item}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Area:</label>
+                            <label>{{report.wbs.wbs_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Disciplina:</label>
+                            <label>{{report.discipline.discipline_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Fecha de Creacion:</label>
+                            <label>{{report.creation_date}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Sistema:</label>
+                            <label>{{report.sistem}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Subsistema:</label>
+                            <label>{{report.subsistem}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Tag:</label>
+                            <label>{{report.tag}}:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Criticidad de No Conformidad:</label>
+                            <p>{{report.criticality}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Origen:</label>
+                            <label>{{report.origin}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Clasificacion:</label>
+                            <label>{{report.clasification}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Criterio / Documentos de Referencia: </label>
+                            <p>{{report.reference_document}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Requisito Incumplido:</label>
+                            <p>{{report.infringement_requirement}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Descripcion detallada de la No Conformidad:</label>
+                            <p>{{report.details}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Observaciones:</label>
+                            <p>{{report.observations}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Originador:</label>
+                            <label>{{report.register_by.first_name}} {{report.register_by.last_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Criterio Especifico de NCR:</label>
+                            <label>{{report.ncr_standar}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>N Transmital Envio NCR:</label>
+                            <label>{{report.num_transmital_ncr}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>N Transmital Envio Accion Correctiva:</label>
+                            <label>{{report.num_transmital_action}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>N NCR Emitida:</label>
+                            <label>{{report.num_ncr}}</label>
+                        </div>
+                    </div>           
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Status:</label>
+                            <label>{{report.status}}</label>
+                        </div>
+                    </div>           
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Fecha de Compromiso Cierre:</label>
+                            <label>{{report.stipulated_date}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="row">
+                    <section id="section-img-static">
+                        {% for img in imgs %}
+                        <div class="col-md-4 form-report">
+                            <img class="img-thumbnail" src="{{img.image.image.url}}"/>
+                        </div>
+                        {% endfor %}
+                    </section>
+                </div>
+                <div class="separator"></div>
+                <div class="row">
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Fecha Real de Cierre:</label>
+                            <input id="date-noncon-real" type="date" value="{{report.real_close_date|date:'Y-m-d'}}"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label>Adjuntar Imagenes:</label>
+                            <input type="file" id="file-noncon" multiple/>
+                        </div>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="row">
+                    <section id="section-img-noncon">
 
-                        </section>
-                    </div>
-                </form>
-            </div>
+                    </section>
+                </div>
+            </form>
             <div class="separator"></div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>

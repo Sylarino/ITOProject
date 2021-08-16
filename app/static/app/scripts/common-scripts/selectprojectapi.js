@@ -4,6 +4,7 @@ $(function () {
 
         var id_select = this.id;
 
+        debugger;
         var id = $('#' + id_select).val();
         var select_contracts = $('select[name="contract"]');
         var options = '';
