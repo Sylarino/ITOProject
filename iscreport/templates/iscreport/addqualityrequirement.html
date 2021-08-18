@@ -48,6 +48,7 @@
                         <label class="form-label">Grupo de Calidad:</label>    
                         <select name="requirement" id="isc_requi_id" class="form-control" required>
                             <option disabled selected>Seleccione Grupo</option>
+
                             {% for groupreq in grouprequirement %}                    
                             <option value="{{groupreq.id}}" id="{{groupreq.id}}">{{groupreq.requirement_group_name}}</option>
                             {% endfor %}

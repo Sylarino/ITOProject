@@ -25,6 +25,48 @@ $(function () {
 
 });
 
+$(function () {
+    $('select[name="contract"]').on('change', function () {
+
+        var id_select = this.id;
+
+        var id = $('#' + id_select).val();
+        var select_requirement = $('select[name="requirement"]');
+
+        if (id === '') {
+            select_requirement.html(options);
+            return false;
+        }
+    
+        $.ajax({
+            type: 'GET',
+            data: { action: 'search_contract_add', id: id },
+            url: "/searchcontractsrequire",
+            dataType: 'json',
+        }).done(function (data) {
+            if (!data.hasOwnProperty('error')) {
+
+                $("#isc_requi_id option").each(function () {
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].id_grupo == $(this).attr('value')) {
+                            $(this).attr("disabled", "disabled");
+                        }
+                    }
+                });
+                return false;
+            }
+            message_error(data.error);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }).always(function (data) {
+            select_requirement.html(options);
+        });
+
+    });
+
+});
+
 function eliminarRequisito(e) {
 
     td_actual = e;

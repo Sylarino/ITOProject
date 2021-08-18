@@ -134,11 +134,18 @@ def searchcontractsrequire(request):
         group_data = []
         id_contract = request.GET['id']
 
-        if action == 'search_contract_require':
+        contract_group = GroupContract.objects.filter(contract_id=int(id_contract))
 
-            contract_group = GroupContract.objects.filter(contract_id=int(id_contract))
+        for con in contract_group:
+                
+            if action == 'search_contract_add':
 
-            for con in contract_group:
+                    group_data.append({
+                            'id_grupo': con.group_id,
+                            'grupo_nombre': con.group.requirement_group_name,
+                        })
+
+            if action == 'search_contract_require':
 
                 find_group = QualityRequirement.objects.filter(group_id=con.group_id)
 
@@ -151,6 +158,5 @@ def searchcontractsrequire(request):
                             'nombre_requisito': finded.requirement_name,
                             'referencia': finded.reference
                         })
-
 
         return JsonResponse(group_data, safe=False)
