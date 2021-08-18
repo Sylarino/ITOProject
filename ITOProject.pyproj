@@ -150,6 +150,7 @@
     <Content Include="app\static\app\scripts\common-scripts\selectprojectcontract.js" />
     <Content Include="app\static\app\scripts\datatables.min.js" />
     <Content Include="app\static\app\scripts\iscreport-scripts\addrequirement.js" />
+    <Content Include="app\static\app\scripts\iscreport-scripts\registeriscreport.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\javascript.js">
       <SubType>Code</SubType>
     </Content>

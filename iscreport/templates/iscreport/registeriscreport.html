@@ -74,57 +74,58 @@
         <div class="row">
 
             <div class="accordion" id="accordionExample">
-                {% for group in grouprequirement %}
-                <div class="accordion-item">
-                    <h2 class="accordion-header " id="heading{{group.id}}">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{group.id}}" aria-controls="collapse{{group.id}}">
-                            {{group.requirement_group_name}}
-                        </button>
-                    </h2>
-                    <div id="collapse{{group.id}}" class="accordion-collapse collapse show" aria-labelledby="heading{{group.id}}" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <table class="table table-striped">
-                                <thead>
-                                      <tr>
-                                        <th scope="row">Requisito</th>
-                                        <th scope="row">Referencia</th>
-                                        <th scope="row">Cumplimiento</th>
-                                        <th scope="row">Metodo de verificacion</th>
-                                        <th scope="row">Resultado Auditoria</th>
-                                      </tr>
-                                </thead>
-                                <tbody>
-                                    {% for requi in requirement%}
-                                    {% if requi.group_id == group.id %}
-                                    <tr>
-                                        <th class="row-quality-style" scope="row">{{requi.requirement_name}}</th>
-                                        <th scope="row">{{requi.reference}}</th>
-                                        <th scope="row">
-                                            <div class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                              <label class="form-check-label text-muted" for="inlineRadio1">Si</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                              <label class="form-check-label text-muted" for="inlineRadio2">No</label>
-                                            </div>
-                                        </th>
-                                        <th>
-                                            <input class="form-control" type="text" placeholder="Metodo de Verificacion" aria-label="default input example">
-                                        </th>                  
-                                        <th>
-                                            <input class="form-control" type="text" placeholder="Resultado Auditoria" aria-label="default input example">
-                                        </th>
-                                    </tr>
-                                    {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                <!--{% for group in grouprequirement %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header " id="heading{{group.id}}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{group.id}}" aria-controls="collapse{{group.id}}">
+                                {{group.requirement_group_name}}
+                            </button>
+                        </h2>
+                        <div id="collapse{{group.id}}" class="accordion-collapse collapse show" aria-labelledby="heading{{group.id}}" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                          <tr>
+                                            <th scope="row">Requisito</th>
+                                            <th scope="row">Referencia</th>
+                                            <th scope="row">Cumplimiento</th>
+                                            <th scope="row">Metodo de verificacion</th>
+                                            <th scope="row">Resultado Auditoria</th>
+                                          </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for requi in requirement%}
+                                        {% if requi.group_id == group.id %}
+                                        <tr>
+                                            <th class="row-quality-style" scope="row">{{requi.requirement_name}}</th>
+                                            <th scope="row">{{requi.reference}}</th>
+                                            <th scope="row">
+                                                <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                                  <label class="form-check-label text-muted" for="inlineRadio1">Si</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                  <label class="form-check-label text-muted" for="inlineRadio2">No</label>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <input class="form-control" type="text" placeholder="Metodo de Verificacion" aria-label="default input example">
+                                            </th>
+                                            <th>
+                                                <input class="form-control" type="text" placeholder="Resultado Auditoria" aria-label="default input example">
+                                            </th>
+                                        </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                </div>
-                {% endfor %}
+                    </div>
+                    {% endfor %}
+                        -->
             </div>
 
         </div>
@@ -146,6 +147,7 @@
 
 {% block extrajs %}
 <script src="{% static 'app/scripts/common-scripts/selectprojectapi.js' %}"></script>
+<script src="{% static 'app/scripts/iscreport-scripts/registeriscreport.js' %}"></script>
 {% endblock %}
 
 {% endblock %}

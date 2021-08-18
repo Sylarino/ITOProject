@@ -124,4 +124,33 @@ def saverequirements(request):
 
         return JsonResponse(data)
 
+@csrf_exempt
+@login_required(login_url="login")
+def searchcontractsrequire(request):
 
+    if request.method == 'GET':
+
+        action = request.GET['action']
+        group_data = []
+        id_contract = request.GET['id']
+
+        if action == 'search_contract_require':
+
+            contract_group = GroupContract.objects.filter(contract_id=int(id_contract))
+
+            for con in contract_group:
+
+                find_group = QualityRequirement.objects.filter(group_id=con.group_id)
+
+                for finded in find_group:
+
+                    group_data.append({
+                            'id_grupo': con.group_id,
+                            'grupo_nombre': con.group.requirement_group_name,
+                            'id_requisito': finded.id,
+                            'nombre_requisito': finded.requirement_name,
+                            'referencia': finded.reference
+                        })
+
+
+        return JsonResponse(group_data, safe=False)
