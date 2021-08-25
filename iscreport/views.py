@@ -126,6 +126,71 @@ def saverequirements(request):
 
 @csrf_exempt
 @login_required(login_url="login")
+def saveregisteriscreport(request):
+
+    if request.method == 'POST':
+
+        action = request.POST.get('action')
+        data = {}
+        id_contrato = request.POST.get('id')
+        rpd = request.POST.getlist('requirements[]')
+        requirements = json.loads(rpd[0])
+
+        contrato = Contract.objects.get(pk=int(id_contrato))
+        id_group = 0
+
+        for requirement in requirements:
+
+            if requirement['cumplimiento'] == "option1":
+
+                acc_var = True
+
+            else:
+
+                acc_var = False
+
+            if int(id_group) != requirement['id_grupo']:
+
+                find_group = QualityRequirementGroup.objects.get(pk=int(requirement['id_grupo']))
+
+                id_group = find_group.id
+
+            qual = QualityRequirement.objects.get(pk=int(requirement['id_requisito']))
+
+            qual_cont = QualityContract(
+                    accomplishment = acc_var,
+                    verification_method = requirement['metodo_verificacion'],
+                    audit_result = requirement['auditoria'], 
+                    contract = find_group,
+                    quality = qual,
+                )
+
+            qual_cont.save()
+
+        isc_lista = ISCList(
+                correlative = request.POST.get('corr'),
+                num_audit = request.POST.get('audit'),
+                creation_date = request.POST.get('date_isc'),
+                api = ,
+                contract = 
+            )
+
+        isc_lista.save()
+                
+
+                
+            
+            
+                
+
+        data = {
+            'submit': 'success'
+            }
+
+        return JsonResponse(data)
+
+@csrf_exempt
+@login_required(login_url="login")
 def searchcontractsrequire(request):
 
     if request.method == 'GET':

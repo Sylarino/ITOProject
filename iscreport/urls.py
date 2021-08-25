@@ -7,5 +7,6 @@ urlpatterns = [
         path('addqualityrequirement/searchrequirements/<str:id>', views.searchrequirements, name='searchrequirements'),
         path('addqualityrequirement/saverequirements/', views.saverequirements, name='saverequirements'),
         path('searchcontractsrequire/', views.searchcontractsrequire, name='searchcontractsrequire'),
+        path('registeriscreport/saveregisteriscreport/', views.saveregisteriscreport, name='saveregisteriscreport'),
 ]
 

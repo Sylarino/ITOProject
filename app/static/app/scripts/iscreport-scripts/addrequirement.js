@@ -44,17 +44,25 @@ $(function () {
             url: "/searchcontractsrequire",
             dataType: 'json',
         }).done(function (data) {
+
             if (!data.hasOwnProperty('error')) {
 
                 $("#isc_requi_id option").each(function () {
 
                     for (var i = 0; i < data.length; i++) {
+
                         if (data[i].id_grupo == $(this).attr('value')) {
+
                             $(this).attr("disabled", "disabled");
+
                         }
+                             
                     }
+
                 });
+
                 return false;
+
             }
             message_error(data.error);
         }).fail(function (jqXHR, textStatus, errorThrown) {
