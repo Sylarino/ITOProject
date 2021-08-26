@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block content %}
 <div class="container">
-    <form action="">
+    <form action="" class="row g-3">
         {% csrf_token %}
 
         <h2 class="title-page">{{ title }}</h2>
@@ -13,8 +13,8 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="field-form">
-                        <label class="form-label">Correlativo:</label>    
-                        <input id="isc_corr_id" class="form-control" required>
+                        <label class="form-label">Correlativo:</label>
+                        <input type="number" id="isc_corr_id" class="form-control" required>
                     </div>
                 </div>
 
@@ -23,7 +23,7 @@
                         <label class="form-label">N de API:</label>
                         <select name="api" id="isc_api_id" class="form-control" required>
                             <option disabled selected>Seleccione N de API</option>
-                            {% for api in apis %}                    
+                            {% for api in apis %}
                             <option value="{{api.id}}" id="{{api.id}}">{{api.api_number}}</option>
                             {% endfor %}
                         </select>
@@ -32,7 +32,7 @@
 
                 <div class="col-md-6">
                     <div class="field-form">
-                        <label class="form-label">N de Contrato:</label>                   
+                        <label class="form-label">N de Contrato:</label>
                         <select name="contract" id="isc_con_id" class="form-control" required>
                         </select>
                     </div>
@@ -40,15 +40,15 @@
 
                 <div class="col-md-6">
                     <div class="field-form">
-                        <label class="form-label">Proyecto:</label>    
-                        <label name="project" class="form-label"></label>    
+                        <label class="form-label">Proyecto:</label>
+                        <label name="project" class="form-label"></label>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="field-form">
-                        <label class="form-label">N de Auditoria:</label>     
-                        <input id="isc_audit_id" class="form-control" required>                    
+                        <label class="form-label">N de Auditoria:</label>
+                        <input type="number" id="isc_audit_id" class="form-control" required>
                     </div>
                 </div>
 
@@ -61,8 +61,8 @@
 
                 <div class="col-md-6">
                     <div class="field-form">
-                        <label class="form-label">Fecha:</label>   
-                        <input id="isc_date_id" type="datetime-local" class="form-control" required>                         
+                        <label class="form-label">Fecha:</label>
+                        <input id="isc_date_id" type="datetime-local" class="form-control" required>
                     </div>
                 </div>
             </div>
@@ -74,12 +74,19 @@
         <div class="row">
             <div class="accordion" id="accordionExample">
                 {% for gr in grouprequirement %}
-                <div name="grupos-requisitos" class="accordion-item">
-                    <h2 class="accordion-header " id="heading{{gr.id}}">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{gr.id}}" aria-controls="collapse{{gr.id}}">
-                            {{gr.requirement_group_name}}
-                        </button>
-                    </h2>
+                <div name="grupos-requisitos" class="accordion-item" id="div-container-{{gr.id}}">
+
+                    <div>
+                        <h2 class="accordion-header " id="heading{{gr.id}}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{gr.id}}" aria-controls="collapse{{gr.id}}">
+                                {{gr.requirement_group_name}}
+                            </button>
+                        </h2>
+                        <div class="progress">
+                            <div  id="progress-gr-{{gr.id}}" class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 0%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+
                     <div id="collapse{{gr.id}}" class="accordion-collapse collapse show" aria-labelledby="heading{{gr.id}}" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <table class="table table-striped">
@@ -95,17 +102,17 @@
                                 <tbody id="tabla-isc-{{gr.id}}">
                                     {% for req in requirement %}
                                     {% if req.group_id == gr.id %}
-                                    <tr> 
+                                    <tr>
                                         <th id="td-requisito-{{req.id}}" class="requisito-td row-quality-style" scope="row">{{req.requirement_name}}</th>
                                         <th scope="row">{{req.reference}}</th>
                                         <th id="cumplimiento" scope="row">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="td-requisito-{{req.id}}" id="inlineRadio1" value="option1">
-                                                <label class="form-check-label text-muted" for="inlineRadio1">Si</label>
+                                                <input class="form-check-input" type="radio" name="td-requisito-{{req.id}}" id="inlineRadio1-{{req.id}}" value="option1">
+                                                <label class="form-check-label text-muted" for="inlineRadio1-{{req.id}}">Si</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="td-requisito-{{req.id}}" id="inlineRadio2" value="option2">
-                                                <label class="form-check-label text-muted" for="inlineRadio2">No</label>
+                                                <input class="form-check-input" type="radio" name="td-requisito-{{req.id}}" id="inlineRadio2-{{req.id}}" value="option2">
+                                                <label class="form-check-label text-muted" for="inlineRadio2-{{req.id}}">No</label>
                                             </div>
                                         </th>
                                         <th>
@@ -127,18 +134,29 @@
 
         </div>
 
+        <h2 class="title-page">{{ title }}</h2>
+        <h3 class="section-title"> ADJUNTAR ARCHIVO </h3>
+        <div class="row">
+            <div class="col-md-12 form-report">
+                <div class="field-form">
+                    <input id="file-iscreport" type="file" class="form-control" multiple />
+                    <a id="reset-input" class="glyphicon glyphicon-remove"></a>
+                </div>
+            </div>
+        </div>
 
+        <h2 class="title-page">{{ title }}</h2>
+        <h3 class="section-title">GUARDAR REPORTE</h3>
+        <div class="btn-save">
+            <input id="btn-save-iscreport" class="btn btn-danger" type="button" value="Guardar" />
+        </div>
+
+        <div class="btn-save">
+            <a href="{% url 'createpdfnonconformity' %}" class="btn btn-danger" type="button" value="PDF">PDF</a>
+        </div>
     </form>
 
-    <h2 class="title-page">{{ title }}</h2>
-    <h3 class="section-title">GUARDAR REPORTE</h3>
-    <div class="btn-save">
-        <input id="btn-save-iscreport" class="btn btn-danger" type="button" value="Guardar"/>
-    </div>
 
-    <div class="btn-save">
-        <a href="{% url 'createpdfnonconformity' %}" class="btn btn-danger" type="button" value="PDF">PDF</a>
-    </div>
 
 </div>
 

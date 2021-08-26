@@ -61,7 +61,7 @@ def registeriscreport(request):
         request,
         'iscreport/registeriscreport.html',
         {
-            'title':'Registro de Lista ISC',
+            'title':'Registro de Lista de Verificacion: Implementacion Sistema de Calidad',
             'year': datetime.now().year,
             'apis': apis,
             'contracts': contracts,
@@ -130,13 +130,14 @@ def saveregisteriscreport(request):
 
     if request.method == 'POST':
 
-        action = request.POST.get('action')
+
         data = {}
         id_contrato = request.POST.get('id')
         rpd = request.POST.getlist('requirements[]')
         requirements = json.loads(rpd[0])
 
         contrato = Contract.objects.get(pk=int(id_contrato))
+        api_contr = API.objects.get(pk=contrato.api_id)
         id_group = 0
 
         for requirement in requirements:
@@ -149,7 +150,7 @@ def saveregisteriscreport(request):
 
                 acc_var = False
 
-            if int(id_group) != requirement['id_grupo']:
+            if int(id_group) != int(requirement['id_grupo']):
 
                 find_group = QualityRequirementGroup.objects.get(pk=int(requirement['id_grupo']))
 
@@ -161,27 +162,40 @@ def saveregisteriscreport(request):
                     accomplishment = acc_var,
                     verification_method = requirement['metodo_verificacion'],
                     audit_result = requirement['auditoria'], 
-                    contract = find_group,
+                    contract = contrato,
                     quality = qual,
                 )
 
             qual_cont.save()
 
         isc_lista = ISCList(
-                correlative = request.POST.get('corr'),
-                num_audit = request.POST.get('audit'),
+                correlative = int(request.POST.get('corr')),
+                num_audit = int(request.POST.get('audit')),
                 creation_date = request.POST.get('date_isc'),
-                api = ,
-                contract = 
+                api = api_contr,
+                contract = contrato
             )
 
-        isc_lista.save()
-                
+        isc_lista.save()                          
 
-                
-            
-            
-                
+        if len(request.FILES.getlist('files')) > 0:
+
+            files = request.FILES.getlist('files')
+
+            for fil in files:
+
+                iscfile = ISCFile(
+                        upload = fil
+                    )
+
+                iscfile.save()
+
+                iscrepfil = ISCReportFile(
+                        isc_report = isc_lista,
+                        file = iscfile 
+                        )
+
+                iscrepfil.save()
 
         data = {
             'submit': 'success'

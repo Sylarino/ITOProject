@@ -116,6 +116,32 @@
 //});
 
 $(function () {
+    $('input[type="radio"]').on('change', this, function () {
+        var requisitos_grupo = $(this).parent().parent().parent().parent().attr('id');
+        requisitos_grupo = requisitos_grupo.replace('tabla-isc-', '');
+        debugger;
+        var inc_radio = 0;
+        var inc_group = 0;
+        document.querySelectorAll('#tabla-isc-' + requisitos_grupo + ' tr').forEach(function (e) {
+            var id_req = e.querySelector('.requisito-td').id;
+            id_req = id_req.replace('td-requisito-', '');
+            inc_group++;
+            if ($("input:radio[name='td-requisito-" + id_req + "']:radio").is(':checked')) {
+                inc_radio++;
+            }
+        });
+
+        var porcentaje = ((inc_radio * 100) / inc_group);
+        porcentaje = Math.trunc(porcentaje);
+        $("#progress-gr-" + requisitos_grupo).css("width", porcentaje + "%");
+        if (porcentaje == 100) {
+            $("#progress-gr-" + requisitos_grupo).removeClass("bg-danger");
+            $("#progress-gr-" + requisitos_grupo).addClass("bg-success");
+        }
+    });
+});
+
+$(function () {
 
     document.getElementById("btn-save-iscreport").onclick = function (e) {
 
@@ -124,35 +150,52 @@ $(function () {
         var correlativo = document.querySelector("#isc_corr_id");
         var auditoria = document.querySelector("#isc_audit_id");
         var fecha_isc = document.querySelector("#isc_date_id");
-        var req_largo = document.getElementsByName('grupos-requisitos').length;
-        
+        var requisitos_in = document.getElementsByName('grupos-requisitos');
+        var req_largo = requisitos_in.length;
+        var files_submit = document.querySelector("#file-iscreport");
+        var data = new FormData();
+        debugger;
+        for (var x = 0; x < (files_submit.files.length); x++) {
+            data.append('files', files_submit.files[x]);
+        }
+
         for (var i = 0; i < req_largo; i++) {
-            document.querySelectorAll('#tabla-isc-' + (i + 1) + ' tr').forEach(function (e) {
-                id_req = e.querySelector('.requisito-td').id;
+
+            var id_div = requisitos_in[i].id
+            id_div = id_div.replace('div-container-', '');
+            document.querySelectorAll('#tabla-isc-' + id_div + ' tr').forEach(function (e) {
+                var id_req = e.querySelector('.requisito-td').id;
+                id_req = id_req.replace('td-requisito-', '');
+                if ($("input:radio[name='td-requisito-" + id_req + "']:radio").is(':checked')) {
+                    var opcion = $('input:radio[name="td-requisito-' + id_req + '"]:checked').val();
+                } else {
+                    var opcion = 'not-selected'
+                }
                 let fila = {
-                    id_grupo: i + 1,
+                    id_grupo: id_div,
                     id_requisito: id_req,
                     metodo_verificacion: e.querySelector('#met-verificacion').value,
                     auditoria: e.querySelector('#res-auditoria').value,
-                    cumplimiento: $('input:radio[name=' + id_req +']:checked').val(),
+                    cumplimiento: opcion,
                 };
                 requirements.push(fila);
             });
         }
 
+        data.append('requirements[]', JSON.stringify(requirements));
+        data.append('id', contract.options[contract.selectedIndex].id);
+        data.append('corr', correlativo.value);
+        data.append('audit', auditoria.value);
+        data.append('date_isc', fecha_isc.value);
+
         $.ajax({
 
             url: 'saveregisteriscreport/',
             type: 'POST',
-            data: {
-                action: 'save_qualities',
-                id: contract.options[contract.selectedIndex].id,
-                corr: correlativo.value,
-                audit: auditoria.value,
-                date_isc: fecha_isc.value,
-                'requirements[]': JSON.stringify(requirements), csrfmiddlewaretoken: '{{ csrf_token }}',
-            },
-            dataType: 'JSON'
+            data: data,
+            dataType: 'JSON',
+            contentType: false,
+            processData: false,
 
         }).done(function (data) {
 
