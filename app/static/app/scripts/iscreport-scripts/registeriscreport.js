@@ -135,8 +135,9 @@ $(function () {
         porcentaje = Math.trunc(porcentaje);
         $("#progress-gr-" + requisitos_grupo).css("width", porcentaje + "%");
         if (porcentaje == 100) {
-            $("#progress-gr-" + requisitos_grupo).removeClass("bg-danger");
-            $("#progress-gr-" + requisitos_grupo).addClass("bg-success");
+            //$("#progress-gr-" + requisitos_grupo).removeClass("bg-danger");
+            $("#progress-gr-" + requisitos_grupo).switchClass("bg-danger", "bg-success", 500, "linear");
+            //$("#progress-gr-" + requisitos_grupo).addClass("bg-success");
         }
     });
 });
@@ -154,14 +155,21 @@ $(function () {
         var req_largo = requisitos_in.length;
         var files_submit = document.querySelector("#file-iscreport");
         var data = new FormData();
-        debugger;
+
         for (var x = 0; x < (files_submit.files.length); x++) {
             data.append('files', files_submit.files[x]);
         }
 
         for (var i = 0; i < req_largo; i++) {
-
             var id_div = requisitos_in[i].id
+
+            if ($("#progress-gr-" + id_div).css("width") != "100%") {
+                Swal.fire("Lista de Verificacion NO registrada",
+                    "Verifique que requisitos de calidad esten completos",
+                    "warning");
+                return false;
+            }
+
             id_div = id_div.replace('div-container-', '');
             document.querySelectorAll('#tabla-isc-' + id_div + ' tr').forEach(function (e) {
                 var id_req = e.querySelector('.requisito-td').id;
