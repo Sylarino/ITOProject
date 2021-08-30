@@ -72,6 +72,7 @@
         <h3 class="section-title"> LISTA DE VERIFICACION </h3>
 
         <div class="row">
+
             <div class="accordion" id="accordionExample">
                 {% for gr in grouprequirement %}
                 <div name="grupos-requisitos" class="accordion-item" id="div-container-{{gr.id}}">
@@ -87,7 +88,7 @@
                         </div>
                     </div>
 
-                    <div id="collapse{{gr.id}}" class="accordion-collapse collapse show" aria-labelledby="heading{{gr.id}}" data-bs-parent="#accordionExample">
+                    <div id="collapse{{gr.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{gr.id}}" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <table class="table table-striped">
                                 <thead>
@@ -152,7 +153,7 @@
         </div>
 
         <div class="btn-save">
-            <a href="{% url 'createpdfnonconformity' %}" class="btn btn-danger" type="button" value="PDF">PDF</a>
+            <a href="{% url 'createpdfiscreport' %}" class="btn btn-danger" type="button" value="PDF">PDF</a>
         </div>
     </form>
 

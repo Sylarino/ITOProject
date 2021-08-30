@@ -128,7 +128,7 @@ function eliminarImg(id) {
 
 }
 
-///Editar
+///Editar No Conformidad
 function modificarNoConformidad(id) {
 
     var fecha_compromiso = document.getElementById("date-noncon-real");
@@ -157,6 +157,7 @@ function modificarNoConformidad(id) {
         Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
         return false;
     });
+
 }
 
 ///

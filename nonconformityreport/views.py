@@ -203,7 +203,7 @@ def separator(c, height_pdf):
     return height_pdf
 
 #FUNCIÓN PARA AGREGAR LA CABEZERA DE CADA PÁGINA DEL PDF
-def principalBanner(height_pdf, c, id_rep, pagina, next_page):
+def principalBanner(height_pdf, c, id_rep, pagina, next_page, type_report):
 
     width, height = portrait(letter) 
     archivo_imagen = settings.STATIC_ROOT +'/app/img/logo.jpg'
@@ -215,14 +215,19 @@ def principalBanner(height_pdf, c, id_rep, pagina, next_page):
     c.drawString(300, 20,"Página " + str(pagina))
 
     height_pdf = height
-    url_img = settings.STATIC_ROOT + "/app/img/report_banners/bannernoconformidad/bannernoconformidad.png" 
+
+    if type_report == 'nonconformity':
+        type_banner = 'bannernoconformidad/bannernoconformidad.png'
+
+    if type_report == 'iscreport':
+        type_banner = 'banneriscreport/banneriscreport.png'
+
+    url_img = settings.STATIC_ROOT + "/app/img/report_banners/" + type_banner 
     im_banner = Image(url_img, width=600, height=47)
     im_banner.drawOn(c, 5, 680)
     height_pdf -= 115
     c.setFont('Helvetica', 18)
     title_report = stringWidth("REPORTE N°"+str(id_rep), 'Helvetica', 18)
-
-
 
     c.drawString((width/2)-(title_report/2), 740,"REPORTE N°"+str(id_rep))
     print(next_page)
@@ -263,7 +268,7 @@ def createpdfnonconformity(id_rep):
     pagina = 0
     height_pdf = height
     archivo_imagen = settings.STATIC_ROOT +'/app/img/logo.jpg'
-    height_pdf, pagina = principalBanner(height_pdf, c, id_rep,pagina,0)
+    height_pdf, pagina = principalBanner(height_pdf, c, id_rep,pagina,0, 'nonconformity')
 
     #ANTECEDENTES GENERALES
     c.setFont('Helvetica', 14)
@@ -347,7 +352,7 @@ def createpdfnonconformity(id_rep):
     if next_page == 1:
 
         c.showPage()
-        height_pdf, next_page, pagina = principalBanner(height_pdf, c,id_rep,pagina,next_page)
+        height_pdf, next_page, pagina = principalBanner(height_pdf, c,id_rep,pagina,next_page, 'nonconformity')
 
     #DETALLE ORIGEN Y SEGUIMIENTO
     height_pdf -= 30
@@ -380,7 +385,7 @@ def createpdfnonconformity(id_rep):
     if next_page == 0:
 
         c.showPage()
-        height_pdf, pagina = principalBanner(height_pdf, c, id_rep,pagina, next_page)
+        height_pdf, pagina = principalBanner(height_pdf, c, id_rep,pagina, next_page, 'nonconformity')
 
         c.setFont('Helvetica', 14)
         title_report = stringWidth("REGISTROS FOTOGRÁFICOS", 'Helvetica', 14)
@@ -416,7 +421,7 @@ def createpdfnonconformity(id_rep):
                 height_pdf -= 115
 
                 c.showPage()
-                height_pdf, pagina = principalBanner(height_pdf, c, id_rep,pagina,next_page)
+                height_pdf, pagina = principalBanner(height_pdf, c, id_rep,pagina,next_page, 'nonconformity')
 
                 title_report = stringWidth("REGISTROS FOTOGRÁFICOS", 'Helvetica', 14)
                 c.drawString((width/2)-(title_report/2), 670,"REGISTROS FOTOGRÁFICOS")

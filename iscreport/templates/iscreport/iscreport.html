@@ -1,0 +1,153 @@
+{% load staticfiles %}
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title title-page">
+                {{ title }}
+            </h2>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="field-form">
+                            <label class="form-label text-center">N Api:</label>
+                            <label class="form-label text-center">{{report.api.api_number}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field-form">
+                            <label class="form-label text-center">N Contrato:</label>
+                            <label class="form-label text-center">{{report.contract.contract_number}}:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field-form">
+                            <label class="form-label text-center">N Auditoria:</label>
+                            <label class="form-label text-center">{{report.num_audit}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field-form">
+                            <label class="form-label text-center">Correlativo:</label>
+                            <label class="form-label text-center">{{report.correlative}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field-form">
+                            <label class="form-label text-center">Proyecto:</label>
+                            <label class="form-label text-center">{{report.api.project_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field-form">
+                            <label class="form-label text-center">Empresa Responsable:</label>
+                            <label class="form-label text-center">{{report.contract.enterprise}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field-form">
+                            <label class="form-label text-center">Fecha de Creacion:</label>
+                            <label class="form-label text-center">{{report.creation_date}}</label>
+                        </div>
+                    </div>
+         
+                </div>
+
+                <div class="separator"></div>
+
+                <div class="row">
+                    <div class="accordion" id="accordionExample">
+                        {% for gr in groups %}
+                        <div name="grupos-requisitos" class="accordion-item" id="div-container-{{gr.id}}">
+
+                            <div>
+                                <h2 class="accordion-header " id="heading{{gr.id}}">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{gr.id}}" aria-controls="collapse{{gr.id}}">
+                                        {{gr.requirement_group_name}}
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="collapse{{gr.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{gr.id}}" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="row">Requisito</th>
+                                                <th scope="row">Referencia</th>
+                                                <th scope="row">Cumplimiento</th>
+                                                <th scope="row">Metodo de verificación</th>
+                                                <th scope="row">Resultado Auditoria</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabla-isc-{{gr.id}}">
+                                            {% for req in qualities %}
+                                            {% if req.quality.group_id == gr.id %}
+                                            <tr>
+                                                <th id="td-requisito-{{req.quality_id}}" class="requisito-td row-quality-style" scope="row">{{req.quality.requirement_name}}</th>
+                                                <th scope="row">{{req.quality.reference}}</th>
+                                                <th id="cumplimiento" scope="row">
+                                                    {% if req.accomplishment == 1 %}
+                                                    <label>Si</label>
+                                                    {% else %}
+                                                    <label>No</label>
+                                                    {% endif %}
+                                                </th>
+                                                <th>
+                                                    <label>{{req.verification_method}}</label>
+                                                </th>
+                                                <th>
+                                                    <label>{{req.audit_result}}</label>
+                                                </th>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="separator"></div>
+                {% if files|length >= 1 %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="text-center">Archivos Adjuntos</h3>
+                        <ul class="list-group list-group-flush">
+                            {% for file in files %}
+                            <li class="list-group-item">
+                                <a class="link-danger" href="{{file.file.upload.url}}"> 
+                                {{file.file.upload.name}} 
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="field-form">
+                            <label class="form-label">Adjuntar Nuevos Archivos:</label>
+                            <input class="form-control" type="file" id="file-isc" multiple/>
+                        </div>
+                    </div>
+                </div>
+                <div class="separator"></div>
+            </form>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+                <button id="btn-save-isc" class="btn btn-danger" type="button">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'app/scripts/iscreport-scripts/searchiscreport.js' %}"></script>
+

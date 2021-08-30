@@ -237,7 +237,7 @@ footer p {
 }
 
 .field-form {
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
 }
 
 .section-title {
@@ -340,6 +340,8 @@ input {
     border-radius: 5rem;
     width: 90%;
     background-color: #980F11;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .subsection-title {
@@ -683,6 +685,7 @@ article .careful {
 
 footer {
     overflow: hidden;
+    margin-top: 100px;
 }
 
 .title-representation {

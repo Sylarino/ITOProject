@@ -98,6 +98,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\static\app\css\scss\" />
+    <Folder Include="app\static\app\img\svg\" />
     <Folder Include="app\static\app\scripts\itoreport-scripts\" />
     <Folder Include="app\static\app\scripts\common-scripts\" />
     <Folder Include="app\static\app\scripts\iscreport-scripts\" />
@@ -144,6 +145,7 @@
     <Content Include="app\static\app\img\logo.png">
       <Publish>True</Publish>
     </Content>
+    <Content Include="app\static\app\img\svg\save2-fill.svg" />
     <Content Include="app\static\app\scripts\common-scripts\inputdaterange.js" />
     <Content Include="app\static\app\scripts\common-scripts\searchimgs.js" />
     <Content Include="app\static\app\scripts\common-scripts\selectprojectapi.js" />
@@ -151,6 +153,7 @@
     <Content Include="app\static\app\scripts\datatables.min.js" />
     <Content Include="app\static\app\scripts\iscreport-scripts\addrequirement.js" />
     <Content Include="app\static\app\scripts\iscreport-scripts\registeriscreport.js" />
+    <Content Include="app\static\app\scripts\iscreport-scripts\searchiscreport.js" />
     <Content Include="app\static\app\scripts\itoreport-scripts\javascript.js">
       <SubType>Code</SubType>
     </Content>
@@ -163,7 +166,9 @@
     <Content Include="app\static\app\scripts\itoreport-scripts\searchactivities.js" />
     <Content Include="app\static\app\scripts\walkreport-scripts\searchwalkreports.js" />
     <Content Include="iscreport\templates\iscreport\addqualityrequirement.html" />
+    <Content Include="iscreport\templates\iscreport\iscreport.html" />
     <Content Include="iscreport\templates\iscreport\registeriscreport.html" />
+    <Content Include="iscreport\templates\iscreport\searchiscreport.html" />
     <Content Include="iscreport\templates\iscreport\viewrequirements.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\nonconformity.html" />
     <Content Include="nonconformityreport\templates\nonconformityreport\registernonconformities.html" />

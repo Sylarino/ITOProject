@@ -135,9 +135,7 @@ $(function () {
         porcentaje = Math.trunc(porcentaje);
         $("#progress-gr-" + requisitos_grupo).css("width", porcentaje + "%");
         if (porcentaje == 100) {
-            //$("#progress-gr-" + requisitos_grupo).removeClass("bg-danger");
             $("#progress-gr-" + requisitos_grupo).switchClass("bg-danger", "bg-success", 500, "linear");
-            //$("#progress-gr-" + requisitos_grupo).addClass("bg-success");
         }
     });
 });
@@ -163,12 +161,12 @@ $(function () {
         for (var i = 0; i < req_largo; i++) {
             var id_div = requisitos_in[i].id
 
-            if ($("#progress-gr-" + id_div).css("width") != "100%") {
-                Swal.fire("Lista de Verificacion NO registrada",
-                    "Verifique que requisitos de calidad esten completos",
-                    "warning");
-                return false;
-            }
+            //if ($("#progress-gr-" + id_div).css("width") != "100%") {
+            //    Swal.fire("Lista de Verificacion NO registrada",
+            //        "Verifique que requisitos de calidad esten completos",
+            //        "warning");
+            //    return false;
+            //}
 
             id_div = id_div.replace('div-container-', '');
             document.querySelectorAll('#tabla-isc-' + id_div + ' tr').forEach(function (e) {
