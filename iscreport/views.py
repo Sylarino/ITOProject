@@ -379,7 +379,7 @@ def searchcontractsrequire(request):
 #Función para crear el pdf del ISC
 def createpdfiscreport(request):
 
-    id_rep = 1
+    id_rep = 4
     isc_report = ISCList.objects.get(id=int(id_rep))
     isc_qual_contr = QualityContract.objects.filter(contract_id=int(isc_report.contract_id))
     groups = QualityRequirementGroup.objects.all()
@@ -403,6 +403,9 @@ def createpdfiscreport(request):
     styleN.alignment = TA_LEFT
     styleBH = styles["Normal"]
     styleBH.alignment = TA_CENTER
+    styleN.fontSize = 8
+    styleBH.fontSize = 8
+    styleBH.textColor = colors.white
 
     #Cabezera PDF
     pagina = 0
@@ -426,11 +429,92 @@ def createpdfiscreport(request):
                              + str(isc_report.creation_date.month) + "/"
                              + str(isc_report.creation_date.year))
     ##Separador
-    height_pdf -= 70
+    height_pdf -= 85
     height_pdf = separator(c, height_pdf)
 
     #LISTA DE VERIFICACION
+    c.setFont('Helvetica', 14)
+    title_report = stringWidth("LISTA DE VERIFICACIÓN", 'Helvetica', 14)
+    c.drawString((width/2)-(title_report/2), height_pdf,"LISTA DE VERIFICACIÓN")
+    height_pdf -= 20
+    n_requisito = Paragraph('''<b>REQUISITO</b>''', styleBH)
+    n_referencia = Paragraph('''<b>REFERENCIA</b>''', styleBH)
+    n_cumplimiento = Paragraph('''<b>CUMPLIMIENTO</b>''', styleBH)
+    n_metodo = Paragraph('''<b>METODO DE VERIFICACIÓN</b>''', styleBH)
+    n_auditoria = Paragraph('''<b>RESULTADO AUDITORÍA</b>''', styleBH)
 
+    inc_group = 0
+
+    #titleStyle = ParagraphStyle(textColor=colors.white)
+
+    for gr in groups:
+
+        inc_group += 1
+
+        req = []
+
+        title_report = stringWidth(gr.requirement_group_name, 'Helvetica', 8)
+        n_grupo = Paragraph('''<b>'''+ gr.requirement_group_name.upper() +'''</b>''', styleBH)
+        print("El ancho de "+str(gr.id)+" es: "+str(title_report))
+
+        req += [[n_grupo,
+                 '',
+                 '',
+                 '',
+                 '']]
+
+        req += [[n_requisito,
+                n_referencia,
+                n_cumplimiento,
+                n_metodo,
+                n_auditoria]]
+
+        for re in isc_qual_contr:
+
+            if re.quality.group_id == gr.id:
+                
+                if re.accomplishment == True:
+
+                    accom = "Si"
+
+                else:
+
+                    accom = "No"
+
+                req += [[
+                      Paragraph(re.quality.requirement_name, styleN),  
+                      Paragraph(re.quality.reference, styleN),  
+                      Paragraph(accom, styleN),  
+                      Paragraph(re.verification_method, styleN),  
+                      Paragraph(re.audit_result, styleN),  
+                    ]]      
+
+        t=Table(req,colWidths= [7.3 * cm,4.3 * cm,2.3 * cm,3.3 * cm,3.3 * cm])
+
+        t.setStyle(TableStyle([ ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                                ('SPAN', (0, 0), (4, 0)),
+                                ('TEXTCOLOR', (0, 0), (4, 1),colors.white),
+                                ('BACKGROUND', (0, 0), (4, 1), colors.Color(red=(180/255))),
+                                ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                ('FONTSIZE', (0,0), (-1, -1), 8),
+                                ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
+                                ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
+                                ('ALIGN', (0,0), (1,-1), 'LEFT'),
+                                ('ALIGN', (2,0), (-1,-1), 'RIGHT')]))
+
+        #rowsuwu = t._rowHeights
+        t.wrapOn(c, width, height)
+        w, h = t.wrap(100, 100)
+        height_pdf -= h
+        t.drawOn(c, 15, height_pdf, 0)
+
+        if (inc_group) != len(groups):
+
+            c.showPage()
+
+            height_pdf = height
+            archivo_imagen = settings.STATIC_ROOT +'/app/img/logo.jpg'
+            height_pdf, pagina = principalBanner(height_pdf, c, id_rep,pagina,0, 'iscreport')
 
     c.save()
 
