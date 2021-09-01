@@ -87,7 +87,7 @@ function cargarTablaISCReport(response) {
             },
             {
                 "data": "id_reporte", "render": function (data, type, full, meta) {
-                    return '<a href="/' + data + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#B52323" class="bi bi-download" viewBox="0 0 16 16">'+
+                    return '<a href="downloadpdfiscreport/iscreport/' + data + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#B52323" class="bi bi-download" viewBox="0 0 16 16">'+
                             '< path d = "M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />'+
                             '<path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />'+
                             '</svg ></a>';
@@ -126,16 +126,16 @@ function abrir_modal_edicion(id_report) {
                 contentType: false,
                 processData: false,
                 dataType: 'json',
-            }).done(function (data) {
+            }).done(function (data, response) {
 
                 if (data.submit == 'success') {
                     Swal.fire("Reporte Modificado",
                         "Reporte ISC N " + id_report + " modificado correctamente",
                         "success");
-                    return false;
+                    return response;
                 }
 
-            }).fail(function (data) {
+            }).fail(function (data, response) {
                 Swal.fire("Reporte No Agregado",
                             "Verifique que archivos sean correctos",
                             "warning");

@@ -12,6 +12,7 @@ class ISCList(models.Model):
 
     api = models.ForeignKey(API, verbose_name="API", on_delete=models.CASCADE)
     contract = models.ForeignKey(Contract, verbose_name="Contrato", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name="Usuario registrador", on_delete=models.CASCADE,default=1)
     
     class Meta:
         verbose_name = 'Lista de Verificacion ISC'
@@ -97,3 +98,27 @@ class GroupContract(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class ISCPDFFIle(models.Model):
+
+    pdf = models.FileField(default='null', verbose_name="PDF", upload_to='pdf_isc_list')
+    file_register = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro de PDF")
+
+    class Meta:
+        verbose_name = 'Reporte PDF'
+        verbose_name_plural = 'Reportes PDF'
+
+    def __str__(self):
+        return str(self.id)
+
+class ISCReportPDF(models.Model):
+
+    isc_report = models.ForeignKey(ISCList, verbose_name="Lista ISC", on_delete=models.CASCADE)
+    pdf = models.ForeignKey(ISCPDFFIle, verbose_name="Reporte PDF", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Repertorio de PDF en Lista ISC'
+        verbose_name_plural = 'Repertorios de PDF en Lista ISC'
+
+    def __str__(self):
+        return str(self.isc_report)  

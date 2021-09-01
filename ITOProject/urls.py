@@ -32,6 +32,7 @@ urlpatterns = [
     path('', include('walkreport.urls')),
     path('', include('nonconformityreport.urls')),
     path('', include('iscreport.urls')),
+    path('', include('terminationdetailsreport.urls')),
 ]
 
 #Configuracion para cargar imagenes

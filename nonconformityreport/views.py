@@ -460,32 +460,38 @@ def createpdfnonconformity(id_rep):
 #DESCARGA DE PDF AL REGISTRAR UN REPORTE DE NO CONFORMIDAD
 @csrf_exempt
 @login_required(login_url="login")
-def downloadpdfnoncon(request, rep_id = ''):
+def downloadpdfnoncon(request, typereport = '', rep_id = ''):
 
     if request.method == 'GET':
-        if rep_id == '':
-            rep_id = request.POST['id']
-        else:
-            rep_id = int(rep_id)
+        rep_id = int(rep_id)
+        
+    if request.method == 'POST':
+        rep_id = request.POST['id']
+        typereport = request.POST['typereport']
 
+    if typereport == 'nonconformity':
         file_path = settings.MEDIA_ROOT + "/pdf_nonconformity_reports/REPORTE_NO_CON-N" +  str(rep_id) + ".pdf"
+        
+    if typereport == 'iscreport':
+        file_path = settings.MEDIA_ROOT + "/pdf_isc_list/REPORTE_ISC_N"+ str(rep_id)+".pdf"
 
-        if os.path.exists(file_path):
-            with open(file_path, 'rb') as fh:
+    if os.path.exists(file_path):
 
-                response = HttpResponse(fh.read(), content_type="application/pdf")
-                response['Content-Disposition'] = 'attachment;filename=' + os.path.basename(file_path)
-                buffer = io.BytesIO()
+        with open(file_path, 'rb') as fh:
 
-                buffer.seek(0)
-                pdf: bytes = buffer.getvalue()
+            response = HttpResponse(fh.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment;filename=' + os.path.basename(file_path)
+            buffer = io.BytesIO()
 
-                response.write(pdf)
-                file_data = ContentFile(pdf)
+            buffer.seek(0)
+            pdf: bytes = buffer.getvalue()
 
-                return response
+            response.write(pdf)
+            file_data = ContentFile(pdf)
 
-        raise Http404
+            return response
+
+    raise Http404
 
 #Función para comparar datos y eliminar en las búsquedas de reportes
 def compareData(name_py, name_js, search, busqueda):

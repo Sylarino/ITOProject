@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from nonconformityreport import views as nonconformityviews
 
 urlpatterns = [
         path('registeriscreport/', views.registeriscreport, name='registeriscreport'),
@@ -13,5 +14,7 @@ urlpatterns = [
         path('searchiscreport/modifiediscreport/<str:id>', views.modifiediscreport, name='modifiediscreport'),
         path('registeriscreport/saveregisteriscreport/', views.saveregisteriscreport, name='saveregisteriscreport'),
         path('createpdfiscreport/', views.createpdfiscreport, name='createpdfiscreport'),
+        path('searchiscreport/downloadpdfiscreport/<str:typereport>/<str:rep_id>/', nonconformityviews.downloadpdfnoncon, name='downloadpdfiscreport'),
+        path('registeriscreport/downloadpdfiscreport/<str:typereport>/<str:rep_id>/', nonconformityviews.downloadpdfnoncon, name='downloadpdfiscreportregistered'),
 ]
 

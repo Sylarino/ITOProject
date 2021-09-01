@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'walkreport',
     'nonconformityreport',
     'iscreport',
+    'terminationdetailsreport',
     # Add your apps here to enable them
     'django.contrib.admin',
     'django.contrib.auth',

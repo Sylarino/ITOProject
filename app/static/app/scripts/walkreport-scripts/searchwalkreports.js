@@ -67,7 +67,7 @@ function cargarTablaCaminatas(response) {
         swal("Oops!", "No se encontraron datos, intente nuevamente.", "warning");
         return false;
     }
-    $("#divTabla").removeClass("hidden");
+    $("#divTabla").removeClass("d-none");
     var url = "modifiedwalkreport/"
     var tablaActividades = "";
     /*    if (!$.fn.dataTable.fnIsDataTable($('#tableActivities'))) {*/

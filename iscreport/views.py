@@ -107,7 +107,8 @@ def addfilestoreport(files_new, isc_report, data):
             iscrepfil.save()
 
     data = {
-        'submit': 'success'
+        'submit': 'success',
+        'id': isc_report.id
         }
 
     return data
@@ -320,7 +321,8 @@ def saveregisteriscreport(request):
                 num_audit = int(request.POST.get('audit')),
                 creation_date = request.POST.get('date_isc'),
                 api = api_contr,
-                contract = contrato
+                contract = contrato,
+                user = request.user
             )
 
         isc_lista.save()                          
@@ -334,8 +336,11 @@ def saveregisteriscreport(request):
         else:
 
             data = {
-                'submit': 'success'
+                'submit': 'success',
+                'id': isc_lista.id
                 }
+
+        createpdfiscreport(isc_lista.id)
 
         return JsonResponse(data)
 
@@ -377,9 +382,8 @@ def searchcontractsrequire(request):
         return JsonResponse(group_data, safe=False)
 
 #Función para crear el pdf del ISC
-def createpdfiscreport(request):
+def createpdfiscreport(id_rep):
 
-    id_rep = 4
     isc_report = ISCList.objects.get(id=int(id_rep))
     isc_qual_contr = QualityContract.objects.filter(contract_id=int(isc_report.contract_id))
     groups = QualityRequirementGroup.objects.all()
@@ -394,6 +398,8 @@ def createpdfiscreport(request):
                       buffer,
                       pagesize=portrait(letter)
                       )
+
+    c.setTitle("REPORTE ISC N°"+ str(id_rep))
 
     width, height = portrait(letter) 
 
@@ -422,6 +428,7 @@ def createpdfiscreport(request):
     c.drawString(25, 650,"N° Contrato: " + str(isc_report.contract.contract_number))
     c.drawString(25, 635,"Proyecto: " + isc_report.contract.contract_name)
     c.drawString(25, 620,"Empresa Responsable: " + isc_report.contract.enterprise)
+    c.drawString(25, 605,"Originado por: " + isc_report.user.first_name + " " +isc_report.user.last_name)
 
     c.drawString(396, 650,"N° Auditoría: " + str(isc_report.num_audit))
     c.drawString(396, 635,"Correlativo: " + str(isc_report.correlative))
@@ -429,7 +436,7 @@ def createpdfiscreport(request):
                              + str(isc_report.creation_date.month) + "/"
                              + str(isc_report.creation_date.year))
     ##Separador
-    height_pdf -= 85
+    height_pdf -= 95
     height_pdf = separator(c, height_pdf)
 
     #LISTA DE VERIFICACION
@@ -524,4 +531,15 @@ def createpdfiscreport(request):
     response.write(pdf)
     file_data = ContentFile(pdf)
 
-    return response
+    reportpdf = ISCPDFFIle()
+    reportpdf.pdf.save('REPORTE_ISC_N°'+ str(id_rep)+'.pdf', file_data, save=False)
+    reportpdf.save()
+
+    pdfrelation = ISCReportPDF(
+        pdf = reportpdf,
+        isc_report = isc_report
+        )
+
+    pdfrelation.save()
+
+    #return response

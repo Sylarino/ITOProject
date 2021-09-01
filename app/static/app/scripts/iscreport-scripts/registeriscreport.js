@@ -207,8 +207,9 @@ $(function () {
 
             if (data.submit == 'success') {
 
-                Swal.fire("Requisitos agregados", "Requisitos de Calidad agregados al contrato", "success");
-                return false;
+                //Swal.fire("Requisitos agregados", "Requisitos de Calidad agregados al contrato", "success");
+                //return false;
+                messageSucces(data);
 
             }
 

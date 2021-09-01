@@ -2,116 +2,117 @@
 {% load staticfiles %}
 {% block content %}
 <div class="container">
-    <form action="">
+    <form action="" class="row g-3">
         {% csrf_token %}
         <h2 class="title-page">{{ title }}</h2>
         <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
         <div class="row">
-
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>N de API:</label>
-                    <select name="api" id="noncon_api_id" class="form-control" required>
-                        <option disabled selected>Seleccione N de API</option>
-                        {% for api in apis %}                    
-                        <option value="{{api.id}}" id="{{api.id}}">{{api.api_number}}</option>
-                        {% endfor %}
-                    </select>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">N de API:</label>
+                        <select name="api" id="noncon_api_id" class="form-control" required>
+                            <option disabled selected>Seleccione N de API</option>
+                            {% for api in apis %}                    
+                            <option value="{{api.id}}" id="{{api.id}}">{{api.api_number}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>N de Contrato:</label>                   
-                    <select name="contract" id="noncon_con_id" class="form-control" required>
-                    </select>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">N de Contrato:</label>                   
+                        <select name="contract" id="noncon_con_id" class="form-control" required>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>N de Auditoria:</label>
-                    <input id="noncon_audi_id" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">N de Auditoria:</label>
+                        <input id="noncon_audi_id" class="form-control"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Correlativo:</label>
-                    <input id="noncon_corre_id" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Correlativo:</label>
+                        <input id="noncon_corre_id" class="form-control"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Proyecto:</label>
-                    <label name="project_name"></label>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Proyecto:</label>
+                        <label class="form-label" name="project_name"></label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Empresa Responsable:</label>
-                    <label name="enterprise"></label>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Empresa Responsable:</label>
+                        <label class="form-label" name="enterprise"></label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Item:</label>
-                    <input id="noncon_item_id" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Item:</label>
+                        <input id="noncon_item_id" class="form-control"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Area:</label>
-                    <select name="area" id="noncon_area_id" class="form-control" required>
-                        <option disabled selected>Seleccione Area</option>
-                        {% for area in wbs %}                    
-                        <option id="{{area.id}}">{{area.wbs_name}}</option>
-                        {% endfor %}
-                    </select>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Area:</label>
+                        <select name="area" id="noncon_area_id" class="form-control" required>
+                            <option disabled selected>Seleccione Area</option>
+                            {% for area in wbs %}                    
+                            <option id="{{area.id}}">{{area.wbs_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Disciplina:</label>
-                    <select name="discipline" id="noncon_disci_id" class="form-control" required>
-                        <option disabled selected>Seleccione Disciplina</option>
-                        {% for discipline in disciplines %}                    
-                        <option id="{{discipline.id}}">{{discipline.discipline_name}}</option>
-                        {% endfor %}
-                    </select>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Disciplina:</label>
+                        <select name="discipline" id="noncon_disci_id" class="form-control" required>
+                            <option disabled selected>Seleccione Disciplina</option>
+                            {% for discipline in disciplines %}                    
+                            <option id="{{discipline.id}}">{{discipline.discipline_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Fecha de Creacion:</label>
-                    <input id="noncon_fecha_id" type="date" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Fecha de Creacion:</label>
+                        <input id="noncon_fecha_id" type="date" class="form-control"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Sistema:</label>
-                    <input id="noncon_sistem_id" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Sistema:</label>
+                        <input id="noncon_sistem_id" class="form-control"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Subsistema:</label>
-                    <input id="noncon_subsis_id" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Subsistema:</label>
+                        <input id="noncon_subsis_id" class="form-control"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Tag:</label>
-                    <input id="noncon_tag_id" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Tag:</label>
+                        <input id="noncon_tag_id" class="form-control"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,122 +122,124 @@
 
         <div class="row">
 
-            <div class="col-md-4 form-report">
-                <div class="field-form">
-                    <label>Criticidad de No Conformidad:</label>
-                    <input id="noncon_cri_id" class="form-control"/>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="field-form">
+                        <label class="form-label">Criticidad de No Conformidad:</label>
+                        <input id="noncon_cri_id" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="field-form">
+                        <label class="form-label">Origen:</label>
+                        <input id="noncon_ori_id" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="field-form">
+                        <label class="form-label">Clasificacion:</label>
+                        <input id="noncon_clasi_id" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <h4 class="subsection-title"> Criterio / Documentos de Referencia (E.T., Planos, Normas, etc.)</h4>
+                    <textarea id="noncon_cri_ref_id" class="form-control medium-text">
+                
+                    </textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <h4 class="subsection-title"> Requisito Incumplido (Punto especifico de la norma, EE.TT., o documento aplicable.)</h4>
+                    <textarea id="noncon_requi_id" class="form-control medium-text">
+                
+                    </textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <h4 class="subsection-title"> Descripcion detallada de la No Conformidad</h4>
+                    <textarea id="noncon_desc_det_id" class="form-control medium-text">
+                
+                    </textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <h4 class="subsection-title"> Observaciones</h4>
+                    <textarea id="noncon_obs_id" class="form-control medium-text">
+                
+                    </textarea>
                 </div>
             </div>
-
-            <div class="col-md-4 form-report">
-                <div class="field-form">
-                    <label>Origen:</label>
-                    <input id="noncon_ori_id" class="form-control"/>
-                </div>
-            </div>
-
-            <div class="col-md-4 form-report">
-                <div class="field-form">
-                    <label>Clasificacion:</label>
-                    <input id="noncon_clasi_id" class="form-control"/>
-                </div>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <h4 class="subsection-title"> Criterio / Documentos de Referencia (E.T., Planos, Normas, etc.)</h4>
-                <textarea id="noncon_cri_ref_id" class="form-control medium-text">
-                
-                </textarea>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <h4 class="subsection-title"> Requisito Incumplido (Punto especifico de la norma, EE.TT., o documento aplicable.)</h4>
-                <textarea id="noncon_requi_id" class="form-control medium-text">
-                
-                </textarea>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <h4 class="subsection-title"> Descripcion detallada de la No Conformidad</h4>
-                <textarea id="noncon_desc_det_id" class="form-control medium-text">
-                
-                </textarea>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <h4 class="subsection-title"> Observaciones</h4>
-                <textarea id="noncon_obs_id" class="form-control medium-text">
-                
-                </textarea>
-            </div>
-
         </div>
 
         <h2 class="title-page">{{ title }}</h2>
         <h3 class="section-title"> DETALLE DE ORIGEN Y SEGUIMIENTO </h3>
 
         <div class="row">
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Originador:</label>
-                    <select name="origin" class="form-control" id="noncon_originador_id" required>
-                        <option disabled selected>Seleccione Originador </option>
-                        {% for user in users %}
-                        <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
-                        {% endfor %}
-                    </select>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Originador:</label>
+                        <select name="origin" class="form-control" id="noncon_originador_id" required>
+                            <option disabled selected>Seleccione Originador </option>
+                            {% for user in users %}
+                            <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Criterio Especifico de NCR:</label>
-                    <input id="noncon_cri_esp_id" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Criterio Especifico de NCR:</label>
+                        <input id="noncon_cri_esp_id" class="form-control"/>
+                    </div>
                 </div>
-            </div>
             
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>N Transmital Envio NCR:</label>
-                    <input id="noncon_num_tran_id" class="form-control"/>
-                </div>
-            </div>     
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">N Transmital Envio NCR:</label>
+                        <input id="noncon_num_tran_id" class="form-control"/>
+                    </div>
+                </div>     
             
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>N Transmital Envio Accion Correctiva:</label>
-                    <input id="noncon_num_envio_id" class="form-control"/>
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">N Transmital Envio Accion Correctiva:</label>
+                        <input id="noncon_num_envio_id" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">N NCR Emitida:</label>
+                        <input id="noncon_num_ncr_id" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Status:</label>
+                        <input id="noncon_stat_id" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Fecha de Compromiso Cierre:</label>
+                        <input type="date" id="noncon_fecha_comp_id" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="field-form">
+                        <label class="form-label">Fecha de Cierre:</label>
+                        <input type="date" id="noncon_fecha_cierre_id" class="form-control"/>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>N NCR Emitida:</label>
-                    <input id="noncon_num_ncr_id" class="form-control"/>
-                </div>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Status:</label>
-                    <input id="noncon_stat_id" class="form-control"/>
-                </div>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Fecha de Compromiso Cierre:</label>
-                    <input type="date" id="noncon_fecha_comp_id" class="form-control"/>
-                </div>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Fecha de Cierre:</label>
-                    <input type="date" id="noncon_fecha_cierre_id" class="form-control"/>
-                </div>
-            </div>
-
         </div>
 
         <h2 class="title-page">{{ title }}</h2>
@@ -263,10 +266,6 @@
     <h3 class="section-title">GUARDAR REPORTE</h3>
     <div class="btn-save">
             <input id="btn_save_noncor_report" class="btn btn-danger" type="button" value="Guardar"/>
-    </div>
-
-    <div class="btn-save">
-            <a href="{% url 'createpdfnonconformity' %}" class="btn btn-danger" type="button" value="PDF">PDF</a>
     </div>
 
     <script src="{% static 'app/scripts/nonconformotiereport-scripts/registernoncoformity.js' %}"></script>

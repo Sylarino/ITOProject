@@ -84,6 +84,16 @@
     </Compile>
     <Compile Include="report\views.py" />
     <Compile Include="report\__init__.py" />
+    <Compile Include="terminationdetailsreport\admin.py" />
+    <Compile Include="terminationdetailsreport\apps.py" />
+    <Compile Include="terminationdetailsreport\migrations\__init__.py" />
+    <Compile Include="terminationdetailsreport\models.py" />
+    <Compile Include="terminationdetailsreport\tests.py" />
+    <Compile Include="terminationdetailsreport\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="terminationdetailsreport\views.py" />
+    <Compile Include="terminationdetailsreport\__init__.py" />
     <Compile Include="walkreport\admin.py" />
     <Compile Include="walkreport\apps.py" />
     <Compile Include="walkreport\migrations\__init__.py" />
@@ -128,6 +138,10 @@
     <Folder Include="report\" />
     <Folder Include="report\templates\" />
     <Folder Include="report\templates\form-report\" />
+    <Folder Include="terminationdetailsreport\" />
+    <Folder Include="terminationdetailsreport\migrations\" />
+    <Folder Include="terminationdetailsreport\templates\" />
+    <Folder Include="terminationdetailsreport\templates\terminationdetailsreport\" />
     <Folder Include="walkreport\" />
     <Folder Include="walkreport\migrations\" />
     <Folder Include="walkreport\templates\" />
@@ -147,6 +161,7 @@
     </Content>
     <Content Include="app\static\app\img\svg\save2-fill.svg" />
     <Content Include="app\static\app\scripts\common-scripts\inputdaterange.js" />
+    <Content Include="app\static\app\scripts\common-scripts\messagesuccess.js" />
     <Content Include="app\static\app\scripts\common-scripts\searchimgs.js" />
     <Content Include="app\static\app\scripts\common-scripts\selectprojectapi.js" />
     <Content Include="app\static\app\scripts\common-scripts\selectprojectcontract.js" />
@@ -208,6 +223,9 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
+    <Content Include="terminationdetailsreport\templates\terminationdetailsreport\registerterminationdetail.html" />
+    <Content Include="terminationdetailsreport\templates\terminationdetailsreport\searchterminationdetail.html" />
+    <Content Include="terminationdetailsreport\templates\terminationdetailsreport\terminationdetail.html" />
     <Content Include="walkreport\templates\walkreport\observation.html" />
     <Content Include="walkreport\templates\walkreport\registerwalkreport.html" />
     <Content Include="walkreport\templates\walkreport\searchwalkreport.html" />
