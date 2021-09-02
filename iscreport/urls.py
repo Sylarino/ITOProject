@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from nonconformityreport import views as nonconformityviews
 
@@ -14,7 +14,9 @@ urlpatterns = [
         path('searchiscreport/modifiediscreport/<str:id>', views.modifiediscreport, name='modifiediscreport'),
         path('registeriscreport/saveregisteriscreport/', views.saveregisteriscreport, name='saveregisteriscreport'),
         path('createpdfiscreport/', views.createpdfiscreport, name='createpdfiscreport'),
+        #re_path('searchiscreport/downloadpdfiscreport/(?P<id>[a-zA-Z0-9]{15})/(?P<typereport>[a-zA-Z0-9]{15})/', nonconformityviews.downloadpdfnoncon, name='downloadpdfiscreport'),
+        #re_path('registeriscreport/downloadpdfiscreportregistered/(?P<id>[a-zA-Z0-9]{15})/(?P<typereport>[a-zA-Z0-9]{15})/', nonconformityviews.downloadpdfnoncon, name='downloadpdfiscreportregistered'),
         path('searchiscreport/downloadpdfiscreport/<str:typereport>/<str:rep_id>/', nonconformityviews.downloadpdfnoncon, name='downloadpdfiscreport'),
-        path('registeriscreport/downloadpdfiscreport/<str:typereport>/<str:rep_id>/', nonconformityviews.downloadpdfnoncon, name='downloadpdfiscreportregistered'),
+        path('registeriscreport/downloadpdfiscreportregistered/<str:typereport>/<str:rep_id>/',nonconformityviews.downloadpdfnoncon, name='downloadpdfiscreportregistered'),
 ]
 

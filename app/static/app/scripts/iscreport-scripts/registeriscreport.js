@@ -206,11 +206,7 @@ $(function () {
         }).done(function (data) {
 
             if (data.submit == 'success') {
-
-                //Swal.fire("Requisitos agregados", "Requisitos de Calidad agregados al contrato", "success");
-                //return false;
-                messageSucces(data);
-
+                messageSucces(data, 'iscreport', 'downloadpdfiscreportregistered');
             }
 
         }).fail(function (data) {

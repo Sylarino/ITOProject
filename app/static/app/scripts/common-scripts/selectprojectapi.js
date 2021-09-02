@@ -3,7 +3,7 @@ $(function () {
     $('select[name="api"]').on('change', function () {
 
         var id_select = this.id;
-
+        debugger;
         var id = $('#' + id_select).val();
         var select_contracts = $('select[name="contract"]');
         var options = '<option id="0" disabled selected>Seleccione Contrato</option>';
@@ -22,7 +22,7 @@ $(function () {
                 $.each(data, function (key, value) {
                     options += '<option id="' + value.id + '" value="' + value.id + '">' + value.contract_number + '</option>';
                 });
-
+                $('label[name="project_name"]').text(data[0].project_name);
                 return false;
             }
             message_error(data.error);

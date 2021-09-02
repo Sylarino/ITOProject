@@ -123,6 +123,13 @@ def buscarcontratos(request, *args, **kwargs):
                                     'subactivity_name': s.subactivity_name,
                                     'subactivity_id': s.id})
 
+           if action == 'search_only_contract':
+                contrato = Contract.objects.get(id=Id)
+                data.append({'id_contract': contrato.id,
+                            'enterprise': contrato.enterprise,
+                            'start_date_contract': contrato.start_date,
+                            'finish_date_contract': contrato.finish_date})
+
            if ((action == 'search_subactivity') or (action == 'search_subactivity_nop')):
                subactividad = SubActivity.objects.filter(activity=Id)
 

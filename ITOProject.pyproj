@@ -162,6 +162,7 @@
     <Content Include="app\static\app\img\svg\save2-fill.svg" />
     <Content Include="app\static\app\scripts\common-scripts\inputdaterange.js" />
     <Content Include="app\static\app\scripts\common-scripts\messagesuccess.js" />
+    <Content Include="app\static\app\scripts\common-scripts\searchcontractinfo.js" />
     <Content Include="app\static\app\scripts\common-scripts\searchimgs.js" />
     <Content Include="app\static\app\scripts\common-scripts\selectprojectapi.js" />
     <Content Include="app\static\app\scripts\common-scripts\selectprojectcontract.js" />

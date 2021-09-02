@@ -165,8 +165,8 @@ def savenonconformityreport(request, *args, **kwargs):
         if id_rep_noncon > 0:
                     
             data = {
-                'submitted': 1,
-                'id_report': id_rep_noncon
+                'submit': 'success',
+                'id': id_rep_noncon
                 }
 
             createpdfnonconformity(id_rep_noncon)
@@ -174,7 +174,7 @@ def savenonconformityreport(request, *args, **kwargs):
         else:
 
             data = {
-                'submitted': 0
+                'submit': 'failed'
                 }
 
         return JsonResponse(data)
@@ -460,7 +460,7 @@ def createpdfnonconformity(id_rep):
 #DESCARGA DE PDF AL REGISTRAR UN REPORTE DE NO CONFORMIDAD
 @csrf_exempt
 @login_required(login_url="login")
-def downloadpdfnoncon(request, typereport = '', rep_id = ''):
+def downloadpdfnoncon(request, typereport = 'None', rep_id = 'None'):
 
     if request.method == 'GET':
         rep_id = int(rep_id)

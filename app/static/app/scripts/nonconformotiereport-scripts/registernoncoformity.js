@@ -77,63 +77,6 @@ $(function () {
     }
 });
 
-function downloadrecentlypdf(id_pdf) {
-
-    $.ajax({
-
-        type: 'POST',
-        data: { 'id': id_pdf, csrfmiddlewaretoken: '{{ csrf_token }}' },
-        url: "downloadpdfnoncon/",
-        success: function (response) {
-
-            var blob = new Blob([response], { type: 'application/pdf' });
-            var link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = "REPORTE_NO_CON_N°" + id_pdf + ".pdf";
-            link.click();
-
-        }
-
-    });
-
-}
-
-function messageSuccesNonCon(data) {
-
-    if (data.submitted == 1) {
-
-        swal.fire("Guardado", "Reporte de No Conformidad N°" + data.id_report + " agregado satisfactoriamente", "success", {
-
-            confirmButtonText: "Descargar"
-
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-
-                downloadrecentlypdf(data.id_report);
-
-                Swal.fire('Descargado!', '', 'success', {
-
-                    confirmButtonText: "Ok"
-
-                }).then((result) => {
-
-                    if (result.isConfirmed) {
-                        window.location.reload();
-                        window.scrollTo(0, 0);
-                    } else {
-                        window.location.reload();
-                        window.scrollTo(0, 0);
-                    }
-
-                });
-            }
-        });
-
-    }
-
-}
-
 $(function () {
 
     document.getElementById("btn_save_noncor_report").onclick = function () {
@@ -224,7 +167,7 @@ $(function () {
 
         }).done(function (data) {
 
-            messageSuccesNonCon(data);
+            messageSucces(data, 'nonconformity', 'downloadpdfnoncon');
 
         }).fail(function (data) {
 

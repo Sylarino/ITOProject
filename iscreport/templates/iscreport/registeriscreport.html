@@ -41,7 +41,7 @@
                 <div class="col-md-6">
                     <div class="field-form">
                         <label class="form-label">Proyecto:</label>
-                        <label name="project" class="form-label"></label>
+                        <label name="project_name" class="form-label"></label>
                     </div>
                 </div>
 
@@ -159,6 +159,7 @@
 
 {% block extrajs %}
 <script src="{% static 'app/scripts/common-scripts/selectprojectapi.js' %}"></script>
+<script src="{% static 'app/scripts/common-scripts/searchcontractinfo.js' %}"></script>
 <script src="{% static 'app/scripts/common-scripts/messagesuccess.js' %}"></script>
 <script src="{% static 'app/scripts/iscreport-scripts/registeriscreport.js' %}"></script>
 {% endblock %}
