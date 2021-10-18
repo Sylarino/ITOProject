@@ -183,10 +183,10 @@ function cargarTabla(response) {
             { "data": "fecha_inicio", "name": "Fecha_inicio" },
             { "data": "fecha_termino", "name": "Fecha_termino" },
             { "data": "dias", "name": "Dias" },
-            { "data": "total_estimado", "name": "Total_estimado" },
-            { "data": "total_acumulado", "name": "Total_acumulado" },
-            { "data": "dias_acumulado", "name": "Dias_acumulado" },
-            { "data": "ref_dia", "name": "Ref_dia" },
+            //{ "data": "total_estimado", "name": "Total_estimado" },
+            //{ "data": "total_acumulado", "name": "Total_acumulado" },
+            //{ "data": "dias_acumulado", "name": "Dias_acumulado" },
+            //{ "data": "ref_dia", "name": "Ref_dia" },
             {
                 "data": "reporte", "render": function (data, type, full, meta) {
                     return '<a onclick="Modificar(' + data + ');" class="form-control btn-danger"><i class="glyphicon glyphicon-pencil"></i></a>';
@@ -218,12 +218,21 @@ function Modificar(id) {
         confirmButtonText: `Modificar`,
         denyButtonText: `No modificar`,
     }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-            location.href = "/modifiedreport/" + id;
-/*            $('input[id="btn-buscar"]').click();*/
+            //    location.href = "/modifiedreport/" + id;
+            abrir_modal_edicion(id);
         } 
     })
+
+}
+
+function abrir_modal_edicion(id_report) {
+
+    var $ = jQuery.noConflict();
+
+    $('#edicion').load('modifiedreport/' + id_report, function () {
+
+    });
 
 }
 

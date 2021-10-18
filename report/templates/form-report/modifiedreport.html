@@ -1,619 +1,630 @@
-{% extends "app/layout.html" %}
 {% load staticfiles %}
-{% block content %}
-    
-<div class="container">
-    <form action="">
-            {% csrf_token %}
-        <h2 class="title-page">{{ title }}</h2>
 
-        {#Formulario Antecedentes Generales#}
-        <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
-        <div class="row">
-            <div class="col-md-6 form-report">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title title-page">
+                {{ title }}
+            </h2>
+        </div>
+        <div class="modal-body">
+        <form action="">
+                {% csrf_token %}
+            <h2 class="title-page">{{ title }}</h2>
+
+            {#Formulario Antecedentes Generales#}
+            <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
+            <div class="row">
+                <div class="col-md-6 form-report">
            
-                <div class="field-form">
-                    <label>N° de API:</label>
-                    <select name="api" id="api_antgen_id" class="form-control" disabled required>
-                        <option disabled selected>Seleccione API</option>
-                        {% for api in apis %}
-                            {% for hist in historical %}
-                                {% if  hist.subactivity.api_id == api.id%}
-                                    <option selected id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
-                                {% else %}
-                                    <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="field-form">
-                    <label>N° de Contrato:</label>
-                    <select name="contract" class="form-control" id="contr_antgen_id" disabled required>
-                        {% for contract in contracts %}
-                            {% for hist in historical %}
-                                {% if  hist.subactivity.contract_id == contract.id%}
-                                    <option selected id="{{contract.id}}" value="{{contract.id}}">{{ contract.contract_name }}</option>
-                                {% else %}
-                                    <option id="{{contract.id}}" value="{{contract.id}}">{{ contract.contract_name }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="field-form">
-                    <label>Fecha de Inicio:</label>
-                    <label name="start_date">{{contract_report.start_date}}</label>
-                </div>
-
-                <div class="field-form">
-                    <label>Especialidad:</label>
-                    <select id="especialidad_id" class="form-control" required>
-                        <option disabled selected>Seleccione Especialidad</option>
-                        {% for specialty in specialties %}
-                            {% if specialty_id == specialty.id %}
-                                <option selected value="{{specialty.id}}" id="{{specialty.id}}">{{ specialty.specialty_name }}</option>
-                            {% else %}
-                                <option value="{{specialty.id}}" id="{{specialty.id}}">{{ specialty.specialty_name }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="field-form">
-                    <label>Referencia Utilizada:</label>
-                    <select id="select-ref-mod" name="select-ref-mod" class="form-control" required>
-                        <option disabled selected>Seleccione Referencia</option>
-                        {% for reference in references %}
-                        <option id="{{reference.id}}">{{ reference.reference_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="field-form">
-                    <label>Nombre Referencia:</label>
-                    <input id="ref-name" name="input-ref-mod" class="form-control" required>
-                </div>
-                <div class="btn-save">
-                    <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Modificar" onclick="agregarReferenciaModificado()"/>
-                </div>
-                <div class="btn-save">
-                    <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Agregar" onclick="agregarReferencia()"/>
-                </div>
-            
-            </div>
-
-            <div class="col-md-6 form-report">
-
-                <div class="field-form">
-                    <label>Nombre del Proyecto:</label>
-                    <label name="project_name">{{contract_report.api.project_name}}</label>
-                </div>
-
-                <div class="field-form">
-                    <label>Empresa Contratista:</label>
-                    <label name="enterprise">{{contract_report.enterprise}}</label>
-                </div>
-
-                <div class="field-form">
-                    <label>Fecha de Termino:</label>
-                    <label name="finish_date">{{contract_report.finish_date}}</label>
-                </div>
-
-                <div class="field-form">
-                    <label>Referencias Registradas:</label>
-                </div>
-
-                <section class="table-container--load"> 
-                    <table class="table table-load">
-                        <thead>
-                            <tr>
-                                <th scope="col">Referencia</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">¿Modificar?</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-referencia" id="table-body">
-                            {% for hist in historical_reference %}
-                                <tr id="histref-{{hist.id_table}}">
-                                    <td class="referencia" id="{{hist.id_referencia}}">{{hist.nombre_referencia}}</td>
-                                    <td class="descripcion" id="{{hist.id_ref_hist}}">{{hist.descripcion}}</td>
-                                    <td>
-                                        <input class="btn btn-danger" type="button" value="Modificar" onclick="modificarReferencia('histref-{{hist.id_table}}')">
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </section>
-
-            </div>
-        </div>
-        <h2 class="title-page">{{ title }}</h2>
-
-        {#Formulario Control de Avance por Actividad (Programada y No Programada)#}
-        <div class="row">
-
-            <h3 class="section-title"> CONTROL DE AVANCE POR ACTIVIDAD SEGÚN PROGRAMA </h3>
-            <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES PROGRAMADAS </h4>
-            <div class="row">
-                <div class="col-md-6 form-report">
-                    <label>Nombre de Actividad:</label>
-                    <select name="select-act-ap-mod" id="select-act-ap-mod" class="form-control" required>
-                        <option disabled selected>Seleccione Actividad</option>
-                        {% for acts in activities %}
-                            {% if acts.contract_id == id_contract %}
-                                <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="col-md-6 form-report">
-                    <label>Nombre de Sub Actividad:</label>
-                    <select name="select-sub-ap-mod" id="select-sub-ap-mod" class="form-control" required>
-                        <option disabled selected>Seleccione Sub Actividad</option>
-                    </select>
-                </div>
-            </div>
-
-            <section class="row-section">
-                <div class="form-section">
-                    <div class="col-lg-2 form-report">
-                        <label>Avance Diario:</label>
-                        <input name="input-cr-ap-mod" id="input-cr-ap-mod" class="form-control" required/>
-                    </div>
-                    <div class="col-lg-2 form-report">
-                        <label>Unidad:</label>
-                        <input name="input-u-ap-mod" id="input-u-ap-mod" class="form-control" required readonly="readonly"/>
-                    </div>
-                    <div class="col-lg-2 form-report">
-                        <label>Total Programado:</label>
-                        <input name="input-te-ap-mod" id="input-te-ap-mod" class="form-control" required readonly="readonly"/>
-                    </div>
-                    <div class="col-lg-2 form-report">
-                        <label>Referencia Diaria: </label>
-                        <input name="input-rf-ap-mod" id="input-rd-ap-mod" class="form-control" required readonly="readonly"/>
-                    </div>
-                    <div class="col-lg-2 form-report">
-                        <label>Avance Real Acumulado:</label>
-                        <input name="input-ta-ap-mod" id="input-ta-ap-mod" class="form-control" required readonly="readonly"/>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section-md-field select-section--activities">
-                <div class="col-md-4 form-report">
-                    <label>Cumplimiento:</label>
-                    <select id="select-cum-ap-mod" class="form-control" required>
-                        <option disabled selected>Si o No</option>
-                        <option>Si</option>
-                        <option>No</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4 form-report">
-                    <label>Causa de NO Cumplimiento:</label>
-                    <select id="select-cau-ap-mod" name="select-cau-ap-mod" class="form-control" required disabled>
-                        <option disabled selected>Seleccione Causa</option>
-                        {% for nonconformity in nonconformities %}
-                        <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="col-md-4 form-report">
-                    <label>Detalle:</label>
-                    <input id="input-det-ap-mod" class="form-control" required readonly="readonly"/>
-                </div>
-
-                <div class="col-md-4 form-report">
-                    <label>Pre Requisito:</label>
-                    <select id="select-pre-ap-mod" name="select-pre-ap-mod" class="form-control">
-                        <option disabled selected>Seleccione Pre Requisito</option>
-                        {% for precondition in preconditions %}
-                        <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-            </section>
-
-
-
-        </div>
-
-        <div class="btn-save">
-            <input id="act-pro-mod" class="btn btn-danger" type="button" value="Modificar" onclick="agregarModificado()"/>
-        </div>
-
-        <div class="btn-save">
-            <input id="act-pro-mod" class="btn btn-danger" type="button" value="Agregar" onclick="agregarHistgoricoProgramado()"/>
-        </div>
-
-        <div class="separator"></div>
-
-        <div class="row">
-            <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES NO PROGRAMADAS </h4>
-            <div class="row">
-                <div class="col-md-6 form-report">
-                    <label>Nombre de Actividad:</label>
-                    <select name="select-act-anp-mod" id="select-act-anp-mod" class="form-control" required>
-                        <option disabled selected>Seleccione Actividad</option>
-                        {% for acts in activities %}
-                        {% if acts.contract_id == id_contract %}
-                        <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
-                        {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="col-md-6 form-report">
-                     <label>Nombre de Sub Actividad:</label>
-                     <input name="input-subact-anp-mod" id="input-subact-anp-mod" class="form-control" />
-                </div>
-
-            </div>
-
-            <section class="row-section">
-                <div class="form-section">
-                    <div class="col-md-2 form-report">
-                        <label>Avance Diario:</label>
-                        <input name="input-cr-anp-mod" id="input-cr-anp-mod" class="form-control" />
-                    </div>
-                    <div class="col-md-2 form-report">
-                        <label>Unidad:</label>
-                        <select name="input-u-anp-mod" id="input-u-anp-mod" class="form-control">
-                            <option disabled selected>Seleccione Medida</option>
-                            {% for measure in measures %}
-                            <option id="{{measure.id}}" class="{{measure.id}}">{{measure.measure_name}}</option>
+                    <div class="field-form">
+                        <label>N° de API:</label>
+                        <select name="api" id="api_antgen_id" class="form-control" disabled required>
+                            <option disabled selected>Seleccione API</option>
+                            {% for api in apis %}
+                                {% for hist in historical %}
+                                    {% if  hist.subactivity.api_id == api.id%}
+                                        <option selected id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
+                                    {% else %}
+                                        <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
+                                    {% endif %}
+                                {% endfor %}
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-2 form-report">
-                        <label>Total Programado:</label>
-                        <input name="input-te-anp-mod" id="input-te-anp-mod" class="form-control" />
+
+                    <div class="field-form">
+                        <label>N° de Contrato:</label>
+                        <select name="contract" class="form-control" id="contr_antgen_id" disabled required>
+                            {% for contract in contracts %}
+                                {% for hist in historical %}
+                                    {% if  hist.subactivity.contract_id == contract.id%}
+                                        <option selected id="{{contract.id}}" value="{{contract.id}}">{{ contract.contract_name }}</option>
+                                    {% else %}
+                                        <option id="{{contract.id}}" value="{{contract.id}}">{{ contract.contract_name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div class="col-md-2 form-report">
-                        <label>Referencia Diaria: </label>
-                        <input name="input-rf-anp-mod" id="input-rf-anp-mod" class="form-control" />
+
+                    <div class="field-form">
+                        <label>Fecha de Inicio:</label>
+                        <label name="start_date">{{contract_report.start_date}}</label>
                     </div>
-                    <div class="col-md-2 form-report">
-                        <label>Avance Real Acumulado:</label>
-                        <input name="input-ta-anp-mod" id="input-ta-anp-mod" class="form-control" />
+
+                    <div class="field-form">
+                        <label>Especialidad:</label>
+                        <select id="especialidad_id" class="form-control" required>
+                            <option disabled selected>Seleccione Especialidad</option>
+                            {% for specialty in specialties %}
+                                {% if specialty_id == specialty.id %}
+                                    <option selected value="{{specialty.id}}" id="{{specialty.id}}">{{ specialty.specialty_name }}</option>
+                                {% else %}
+                                    <option value="{{specialty.id}}" id="{{specialty.id}}">{{ specialty.specialty_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
                     </div>
+
+                    <div class="field-form">
+                        <label>Referencia Utilizada:</label>
+                        <select id="select-ref-mod" name="select-ref-mod" class="form-control" required>
+                            <option disabled selected>Seleccione Referencia</option>
+                            {% for reference in references %}
+                            <option id="{{reference.id}}">{{ reference.reference_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field-form">
+                        <label>Nombre Referencia:</label>
+                        <input id="ref-name" name="input-ref-mod" class="form-control" required>
+                    </div>
+                    <div class="btn-save">
+                        <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Modificar" onclick="agregarReferenciaModificado()"/>
+                    </div>
+                    <div class="btn-save">
+                        <input id="btn-reference-mod" class="btn btn-danger btn-ref" type="button" value="Agregar" onclick="agregarReferencia()"/>
+                    </div>
+            
                 </div>
-            </section>
-
-
-            <section class="section-md-field select-section--activities">
-                <div class="col-md-4 form-report">
-                    <label>Cumplimiento:</label>
-                    <select id="select-cum-anp-mod" class="form-control" required>
-                        <option disabled selected>Si o No</option>
-                        <option>Si</option>
-                        <option>No</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4 form-report">
-                    <label>Causa de NO Cumplimiento:</label>
-                    <select name="select-cau-anp-mod" id="select-cau-anp-mod" class="form-control" disabled>
-                        <option disabled selected>Seleccione Causa</option>
-                        {% for nonconformity in nonconformities %}
-                        <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="col-md-4 form-report">
-                    <label>Detalle:</label>
-                    <input id="input-det-anp-mod" class="form-control" readonly="readonly" />
-                </div>
-
-                <div class="col-md-4 form-report">
-                    <label>Pre Requisito:</label>
-                    <select name="select-pre-anp-mod" id="select-pre-anp" class="form-control">
-                        <option disabled selected>Seleccione Pre Requisito</option>
-                        {% for precondition in preconditions %}
-                        <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-            </section>
-
-
-        </div>
-
-        <div class="btn-save">
-            <input id="act-no-pro-mod" class="btn btn-danger" type="button" value="Modificar" onclick="agregarModificado()" />
-        </div>        
-        <div class="btn-save">
-            <input id="act-no-pro-mod" class="btn btn-danger" type="button" value="Agregar" onclick="agregarHistoricoNoProgramado()" />
-        </div>
-
-        <div class="separator"></div>
-    
-        <section class="table-container--load">
-            <table class="table table-load" id="tablaHistorico">
-                <thead>
-                    <tr>
-                        <th scope="col">Nombre Actividad</th>
-                        <th scope="col">Nombre SubActividad</th>
-                        <th scope="col">Avance Diario</th>
-                        <th scope="col">Unidad</th>
-                        <th scope="col">Total Programado</th>
-                        <th scope="col">Ref.Día</th>
-                        <th scope="col">Cumplimiento</th>
-                        <th scope="col">Avance Real Acumulado</th>
-                        <th scope="col">Tipo Actividad</th>
-                        <th scope="col">Pre Requisito</th>
-                        <th scope="col">¿Modificar?</th>
-                    </tr>
-                </thead>
-                <tbody class="table-actividad" id="table-actividad">
-                    {% for historic in historical %}
-                    {% for histid in id_historic %}
-                    {% if histid.id == historic.id %}
-                    <tr id="{{histid.id_html}}">
-                        <td id="{{historic.activity_id}}" class="actividad">{{historic.activity.activity_name}}</td>
-                        {% if historic.activitytype_id == 1 %}
-                        <td id="{{historic.subactivity_id}}" class="subactividad">{{historic.subactivity.subactivity_name}}</td>
-                        {% else %}
-                        <td id="{{historic.subactivity_id}}" class="subactividad">{{historic.subactivity_no_program}}</td>
-                        {% endif %}
-                        <td class="cantidad">{{historic.real_amount}}</td>
-                        <td id="{{historic.measure_id}}" class="medida">{{historic.measure.measure_name}}</td>
-                        <td id="{{historic.id}}" class="total">{{historic.no_program_total}}</td>
-                        <td class="refday">{{historic.no_program_refday}}</td>
-                        <td id="{{historic.nonconformity_id}}" class="causa-no">{{historic.nonconformity.nonconformity_name}}</td>
-                        <td id="{{historic.id}}" class="total_acumulado">{{historic.no_program_total_acu}}</td>
-                        <td id="{{historic.activitytype_id}}" class="activity_type">{{historic.activitytype.activity_type_name}}</td>
-                        <td id="{{historic.precondition_id}}" class="precondition">{{historic.precondition.precondition_name}}</td>
-                        <td><a class="btn btn-danger " onclick="modificarHistorico('{{histid.id_html}}');">Modificar</a></td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
-        {#Formulario para realizar registro de Recursos y Observaciones (Desviaciones y Plan)#}
-        <h2 class="title-page">{{ title }}</h2>
-        <h3 class="section-title"> RECURSOS EECC EN TERRENO </h3>
-        <div class="row">
-
-            <section class="row">
 
                 <div class="col-md-6 form-report">
-                    <label>Nombre de Actividad:</label>
-                    <select name="select-act-equi-mod" id="select-act-equi-mod" class="form-control" required>
-                        {% for acts in activities %}
+
+                    <div class="field-form">
+                        <label>Nombre del Proyecto:</label>
+                        <label name="project_name">{{contract_report.api.project_name}}</label>
+                    </div>
+
+                    <div class="field-form">
+                        <label>Empresa Contratista:</label>
+                        <label name="enterprise">{{contract_report.enterprise}}</label>
+                    </div>
+
+                    <div class="field-form">
+                        <label>Fecha de Termino:</label>
+                        <label name="finish_date">{{contract_report.finish_date}}</label>
+                    </div>
+
+                    <div class="field-form">
+                        <label>Referencias Registradas:</label>
+                    </div>
+
+                    <section class="table-container--load"> 
+                        <table class="table table-load">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Referencia</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">¿Modificar?</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-referencia" id="table-body">
+                                {% for hist in historical_reference %}
+                                    <tr id="histref-{{hist.id_table}}">
+                                        <td class="referencia" id="{{hist.id_referencia}}">{{hist.nombre_referencia}}</td>
+                                        <td class="descripcion" id="{{hist.id_ref_hist}}">{{hist.descripcion}}</td>
+                                        <td>
+                                            <input class="btn btn-danger" type="button" value="Modificar" onclick="modificarReferencia('histref-{{hist.id_table}}')">
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </section>
+
+                </div>
+            </div>
+            <h2 class="title-page">{{ title }}</h2>
+
+            {#Formulario Control de Avance por Actividad (Programada y No Programada)#}
+            <div class="row">
+
+                <h3 class="section-title"> CONTROL DE AVANCE POR ACTIVIDAD SEGÚN PROGRAMA </h3>
+                <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES PROGRAMADAS </h4>
+                <div class="row">
+                    <div class="col-md-6 form-report">
+                        <label>Nombre de Actividad:</label>
+                        <select name="select-act-ap-mod" id="select-act-ap-mod" class="form-control" required>
+                            <option disabled selected>Seleccione Actividad</option>
+                            {% for acts in activities %}
+                                {% if acts.contract_id == id_contract %}
+                                    <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 form-report">
+                        <label>Nombre de Sub Actividad:</label>
+                        <select name="select-sub-ap-mod" id="select-sub-ap-mod" class="form-control" required>
+                            <option disabled selected>Seleccione Sub Actividad</option>
+                        </select>
+                    </div>
+                </div>
+
+                <section class="row-section">
+                    <div class="form-section">
+                        <div class="col-lg-2 form-report">
+                            <label>Avance Diario:</label>
+                            <input name="input-cr-ap-mod" id="input-cr-ap-mod" class="form-control" required/>
+                        </div>
+                        <div class="col-lg-2 form-report">
+                            <label>Unidad:</label>
+                            <input name="input-u-ap-mod" id="input-u-ap-mod" class="form-control" required readonly="readonly"/>
+                        </div>
+                        <div class="col-lg-2 form-report">
+                            <label>Total Programado:</label>
+                            <input name="input-te-ap-mod" id="input-te-ap-mod" class="form-control" required readonly="readonly"/>
+                        </div>
+                        <div class="col-lg-2 form-report">
+                            <label>Referencia Diaria: </label>
+                            <input name="input-rf-ap-mod" id="input-rd-ap-mod" class="form-control" required readonly="readonly"/>
+                        </div>
+                        <div class="col-lg-2 form-report">
+                            <label>Avance Real Acumulado:</label>
+                            <input name="input-ta-ap-mod" id="input-ta-ap-mod" class="form-control" required readonly="readonly"/>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-md-field select-section--activities">
+                    <div class="col-md-4 form-report">
+                        <label>Cumplimiento:</label>
+                        <select id="select-cum-ap-mod" class="form-control" required>
+                            <option disabled selected>Si o No</option>
+                            <option>Si</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 form-report">
+                        <label>Causa de NO Cumplimiento:</label>
+                        <select id="select-cau-ap-mod" name="select-cau-ap-mod" class="form-control" required disabled>
+                            <option disabled selected>Seleccione Causa</option>
+                            {% for nonconformity in nonconformities %}
+                            <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 form-report">
+                        <label>Detalle:</label>
+                        <input id="input-det-ap-mod" class="form-control" required readonly="readonly"/>
+                    </div>
+
+                    <div class="col-md-4 form-report">
+                        <label>Pre Requisito:</label>
+                        <select id="select-pre-ap-mod" name="select-pre-ap-mod" class="form-control">
+                            <option disabled selected>Seleccione Pre Requisito</option>
+                            {% for precondition in preconditions %}
+                            <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </section>
+
+
+
+            </div>
+
+            <div class="btn-save">
+                <input id="act-pro-mod" class="btn btn-danger" type="button" value="Modificar" onclick="agregarModificado()"/>
+            </div>
+
+            <div class="btn-save">
+                <input id="act-pro-mod" class="btn btn-danger" type="button" value="Agregar" onclick="agregarHistgoricoProgramado()"/>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="row">
+                <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES NO PROGRAMADAS </h4>
+                <div class="row">
+                    <div class="col-md-6 form-report">
+                        <label>Nombre de Actividad:</label>
+                        <select name="select-act-anp-mod" id="select-act-anp-mod" class="form-control" required>
+                            <option disabled selected>Seleccione Actividad</option>
+                            {% for acts in activities %}
                             {% if acts.contract_id == id_contract %}
-                                <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
+                            <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
                             {% endif %}
-                        {% endfor %}
-                    </select>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 form-report">
+                         <label>Nombre de Sub Actividad:</label>
+                         <input name="input-subact-anp-mod" id="input-subact-anp-mod" class="form-control" />
+                    </div>
+
                 </div>
 
-                <div class="col-md-4 form-report">
-                    <label>Nombre <br /> de Equipo:</label>
-                    <select name="id-nombre-equi-mod" id="id-nombre-equi-mod" class="form-control" required>
-                        <option disabled selected>Seleccione Equipo</option>
-                        {% for equipment in equipments %}
-                            <option id="{{equipment.id}}">{{equipment.equipment_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                <section class="row-section">
+                    <div class="form-section">
+                        <div class="col-md-2 form-report">
+                            <label>Avance Diario:</label>
+                            <input name="input-cr-anp-mod" id="input-cr-anp-mod" class="form-control" />
+                        </div>
+                        <div class="col-md-2 form-report">
+                            <label>Unidad:</label>
+                            <select name="input-u-anp-mod" id="input-u-anp-mod" class="form-control">
+                                <option disabled selected>Seleccione Medida</option>
+                                {% for measure in measures %}
+                                <option id="{{measure.id}}" class="{{measure.id}}">{{measure.measure_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 form-report">
+                            <label>Total Programado:</label>
+                            <input name="input-te-anp-mod" id="input-te-anp-mod" class="form-control" />
+                        </div>
+                        <div class="col-md-2 form-report">
+                            <label>Referencia Diaria: </label>
+                            <input name="input-rf-anp-mod" id="input-rf-anp-mod" class="form-control" />
+                        </div>
+                        <div class="col-md-2 form-report">
+                            <label>Avance Real Acumulado:</label>
+                            <input name="input-ta-anp-mod" id="input-ta-anp-mod" class="form-control" />
+                        </div>
+                    </div>
+                </section>
 
-            </section>
 
-            <section class="row">
+                <section class="section-md-field select-section--activities">
+                    <div class="col-md-4 form-report">
+                        <label>Cumplimiento:</label>
+                        <select id="select-cum-anp-mod" class="form-control" required>
+                            <option disabled selected>Si o No</option>
+                            <option>Si</option>
+                            <option>No</option>
+                        </select>
+                    </div>
 
-                <div class="col-md-2 form-report">
-                    <label>Cantidad <br /> de Equipos:</label>
-                    <input type="number" name="id-cantidad-equi-mod" id="id-cantidad-equi-mod" class="form-control" readonly="readonly"/>
-                </div>
+                    <div class="col-md-4 form-report">
+                        <label>Causa de NO Cumplimiento:</label>
+                        <select name="select-cau-anp-mod" id="select-cau-anp-mod" class="form-control" disabled>
+                            <option disabled selected>Seleccione Causa</option>
+                            {% for nonconformity in nonconformities %}
+                            <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-                <div class="col-md-2 form-report">
-                    <label>Dotación <br/> Directa: </label>
-                    <input type="number" name="id-dotdi-equi-mod" id="id-dotdi-equi-mod" class="form-control" readonly="readonly"/>
-                </div>
+                    <div class="col-md-4 form-report">
+                        <label>Detalle:</label>
+                        <input id="input-det-anp-mod" class="form-control" readonly="readonly" />
+                    </div>
 
-                <div class="col-md-2 form-report">
-                    <label>Dotación <br /> Referencial: </label>
-                    <input type="number" name="id-dotref-equi-mod" id="id-dotref-equi-mod" class="form-control" readonly="readonly"/>
-                </div>
+                    <div class="col-md-4 form-report">
+                        <label>Pre Requisito:</label>
+                        <select name="select-pre-anp-mod" id="select-pre-anp" class="form-control">
+                            <option disabled selected>Seleccione Pre Requisito</option>
+                            {% for precondition in preconditions %}
+                            <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-                <div class="col-md-2 form-report">
-                    <label>Dotación <br /> Indirecta: </label>
-                    <input type="number" name="id-dotind-equi-mod" id="id-dotind-equi-mod" class="form-control" readonly="readonly"/>
-                </div>
+                </section>
 
-            </section>
 
-        </div>
+            </div>
 
-        <div class="btn-save">
-            <input id="but-rec-save" class="btn btn-danger" type="button" value="Modificar" onclick="agregarEquipoModificado()" />
-        </div>        
-        <div class="btn-save">
-            <input id="but-rec-save" class="btn btn-danger" type="button" value="Agregar" onclick="agregarEquipo()" />
-        </div>
+            <div class="btn-save">
+                <input id="act-no-pro-mod" class="btn btn-danger" type="button" value="Modificar" onclick="agregarModificado()" />
+            </div>        
+            <div class="btn-save">
+                <input id="act-no-pro-mod" class="btn btn-danger" type="button" value="Agregar" onclick="agregarHistoricoNoProgramado()" />
+            </div>
 
-        <section class="table-container--load">
-            <table class="table table-load">
-                <thead>
-                    <tr>
-                        <th scope="col">N°</th>
-                        <th scope="col">Nombre Equipo</th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">Actividad</th>
-                        <th scope="col">Dotación Directa</th>
-                        <th scope="col">Dotación Referencial</th>
-                        <th scope="col">Dotación Indirecta</th>
-                        <th scope="col">¿Modificar?</th>
-                    </tr>
-                </thead>
-                <tbody class="tabla-equipo" id="tabla-equipo">
-                    {% for equi in equipmentamount %}
-                        <tr id="equi-{{equi.id}}">
-                            <td>N°1</td>
-                            <td class="equipo" id="2">{{equi.equipment.equipment_name}}</td>
-                            <td class="cantidad" id="{{equi.id}}">{{equi.equipment_amount}}</td>
-                            <td class="actividad" id="{{equi.activity_id}}">{{equi.activity.activity_name}}</td>
-                            <td class="dotacion-directa">{{equi.direct_endowment}}</td>
-                            <td class="dotacion-referencial">{{equi.direct_reference}}</td>
-                            <td class="dotacion-indirecta">{{equi.indirect_endowment}}</td>
-                            <td><input class="btn btn-danger" type="button" value="Modificar" onclick="modificarEquipo('equi-{{equi.id}}');"></td>
+            <div class="separator"></div>
+    
+            <section class="table-container--load">
+                <table class="table table-load" id="tablaHistorico">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre Actividad</th>
+                            <th scope="col">Nombre SubActividad</th>
+                            <th scope="col">Avance Diario</th>
+                            <th scope="col">Unidad</th>
+                            <th scope="col">Total Programado</th>
+                            <th scope="col">Ref.Día</th>
+                            <th scope="col">Cumplimiento</th>
+                            <th scope="col">Avance Real Acumulado</th>
+                            <th scope="col">Tipo Actividad</th>
+                            <th scope="col">Pre Requisito</th>
+                            <th scope="col">¿Modificar?</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
-        <div class="separator"></div>
-
-        <div class="row">
-            <div class="col-md-6 form-report">
-                <h4 class="subsection-title"> DESVIACIONES DETECTADAS</h4>
-                <textarea id="desviacion" class="form-control medium-text">
-                    {{report.deviation_detected}}
-                </textarea>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <h4 class="subsection-title"> PLAN DE ACCIÓN</h4>
-                <textarea id="plandeaccion" class="form-control medium-text">
-                    {{report.action_plan}}
-                </textarea>
-            </div>
-        </div>
-
-        {#Formulario de Registro Fotografico#}
-        <h2 class="title-page">{{ title }}</h2>
-        <h3 class="section-title">REGISTRO FOTOGRÁFICO</h3>
-        <div class="row">
-            <div class="col-md-6 form-report">
-                <div class="field-form">
-                    <label>Sub Actividad:</label>
-                    <select name="select-sub-img" id="select-sub-img" class="form-control" required>
-                        {% for subact in subactivities %}
-                        {% if subact.contract_id == id_contract %}
-                        <option id="{{subact.id}}" class="{{subact.id}}">{{subact.subactivity_name}}</option>
+                    </thead>
+                    <tbody class="table-actividad" id="table-actividad">
+                        {% for historic in historical %}
+                        {% for histid in id_historic %}
+                        {% if histid.id == historic.id %}
+                        <tr id="{{histid.id_html}}">
+                            <td id="{{historic.activity_id}}" class="actividad">{{historic.activity.activity_name}}</td>
+                            {% if historic.activitytype_id == 1 %}
+                            <td id="{{historic.subactivity_id}}" class="subactividad">{{historic.subactivity.subactivity_name}}</td>
+                            {% else %}
+                            <td id="{{historic.subactivity_id}}" class="subactividad">{{historic.subactivity_no_program}}</td>
+                            {% endif %}
+                            <td class="cantidad">{{historic.real_amount}}</td>
+                            <td id="{{historic.measure_id}}" class="medida">{{historic.measure.measure_name}}</td>
+                            <td id="{{historic.id}}" class="total">{{historic.no_program_total}}</td>
+                            <td class="refday">{{historic.no_program_refday}}</td>
+                            <td id="{{historic.nonconformity_id}}" class="causa-no">{{historic.nonconformity.nonconformity_name}}</td>
+                            <td id="{{historic.id}}" class="total_acumulado">{{historic.no_program_total_acu}}</td>
+                            <td id="{{historic.activitytype_id}}" class="activity_type">{{historic.activitytype.activity_type_name}}</td>
+                            <td id="{{historic.precondition_id}}" class="precondition">{{historic.precondition.precondition_name}}</td>
+                            <td><a class="btn btn-danger " onclick="modificarHistorico('{{histid.id_html}}');">Modificar</a></td>
+                        </tr>
                         {% endif %}
                         {% endfor %}
-                    </select>
-                </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
 
-                <div class="field-form">
-                    <label>Detalle de Imagen:</label>
-                    <textarea name="det-img" id="det-img" class="form-control medium-text">
+            {#Formulario para realizar registro de Recursos y Observaciones (Desviaciones y Plan)#}
+            <h2 class="title-page">{{ title }}</h2>
+            <h3 class="section-title"> RECURSOS EECC EN TERRENO </h3>
+            <div class="row">
+
+                <section class="row">
+
+                    <div class="col-md-6 form-report">
+                        <label>Nombre de Actividad:</label>
+                        <select name="select-act-equi-mod" id="select-act-equi-mod" class="form-control" required>
+                            {% for acts in activities %}
+                                {% if acts.contract_id == id_contract %}
+                                    <option id="{{acts.id}}" class="{{acts.id}}">{{acts.activity_name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 form-report">
+                        <label>Nombre <br /> de Equipo:</label>
+                        <select name="id-nombre-equi-mod" id="id-nombre-equi-mod" class="form-control" required>
+                            <option disabled selected>Seleccione Equipo</option>
+                            {% for equipment in equipments %}
+                                <option id="{{equipment.id}}">{{equipment.equipment_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </section>
+
+                <section class="row">
+
+                    <div class="col-md-2 form-report">
+                        <label>Cantidad <br /> de Equipos:</label>
+                        <input type="number" name="id-cantidad-equi-mod" id="id-cantidad-equi-mod" class="form-control" readonly="readonly"/>
+                    </div>
+
+                    <div class="col-md-2 form-report">
+                        <label>Dotación <br/> Directa: </label>
+                        <input type="number" name="id-dotdi-equi-mod" id="id-dotdi-equi-mod" class="form-control" readonly="readonly"/>
+                    </div>
+
+                    <div class="col-md-2 form-report">
+                        <label>Dotación <br /> Referencial: </label>
+                        <input type="number" name="id-dotref-equi-mod" id="id-dotref-equi-mod" class="form-control" readonly="readonly"/>
+                    </div>
+
+                    <div class="col-md-2 form-report">
+                        <label>Dotación <br /> Indirecta: </label>
+                        <input type="number" name="id-dotind-equi-mod" id="id-dotind-equi-mod" class="form-control" readonly="readonly"/>
+                    </div>
+
+                </section>
+
+            </div>
+
+            <div class="btn-save">
+                <input id="but-rec-save" class="btn btn-danger" type="button" value="Modificar" onclick="agregarEquipoModificado()" />
+            </div>        
+            <div class="btn-save">
+                <input id="but-rec-save" class="btn btn-danger" type="button" value="Agregar" onclick="agregarEquipo()" />
+            </div>
+
+            <section class="table-container--load">
+                <table class="table table-load">
+                    <thead>
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">Nombre Equipo</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Actividad</th>
+                            <th scope="col">Dotación Directa</th>
+                            <th scope="col">Dotación Referencial</th>
+                            <th scope="col">Dotación Indirecta</th>
+                            <th scope="col">¿Modificar?</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tabla-equipo" id="tabla-equipo">
+                        {% for equi in equipmentamount %}
+                            <tr id="equi-{{equi.id}}">
+                                <td>N°1</td>
+                                <td class="equipo" id="2">{{equi.equipment.equipment_name}}</td>
+                                <td class="cantidad" id="{{equi.id}}">{{equi.equipment_amount}}</td>
+                                <td class="actividad" id="{{equi.activity_id}}">{{equi.activity.activity_name}}</td>
+                                <td class="dotacion-directa">{{equi.direct_endowment}}</td>
+                                <td class="dotacion-referencial">{{equi.direct_reference}}</td>
+                                <td class="dotacion-indirecta">{{equi.indirect_endowment}}</td>
+                                <td><input class="btn btn-danger" type="button" value="Modificar" onclick="modificarEquipo('equi-{{equi.id}}');"></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <div class="separator"></div>
+
+            <div class="row">
+                <div class="col-md-6 form-report">
+                    <h4 class="subsection-title"> DESVIACIONES DETECTADAS</h4>
+                    <textarea id="desviacion" class="form-control medium-text">
+                        {{report.deviation_detected}}
                     </textarea>
                 </div>
 
-                <div class="field-form">
-                    <input class="submit-img" id="file-new" type="file" value="Subir Imagen" multiple />
-                </div>
-
-                <div class="field-form" id="div-mod-container">
-
-                </div>
-            </div>
-
-            <div class="col-md-6 form-report">
-                <div class="preview" id="preview">
-                    {% for img in reportimage %}
-                    <div id="div_mod_{{img.id}}" class="image-section--containar">
-                        <div class="div-buttons--container">
-                            <input name="file-mod" onchange="obtenerNuevaImagen(this)" class="img-sub-{{img.id}}" id="file-mod" type="file" value="Cambiar Imagen" multiple />
-                            <input class="btn btn-danger" onclick="eliminarImg('div_mod_{{img.id}}');" value="Borrar" type="button">
-                            <input class="btn btn-danger" value="Modificar" onclick="modificarImagen('div_mod_{{img.id}}')" type="button">
-                        </div>                      
-                        <img id="img_{{img.id}}" class="img-submit" src="{{img.image.image.url}}">
-                        <div class="title-image--container">
-                            <label class="subactividad" id="{{img.subactivity_id}}">{{img.subactivity.subactivity_name}}</label>
-                            <p class="lab-img-sub">{{img.image.description}}</p>
-                        </div>
-                    </div>
-                    {% endfor %}
+                <div class="col-md-6 form-report">
+                    <h4 class="subsection-title"> PLAN DE ACCIÓN</h4>
+                    <textarea id="plandeaccion" class="form-control medium-text">
+                        {{report.action_plan}}
+                    </textarea>
                 </div>
             </div>
-        </div>
 
-        <div class="separator"></div>
-        <h4 class="subsection-title">OBSERVACIÓN</h4>
-        <textarea id="evidencia" class="form-control large-text">{{report.evidence_obs}}</textarea>
-
-        {#Formulario Final, Vista Previa de la Inspección Diaria#} 
-        <h2 class="title-page">{{ title }}</h2>
-        <h3 class="section-title">GUARDAR INFORME</h3>
-
-        <div class="row">
-            <div class="col-md-6">
-                <h4 class="subsection-title">INSPECTOR EMISOR DEL INFORME</h4>
-                <div class="form-report">
-                    <label>Empresa: </label> <br />
-                    <label>Nombre: </label> <br />
-                    <label>Correo: </label> <br />
-                </div>
-
-            </div>
-
-            <div class="col-md-6">
-                <h4 class="subsection-title">JEFE DE PROYECTO</h4>
-                <div class="form-report">
-                    <label>Empresa: </label> <br />
-                    <label>Nombre: </label> <br />
-                    <label>Correo: </label> <br />
-                </div>
-
-            </div>
-
-            <div class="col-md-6">
-                <h4 class="subsection-title">JEFE DE TERRENO</h4>
-                <div class="form-report">
-                    <label>Empresa: </label> <br />
-                    <label>Nombre: </label> <br />
-                    <label>Correo: </label> <br />
-                </div>
-            </div>
-        </div>
-
-        <section class="bar-results">
-
-            <div class="bar-enterprise">
-                <div class="radio-box">
-                    <h4 class="subsection-title"> RESULTADOS </h4>
-                    <ul class="radio-buttons-group">
-                        {% for following in followings %}
-                        <li>
-                            {% if report.following_id == following.id %}
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="{{following.id}}" value="{{following.id}}" checked>
-                            {% else %}
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="{{following.id}}" value="{{following.id}}">
+            {#Formulario de Registro Fotografico#}
+            <h2 class="title-page">{{ title }}</h2>
+            <h3 class="section-title">REGISTRO FOTOGRÁFICO</h3>
+            <div class="row">
+                <div class="col-md-6 form-report">
+                    <div class="field-form">
+                        <label>Sub Actividad:</label>
+                        <select name="select-sub-img" id="select-sub-img" class="form-control" required>
+                            {% for subact in subactivities %}
+                            {% if subact.contract_id == id_contract %}
+                            <option id="{{subact.id}}" class="{{subact.id}}">{{subact.subactivity_name}}</option>
                             {% endif %}
-                            <label class="form-check-label" for="{{following.id}}">
-                                {{following.following_name}}
-                            </label>
-                        </li>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field-form">
+                        <label>Detalle de Imagen:</label>
+                        <textarea name="det-img" id="det-img" class="form-control medium-text">
+                        </textarea>
+                    </div>
+
+                    <div class="field-form">
+                        <input class="submit-img" id="file-new" type="file" value="Subir Imagen" multiple />
+                    </div>
+
+                    <div class="field-form" id="div-mod-container">
+
+                    </div>
+                </div>
+
+                <div class="col-md-6 form-report">
+                    <div class="preview" id="preview">
+                        {% for img in reportimage %}
+                        <div id="div_mod_{{img.id}}" class="image-section--containar">
+                            <div class="div-buttons--container">
+                                <input name="file-mod" onchange="obtenerNuevaImagen(this)" class="img-sub-{{img.id}}" id="file-mod" type="file" value="Cambiar Imagen" multiple />
+                                <input class="btn btn-danger" onclick="eliminarImg('div_mod_{{img.id}}');" value="Borrar" type="button">
+                                <input class="btn btn-danger" value="Modificar" onclick="modificarImagen('div_mod_{{img.id}}')" type="button">
+                            </div>                      
+                            <img id="img_{{img.id}}" class="img-submit" src="{{img.image.image.url}}">
+                            <div class="title-image--container">
+                                <label class="subactividad" id="{{img.subactivity_id}}">{{img.subactivity.subactivity_name}}</label>
+                                <p class="lab-img-sub">{{img.image.description}}</p>
+                            </div>
+                        </div>
                         {% endfor %}
-                    </ul>
+                    </div>
                 </div>
             </div>
 
-        </section>
+            <div class="separator"></div>
+            <h4 class="subsection-title">OBSERVACIÓN</h4>
+            <textarea id="evidencia" class="form-control large-text">{{report.evidence_obs}}</textarea>
 
-        <div class="btn-save">
-            <input id="btn-save-mod" class="btn btn-danger" type="button" value="Guardar y Descargar" onclick="modificarReporte('{{report.id}}')"/>
+            {#Formulario Final, Vista Previa de la Inspección Diaria#} 
+            <h2 class="title-page">{{ title }}</h2>
+            <h3 class="section-title">GUARDAR INFORME</h3>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="subsection-title">INSPECTOR EMISOR DEL INFORME</h4>
+                    <div class="form-report">
+                        <label>Empresa: </label> <br />
+                        <label>Nombre: </label> <br />
+                        <label>Correo: </label> <br />
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <h4 class="subsection-title">JEFE DE PROYECTO</h4>
+                    <div class="form-report">
+                        <label>Empresa: </label> <br />
+                        <label>Nombre: </label> <br />
+                        <label>Correo: </label> <br />
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <h4 class="subsection-title">JEFE DE TERRENO</h4>
+                    <div class="form-report">
+                        <label>Empresa: </label> <br />
+                        <label>Nombre: </label> <br />
+                        <label>Correo: </label> <br />
+                    </div>
+                </div>
+            </div>
+
+            <section class="bar-results">
+
+                <div class="bar-enterprise">
+                    <div class="radio-box">
+                        <h4 class="subsection-title"> RESULTADOS </h4>
+                        <ul class="radio-buttons-group">
+                            {% for following in followings %}
+                            <li>
+                                {% if report.following_id == following.id %}
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="{{following.id}}" value="{{following.id}}" checked>
+                                {% else %}
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="{{following.id}}" value="{{following.id}}">
+                                {% endif %}
+                                <label class="form-check-label" for="{{following.id}}">
+                                    {{following.following_name}}
+                                </label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+
+            <div class="btn-save">
+                <input id="btn-save-mod" class="btn btn-danger" type="button" value="Guardar y Descargar" onclick="modificarReporte('{{report.id}}')"/>
+            </div>
+
+        </form>
+            <div class="separator"></div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+                <button onclick="modificarNoConformidad('{{report.id}}');" class="btn btn-danger" type="button">Guardar</button>
+            </div>
         </div>
-
-        <script src="{% static 'app/scripts/itoreport-scripts/modifiedreport.js' %}"></script>
-    </form>
+    </div>
 </div>
 
-{% endblock %}
+<script src="{% static 'app/scripts/itoreport-scripts/modifiedreport.js' %}"></script>

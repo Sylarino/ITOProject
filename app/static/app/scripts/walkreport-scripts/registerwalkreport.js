@@ -263,7 +263,7 @@ function agregarUsuario() {
 
     }).done(function (data) {
 
-        messageSuccessPDF(data);
+        messageSuccessUser(data);
 
     }).fail(function (data) {
         Swal.fire("Usuario No Agregado", "Verifique los datos a ingresar", "warning");
@@ -272,7 +272,7 @@ function agregarUsuario() {
 
 }
 
-function messageSuccessPDF(data) {
+function messageSuccessUser(data) {
 
     if (data.submitted == 1) {
         Swal.fire("Usuario Agregado", "Se ha agregado un usuario satisfactoriamente", "success");

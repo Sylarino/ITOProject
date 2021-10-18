@@ -18,7 +18,7 @@ urlpatterns = [
     path('loadfiles/submitdata/', views.submitdata, name='submitdata'),
     path('downloadstructure/<str:id>', views.downloadstructure, name='downloadstructure'),
     path('generatereport/downloadpdf/', views.downloadpdf, name='downloadpdf'),
-    path('modifiedreport/<str:id>', views.modifiedreport, name='modifiedreport'),
+    path('searchactivities/modifiedreport/<str:id>', views.modifiedreport, name='modifiedreport'),
     path('modifiedreport/modifiedactualreport/', views.modifiedactualreport, name='modifiedactualreport'),
     path('modifiedreport/savemodifiedimage/', views.modifiedactualreport, name='savemodifiedimage'),
     ]

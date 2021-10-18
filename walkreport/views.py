@@ -27,7 +27,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 import os
 from django.contrib.auth.models import User, Group
 
-# Create your views here.
+# VISTA PARA IR A MODIFICAR REPORTE DE CAMINATAS
 def modifiedwalkreport(request, id):
 
     wo = WalkObservation.objects.get(pk=int(id))

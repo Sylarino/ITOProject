@@ -1812,7 +1812,6 @@ def modifiedreport(request, id):
     equipmentamount = EquipmentAmount.objects.filter(report=id)
     reportimage = ReportImage.objects.filter(report=id)
     historical_reference = HistoricalReference.objects.filter(report=id)
-
     id_contract = historic[0].activity.contract_id
     contract_report = Contract.objects.filter(id=id_contract)[0]
     
@@ -1865,7 +1864,7 @@ def modifiedreport(request, id):
             'id_historic': id_hists,
             'contract_report': contract_report,
             'specialty_id': specialty_id
-    })
+        })
     
 @csrf_exempt
 @login_required(login_url="login")

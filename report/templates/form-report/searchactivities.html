@@ -6,128 +6,117 @@
 
     <h2 class="title-page">{{ title }}</h2>
 
-    <div class="row form-search-act">
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Proyecto:</label>
-                <select name="api" id="api_antgen_id" class="form-control form-search-control" required>
-                    <option id="0" disabled selected>Seleccione API</option>
-                    {% for api in apis %}
-                    <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
-                    {% endfor %}
-                </select>
+        <div class="row form-search-act">
+            <div class="col-md-3 form-report">
+                <div class="field-form">
+                    <label class="form-search-label">Proyecto:</label>
+                    <select name="api" id="api_antgen_id" class="form-control form-search-control" required>
+                        <option id="0" disabled selected>Seleccione API</option>
+                        {% for api in apis %}
+                        <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Contrato:</label>
-                <select name="contract" class="form-control form-search-control" id="contr_antgen_id" required>
-                    <option id="0" disabled selected>Seleccione Contrato</option>
+            <div class="col-md-3 form-report">
+                <div class="field-form">
+                    <label class="form-search-label">Contrato:</label>
+                    <select name="contract" class="form-control form-search-control" id="contr_antgen_id" required>
+                        <option id="0" disabled selected>Seleccione Contrato</option>
 
-                </select>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Actividad:</label>
-                <select name="select-act-ap" id="select-act-ap" class="form-control form-search-control" required>
-                    <option id="0" disabled selected>Seleccione Actividad</option>
+            <div class="col-md-3 form-report">
+                <div class="field-form">
+                    <label class="form-search-label">Actividad:</label>
+                    <select name="select-act-ap" id="select-act-ap" class="form-control form-search-control" required>
+                        <option id="0" disabled selected>Seleccione Actividad</option>
                     
-                </select>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Sub Actividad:</label>
-                <select name="select-sub-ap" id="select-sub-ap" class="form-control form-search-control">
-                    <option id="0" disabled selected>Seleccione SubActividad</option>
+            <div class="col-md-3 form-report">
+                <div class="field-form">
+                    <label class="form-search-label">Sub Actividad:</label>
+                    <select name="select-sub-ap" id="select-sub-ap" class="form-control form-search-control">
+                        <option id="0" disabled selected>Seleccione SubActividad</option>
                     
-                </select>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3 form-report">
+                <div class="field-form">
+                    <label class="form-search-label">Conformidad:</label>
+                    <select id="select-confor" class="form-control form-search-control">
+                        <option id="0" disabled selected>Seleccione Conformidad</option>
+                        {% for nonconformity in nonconformities %}
+                        <option id="{{nonconformity.id}}" value="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3 form-report">
+                <div class="field-form">
+                    <label class="form-search-label">Tipo de SubActividad:</label>
+                    <select id="select-tip-act" class="form-control form-search-control">
+                        <option id="0" disabled selected>Seleccione Tipo</option>
+                        {% for activitytype in activitytypes %}
+                        <option id="{{activitytype.id}}" value="{{activitytype.id}}">{{activitytype.activity_type_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3 form-report">
+                <div class="field-form">
+                    <label class="form-search-label">Seguimiento:</label>
+                    <select id="select-seguimiento" class="form-control form-search-control">
+                        <option id="0" disabled selected>Seleccione Proyecto</option>
+                        {% for follow in followings %}
+                        <option id="{{follow.id}}">{{follow.following_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3 form-report">
+                <div class="field-form">
+                    <label class="form-search-label">Rango de Fechas de Reporte:</label>
+                    <input class="form-control form-search-control" type="text" id="daterange" name="daterange"/>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Conformidad:</label>
-                <select id="select-confor" class="form-control form-search-control">
-                    <option id="0" disabled selected>Seleccione Conformidad</option>
-                    {% for nonconformity in nonconformities %}
-                    <option id="{{nonconformity.id}}" value="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
-                    {% endfor %}
-                </select>
+        <div class="btn-section-container">
+            <div class="btn-save">
+                <input id="btn-buscar" class="btn btn-danger" type="button" value="Buscar"/>
+            </div>
+
+            <div class="btn-save">
+                <input id="btn-recargar" class="btn btn-danger" type="button" value="Limpiar"/>
+            </div>
+
+            <div id="export" class="btn-save">
+
             </div>
         </div>
 
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Tipo de SubActividad:</label>
-                <select id="select-tip-act" class="form-control form-search-control">
-                    <option id="0" disabled selected>Seleccione Tipo</option>
-                    {% for activitytype in activitytypes %}
-                    <option id="{{activitytype.id}}" value="{{activitytype.id}}">{{activitytype.activity_type_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div class="col-md-12 hidden" id="divTabla">
+            {% include 'form-report/pagination.html' %}
         </div>
-
-        <!--
-         <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Historico:</label>
-                <select class="form-control form-search-control">
-                    <option id="0">Seleccione Proyecto</option>
-                </select>
-            </div>
-        </div>
-        -->
-
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Seguimiento:</label>
-                <select id="select-seguimiento" class="form-control form-search-control">
-                    <option id="0" disabled selected>Seleccione Proyecto</option>
-                    {% for follow in followings %}
-                    <option id="{{follow.id}}">{{follow.following_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-
-        <div class="col-md-3 form-report">
-            <div class="field-form">
-                <label class="form-search-label">Rango de Fechas de Reporte:</label>
-                <input class="form-control form-search-control" type="text" id="daterange" name="daterange"/>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="btn-section-container">
-        <div class="btn-save">
-            <input id="btn-buscar" class="btn btn-danger" type="button" value="Buscar"/>
-        </div>
-
-        <div class="btn-save">
-            <input id="btn-recargar" class="btn btn-danger" type="button" value="Limpiar"/>
-        </div>
-
-        <div id="export" class="btn-save">
-
-        </div>
-    </div>
     </div>
     
-
-    <div class="col-md-12 hidden" id="divTabla">
-        {% include 'form-report/pagination.html' %}
-    </div>
-
 </form>
 
+<div class="modal fade" id="edicion" role="dialog">
+
+</div>
 
 <script src="{% static 'app/scripts/itoreport-scripts/searchactivities.js' %}"></script>
 <script src="{% static 'app/scripts/common-scripts/selectprojectapi.js' %}"></script>

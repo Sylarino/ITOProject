@@ -133,29 +133,21 @@ footer p {
 }*/
 
 .section-home_img {
-    padding: 5rem;
-    margin: 5rem;
-    background-color: #DECFCF;
-    border: 2px solid #AB9A9A;
-    border-radius: 10px;
-    max-width: 700px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 .home-img {
-    border: 2px solid #E35A2A;
-    border-radius: 10px;
-    width: 70%;
     display: flex;
-    margin: 0 auto;
-    margin-top: 10%;
-    margin-bottom: 10%;
+    justify-content: space-around;
 }
 
 .col-md-6 .text-description {
-    padding-left: 10rem;
-    padding-right: 10rem;
+    padding-left: 20px;
+    padding-right: 20px;
     text-align: justify;
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-family: 'Raleway', sans-serif;
 }
 
@@ -242,7 +234,7 @@ footer p {
 
 .section-title {
     text-align: center;
-    margin-bottom: 5rem;
+    margin-bottom: 40px;
     font-family: Montserrat, Helvetica, sans-serif;
     font-weight: bold;
     color: #491818;
@@ -346,7 +338,6 @@ input {
 
 .subsection-title {
     text-align: center;
-    margin-bottom: 5rem;
     font-family: Montserrat, Helvetica, sans-serif;
     font-weight: bold;
     color: #974040;
