@@ -1,11 +1,119 @@
-<!DOCTYPE html>
+{% extends "app/layout.html" %}
+{% load staticfiles %}
+{% block content %}
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+<form action="">
+    <div class="container">
 
-</body>
-</html>
+        <h2 class="title-page">{{ title }}</h2>
+
+        <div class="row form-search-act">
+
+            <div class="col-md-4 form-report">
+                <div class="field-form">
+                    <label class="form-label">Proyecto:</label>
+                    <select name="api" id="api_det_select" class="form-control" required>
+                        <option id="0" disabled selected>Seleccione API</option>
+                        {% for api in apis %}
+                        <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4 form-report">
+                <div class="field-form">
+                    <label class="form-label">Contrato:</label>
+                    <select name="contract" class="form-control" id="con_det_select" required>
+                        <option id="0" disabled selected>Seleccione Contrato</option>
+                    
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4 form-report">
+                <div class="field-form">
+                    <label class="form-label">N de Caminata</label>
+                    <select name="" class="form-control" id="cam_det_select" required>
+                        <option id="0" disabled selected>Seleccione numero de caminata</option>
+                        <option>Caminata 1</option>
+                        <option>Caminata 2</option>
+                        <option>Caminata 3</option>
+                        <option>Caminata 4</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4 form-report">
+                <div class="field-form">
+                    <label class="form-label">Sistema</label>
+                    <select name="sistem" class="form-control" id="sis_det_select" required>
+                        <option id="0" disabled selected>Seleccione Sistema</option>
+                        {% for sis in sistem%}
+                        <option id="{{sis.id}}" value="{{sis.id}}">{{ sis.sistem_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+                
+            <div class="col-md-4 form-report">
+                <div class="field-form">
+                    <label class="form-label">Empresa Contratista</label>
+                    <select name="enterprise" class="form-control" id="ent_det_select" required>
+                        <option id="0" disabled selected>Seleccione empresa</option>
+                        {% for enter in enterprise %}
+                        <option id="{{enter.id}}" value="{{enter.id}}">{{ enter.enterprise_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-section-container">
+            <div class="btn-save">
+                <button id="btn-buscar-detalle" class="btn btn-danger" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    Buscar
+                </button>
+            </div>
+
+            <div class="btn-save">
+                <button id="" class="btn btn-danger" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>
+                    Limpiar
+                </button>
+            </div>
+
+        </div>
+
+        <div class="col-md-12 d-none d-flex justify-content-center" id="divTabla">
+            <table class="display table table-hover table-responsive" width="100%" id="tableActivities">
+                <thead class="thead-dark">
+                    <tr class="table-dark">
+                        <th>Reporte</th>
+                        <th>N Caminata</th>
+                        <th>Disciplina</th>
+                        <th>Descripcion</th>
+                        <th>Prioridad</th>
+                        <th>Fecha Compromiso de Cierre</th>
+                        <th>Fecha Compromiso de Cierre real</th>
+                        <th>Estado</th>
+                        <th>Dias de atraso</th>
+                        <th>Ver</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+</form>
+
+<script src="{% static 'app/scripts/common-scripts/selectprojectapi.js' %}"></script>
+<script src="{% static 'app/scripts/detailstermination-scripts/searchdetailstermination.js' %}"></script>
+
+{% endblock %}

@@ -25,7 +25,6 @@ $(function () {
                 $('label[name="project_name"]').text(data[0].project_name);
                 return false;
             }
-            message_error(data.error);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert(textStatus + ': ' + errorThrown);
         }).always(function (data) {

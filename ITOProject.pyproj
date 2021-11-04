@@ -224,7 +224,6 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
-    <Content Include="terminationdetailsreport\templates\terminationdetailsreport\registerterminationdetail.html" />
     <Content Include="terminationdetailsreport\templates\terminationdetailsreport\searchterminationdetail.html" />
     <Content Include="terminationdetailsreport\templates\terminationdetailsreport\terminationdetail.html" />
     <Content Include="walkreport\templates\walkreport\observation.html" />

@@ -32,29 +32,31 @@ from nonconformityreport.views import compareData, setParagraph, separator, prin
 
 # Create your views here.
 
-#Vista para ir a la ventana de registro de reporte de terminación de detalles
-def registerterminationdetail(request):
-    
+def searchterminationdetails(request):
+
     apis = API.objects.all()
-    contracts = Contract.objects.all()
     disciplines = Discipline.objects.all()
     wbs = WBS.objects.all()
     priorities = Priority.objects.all()
     users = User.objects.all()
-    extern_users = User.objects.filter(groups__name='Externo')
+    enterprise = Enterprise.objects.all()
+    sistem = Sistem.objects.all()
+    subsistem = Subsistem.objects.all()
 
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'terminationdetailsreport/registerterminationdetail.html',
+        'terminationdetailsreport/searchterminationdetail.html',
         {
-            'title':'Registro de Terminacion de Detalles',
+            'title':'Reporte de Detalles de Terminacion',
             'year': datetime.now().year,
             'apis': apis,
-            'contracts': contracts,
             'disciplines': disciplines,
             'wbs': wbs,
             'priorities': priorities,
             'users': users,
-            'extern_users': extern_users
+            'enterprise': enterprise,
+            'sistem': sistem,
+            'subsistem': subsistem
         })
+

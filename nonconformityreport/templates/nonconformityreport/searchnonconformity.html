@@ -10,8 +10,8 @@
         <div class="row form-search-act">
             <div class="col-md-3 form-report">
                 <div class="field-form">
-                    <label class="form-search-label">Proyecto:</label>
-                    <select name="api" id="api_noncon_select" class="form-control form-search-control" required>
+                    <label class="form-label">Proyecto:</label>
+                    <select name="api" id="api_noncon_select" class="form-control" required>
                         <option id="0" disabled selected>Seleccione API</option>
                         {% for api in apis %}
                         <option id="{{api.id}}" value="{{api.id}}">{{ api.project_name }}</option>
@@ -22,8 +22,8 @@
 
             <div class="col-md-3 form-report">
                 <div class="field-form">
-                    <label class="form-search-label">Contrato:</label>
-                    <select name="contract" class="form-control form-search-control" id="con_noncon_select" required>
+                    <label class="form-label">Contrato:</label>
+                    <select name="contract" class="form-control" id="con_noncon_select" required>
                         <option id="0" disabled selected>Seleccione Contrato</option>
                     
                     </select>
@@ -32,8 +32,8 @@
 
             <div class="col-md-3 form-report">
                 <div class="field-form">
-                    <label class="form-search-label">Area:</label>
-                    <select name="area" class="form-control form-search-control" id="area_noncon_select" required>
+                    <label class="form-label">Area:</label>
+                    <select name="area" class="form-control" id="area_noncon_select" required>
                         <option id="0" disabled selected>Seleccione Area</option>
                         {% for wb in wbs %}
                         <option id="{{wb.id}}" value="{{wb.id}}">{{ wb.wbs_name }}</option>
@@ -44,8 +44,8 @@
 
             <div class="col-md-3 form-report">
                 <div class="field-form">
-                    <label class="form-search-label">Disciplina:</label>
-                    <select name="discipline" class="form-control form-search-control" id="disi_noncon_select" required>
+                    <label class="form-label">Disciplina:</label>
+                    <select name="discipline" class="form-control" id="disi_noncon_select" required>
                         <option id="0" disabled selected>Seleccione Disciplina</option>
                         {% for discipline in disciplines %}
                         <option id="{{discipline.id}}" value="{{discipline.id}}">{{ discipline.discipline_name }}</option>
@@ -56,8 +56,8 @@
 
             <div class="col-md-3 form-report">
                 <div class="field-form">
-                    <label class="form-search-label">Autor:</label>
-                    <select name="autor" class="form-control form-search-control" id="autor_noncon_select" required>
+                    <label class="form-label">Autor:</label>
+                    <select name="autor" class="form-control" id="autor_noncon_select" required>
                         <option id="0" disabled selected>Seleccione Autor</option>
                         {% for user in users %}
                         <option id="{{user.id}}" value="{{user.id}}">{{ user.first_name }}</option>
@@ -68,8 +68,8 @@
 
             <div class="col-md-3 form-report">
                 <div class="field-form">
-                    <label class="form-search-label">Rango de Fechas de Cierre:</label>
-                    <input class="form-control form-search-control" type="text" id="daterange" name="daterange"/>
+                    <label class="form-label">Rango de Fechas de Cierre:</label>
+                    <input class="form-control" type="text" id="daterange" name="daterange"/>
                 </div>
             </div>
 

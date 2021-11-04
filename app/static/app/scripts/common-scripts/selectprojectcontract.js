@@ -31,7 +31,6 @@ $(function () {
 
                 return false;
             }
-            message_error(data.error);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert(textStatus + ': ' + errorThrown);
         }).always(function (data) {

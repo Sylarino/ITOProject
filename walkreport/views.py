@@ -26,6 +26,7 @@ from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER
 from reportlab.pdfbase.pdfmetrics import stringWidth
 import os
 from django.contrib.auth.models import User, Group
+from nonconformityreport.views import compareData
 
 # VISTA PARA IR A MODIFICAR REPORTE DE CAMINATAS
 def modifiedwalkreport(request, id):
@@ -196,6 +197,7 @@ def registerwalkreport(request):
     priorities = Priority.objects.all()
     users = User.objects.all()
     extern_users = User.objects.filter(groups__name='Externo')
+    sistem = Sistem.objects.all()
 
 
 
@@ -212,7 +214,8 @@ def registerwalkreport(request):
             'wbs': wbs,
             'priorities': priorities,
             'users': users,
-            'extern_users': extern_users
+            'extern_users': extern_users,
+            'sistem': sistem
         })
 
 #Vista para ir a la ventana de consulta de reporte de caminata
@@ -321,7 +324,7 @@ def savewalkreport(request,*args, **kwargs):
                     )
 
                 observacion.save()
-
+            
 
             if id_rep_walk > 0:
                     
@@ -550,9 +553,7 @@ def createwalkpdf(id_report):
         )
 
     pdfrelation.save()
-
-search = []
-
+    
 #Vista para buscar los datos requeridos en la consulta de caminatas
 @csrf_exempt
 @login_required(login_url="login")
@@ -561,13 +562,15 @@ def searchwalks(request):
     try:
 
         if request.method == 'GET':
+                
+            search = []
 
             search.clear()
 
             listar = request.GET.getlist('listar[]')
             busqueda = json.loads(listar[0])
 
-            walk_rep = WalkReport.objects.filter(api_id=int(busqueda[0]['id_api']))
+            walk_rep = WalkReport.objects.filter(api_id=int(busqueda['id_api']))
 
             for report in walk_rep:
 
@@ -575,16 +578,18 @@ def searchwalks(request):
 
                 for obs in observaciones:
 
+                    #if(obs.real_close_date == )
                     search.append({
                         'id_reporte': report.id,
                         'id_observacion': obs.id,
                         'top':report.top,
-                        'sistema': report.sistem,
-                        'subsistema': report.subsistem,
+                        'sistema': report.sistem.sistem_name,
+                        'subsistema': report.subsistem.subsistem_name,
                         'caminata': report.walk_number,
                         'area': report.wbs.wbs_name,
                         'contrato_id': report.contract_id,
                         'api_id': report.api_id,
+                        'empresa': report.contract.enterprise.enterprise_name,
                         'ubicacion': obs.ubication,
                         'plano': obs.plane_number,
                         'equipo': obs.equipment_code,
@@ -604,35 +609,10 @@ def searchwalks(request):
                         'prioridad_id': obs.priority_id,
                         })
 
-            if int(busqueda[0]['id_contrato']) != 0:
-                        
-                large = len(search)  
-                inc = 0
-                while inc < large:
-                
-                    if (search[inc]['contrato_id'] != int(busqueda[0]['id_contrato'])):
-
-                        search.pop(inc)
-
-                        inc = inc
-                        large -= 1
-                    else:
-                        inc += 1
-
-            if int(busqueda[0]['id_autor']) != 0:
-                        
-                large = len(search)  
-                inc = 0
-                while inc < large:
-                
-                    if (search[inc]['originador_id'] != int(busqueda[0]['id_autor'])):
-
-                        search.pop(inc)
-
-                        inc = inc
-                        large -= 1
-                    else:
-                        inc += 1     
+            search = compareData('api_id', 'id_api', search, busqueda)
+            search = compareData('contrato_id', 'id_contrato', search, busqueda)
+            search = compareData('originador_id', 'id_autor', search, busqueda)
+            search = compareData('disciplina_id', 'id_disciplina', search, busqueda)  
 
             if int(busqueda[0]['id_lider']) != 0:
                         
@@ -647,22 +627,7 @@ def searchwalks(request):
                         inc = inc
                         large -= 1
                     else:
-                        inc += 1      
-                  
-            if int(busqueda[0]['id_disciplina']) != 0:
-                        
-                large = len(search)  
-                inc = 0
-                while inc < large:
-                
-                    if (search[inc]['disciplina_id'] != int(busqueda[0]['id_disciplina'])):
-
-                        search.pop(inc)
-
-                        inc = inc
-                        large -= 1
-                    else:
-                        inc += 1     
+                        inc += 1                     
 
             if int(busqueda[0]['id_prioridad']) != 0:
                         
@@ -717,10 +682,12 @@ def searchwalks(request):
 def downloadwalkpdf(request):
 
     if request.method == 'POST':
+
         rep_id = request.POST['id']
         file_path = settings.MEDIA_ROOT + "/pdf_walk_reports/REPORTE_N" +  rep_id + ".pdf"
 
         if os.path.exists(file_path):
+
             with open(file_path, 'rb') as fh:
                 response = HttpResponse(fh.read(), content_type="application/pdf")
                 response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)

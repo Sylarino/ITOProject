@@ -1,7 +1,7 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
-from report.models import Contract, API
+from report.models import Contract, API, Sistem, Subsistem, SistemSubSistem
 # Create your models here.
 class WBS(models.Model):
 
@@ -56,13 +56,14 @@ class EvidenceFile(models.Model):
 
 class WalkReport(models.Model):
 
-    #agregar fecha 
+    #Agregar fecha 
     historic_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro")
     top = models.CharField(max_length=200, verbose_name="TOP")
     sistem = models.CharField(max_length=200, verbose_name="Sistema")
     subsistem = models.CharField(max_length=200, verbose_name="Sub Sistema")
     walk_number = models.IntegerField(verbose_name="Número de Caminata")
     #Llaves
+    sistem_subsistem = models.ForeignKey(SistemSubSistem, verbose_name="Sistema", on_delete=models.CASCADE, default=1)
     wbs = models.ForeignKey(WBS, verbose_name="WBS", on_delete=models.CASCADE)
     contract = models.ForeignKey(Contract, verbose_name="Contrato", on_delete=models.CASCADE)
     api = models.ForeignKey(API, verbose_name="API", on_delete=models.CASCADE)
@@ -72,7 +73,7 @@ class WalkReport(models.Model):
         verbose_name_plural = 'Reportes de Caminata'
 
     def __str__(self):
-        return self.id    
+        return str(self.id)    
 
 class WalkObservation(models.Model):
 
@@ -82,7 +83,7 @@ class WalkObservation(models.Model):
     action_description = models.TextField(blank=True, verbose_name="Descripción Acción Pendiente", default="")
     historic_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro")
     stipulated_date = models.DateField(verbose_name="Fecha de Compromiso de Cierre")
-    real_close_date = models.DateField(verbose_name="Fecha de Cierre Real")
+    real_close_date = models.DateField(verbose_name="Fecha de Cierre Real", blank=True, null=True)
     #Llaves
     discipline = models.ForeignKey(Discipline, verbose_name="Disciplina", on_delete=models.CASCADE)
     walk_report = models.ForeignKey(WalkReport, verbose_name="Reporte de Caminata", on_delete=models.CASCADE)

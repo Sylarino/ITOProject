@@ -475,6 +475,9 @@ def downloadpdfnoncon(request, typereport = 'None', rep_id = 'None'):
     if typereport == 'iscreport':
         file_path = settings.MEDIA_ROOT + "/pdf_isc_list/REPORTE_ISC_N"+ str(rep_id)+".pdf"
 
+    if typereport == 'walkreport':
+        file_path = settings.MEDIA_ROOT + "/pdf_walk_reports/REPORTE_N"+ str(rep_id)+".pdf"
+
     if os.path.exists(file_path):
 
         with open(file_path, 'rb') as fh:
@@ -549,7 +552,6 @@ def searchnonconformityingrid(request):
                     'num_audit': report.num_audit                       
                     })
 
-        
             search = compareData('api_id', 'id_api', search, busqueda)
             search = compareData('contrato_id', 'id_contrato', search, busqueda)
             search = compareData('originador_id', 'id_autor', search, busqueda)

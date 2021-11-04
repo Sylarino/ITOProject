@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from nonconformityreport import views as nonconformityviews
 
 urlpatterns = [
         path('registerwalkreport/', views.registerwalkreport, name='registerwalkreport'),
@@ -13,5 +14,5 @@ urlpatterns = [
         path('registerwalkreport/registeruser/', views.registeruser, name='registeruser'),
         path('registerwalkreport/registernewuser/', views.registernewuser, name='registernewuser'),
         path('registerwalkreport/downloadwalkpdf/', views.downloadwalkpdf, name='downloadwalkpdf'),
-        path('searchwalkreport/savemodifiedwalkreport/', views.savemodifiedwalkreport, name='savemodifiedwalkreport'),
+        path('searchwalkreport/downloadwalkpdf/<str:typereport>/<str:rep_id>/', nonconformityviews.downloadpdfnoncon, name='downloadwalkpdf'),
     ]

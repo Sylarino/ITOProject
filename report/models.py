@@ -2,10 +2,18 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 
+# Create your models here
+class Enterprise(models.Model):
 
+    enterprise_name = models.CharField(max_length=500, verbose_name="Empresa Contratista")
+    enterprise_rut = models.CharField(max_length=16, verbose_name="RUT de Empresa")
 
-# Create your models here.
+    class Meta:
+        verbose_name = 'Empresa contratista'
+        verbose_name_plural = 'Empresas contratistas'
 
+    def __str__(self):
+        return str(self.enterprise_name)
 
 class Image(models.Model):
     url = models.CharField(max_length=100, verbose_name="URL de la imagén")
@@ -113,6 +121,7 @@ class Contract(models.Model):
 
     #LLaves
     api = models.ForeignKey(API, verbose_name="API", on_delete=models.CASCADE)
+    enterprise_contract = models.ForeignKey(Enterprise, verbose_name="Empresa Contratista", on_delete=models.CASCADE, default=1)
 
     class Meta:
         verbose_name = 'Contrato'
@@ -305,4 +314,40 @@ class PDFReport(models.Model):
 
     def __str__(self):
         return str(self.inspection_date)
+
+class Sistem(models.Model):
+
+    sistem_name = models.CharField(max_length=500, verbose_name="Sistema")
+
+    class Meta:
+        verbose_name = 'Sistema'
+        verbose_name_plural = 'Sistemas'
+
+    def __str__(self):
+
+        return str(self.sistem_name)
+
+class Subsistem(models.Model):
+
+    subsistem_name = models.CharField(max_length=500, verbose_name="Sub Sistema")
+
+    class Meta:
+        verbose_name = 'Subsistema'
+        verbose_name_plural = 'Subsistemas'
+
+    def __str__(self):
+        return str(self.subsistem_name)
+
+class SistemSubSistem(models.Model):
+
+    sistem = models.ForeignKey(Sistem, verbose_name="Sistema", on_delete=models.CASCADE)
+    subsistem = models.ForeignKey(Subsistem, verbose_name="Sub Sistema", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Subsistema del Sistema'
+        verbose_name_plural = 'Subsistema de los Sistemas'
+
+    def __str__(self):
+        return str(self.sistem)
+
 
