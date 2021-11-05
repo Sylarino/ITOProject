@@ -230,15 +230,19 @@ function messageSuccessPDF(data) {
 }
 
 function abrir_modal_registro() {
+
     var $ = jQuery.noConflict();
+    var id_modal = $(this).attr("id");
+    
+    if (id_modal == "modal-user") {
+        var link_modal = 'registeruser';
+    } else {
+        var link_modal = 'registersistem';
+    }
 
-
-    $('#registro').load('registeruser/', function () {
-
+    $('#registro').load(link_modal+'/', function () {
         $(this).modal('show');
-
     });
-
 }
 
 
@@ -263,7 +267,7 @@ function agregarUsuario() {
 
     }).done(function (data) {
 
-        messageSuccessUser(data);
+        messageSuccesData(data, "Usuario");
 
     }).fail(function (data) {
         Swal.fire("Usuario No Agregado", "Verifique los datos a ingresar", "warning");
@@ -272,9 +276,34 @@ function agregarUsuario() {
 
 }
 
-function messageSuccessUser(data) {
+function messageSuccesData(data, dato_real) {
 
     if (data.submitted == 1) {
-        Swal.fire("Usuario Agregado", "Se ha agregado un usuario satisfactoriamente", "success");
+        Swal.fire(dato_real + " Agregado", "Se ha agregado un usuario satisfactoriamente", "success");
     }
+
+}
+
+function agregarSistema() {
+
+    var sistema = document.getElementById("sistem_name");
+
+    $.ajax({
+        url: 'registernewsistem/',
+        type: 'POST',
+        data: {
+            action: 'save_sistem',
+            sistem_name: sistema.value,
+        },
+        dataType: 'JSON',
+
+    }).done(function (data) {
+
+        messageSuccesData(data, "Sistema");
+
+    }).fail(function (data) {
+        Swal.fire("Sistema No Agregado", "Verifique los datos a ingresar", "warning");
+        return false;
+    });
+
 }

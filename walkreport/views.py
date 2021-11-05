@@ -52,11 +52,56 @@ def registeruser(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'walkreport/userregister.html',
+        'walkreport/sistemregister.html',
         {
             'title':'Registro de Usuario',
             'year': datetime.now().year
         })
+
+def registersistem(request):
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'walkreport/userregister.html',
+        {
+            'title':'Registro de Sistema'
+        })
+
+@csrf_exempt
+@login_required(login_url="login")
+def registernewsistem(request):
+
+    if request.method == 'POST':
+
+        action = request.POST.get('action')
+        data = {}
+
+        if action  == 'save_sistem':
+
+            sistem = request.POST.get('sistem_name')
+
+            new_sistem = Sistem(
+                    sistem_name = sistem
+                )
+
+            new_sistem.save()
+            
+            id_sistem = new_sistem.id
+
+            if int(id_sistem) > 0:
+                    
+                data = {
+                    'submitted': 1,
+                    'id_sistem': int(id_sistem)
+                    }
+
+            else:
+                data = {
+                    'submitted': 0
+                    }
+
+            return JsonResponse(data)
 
 @csrf_exempt
 @login_required(login_url="login")

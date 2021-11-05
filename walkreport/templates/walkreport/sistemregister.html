@@ -1,0 +1,29 @@
+{% load staticfiles %}
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="col-md-12 form-report">
+                <h2 class="modal-title title-page">
+                    {{ title }}
+                </h2>
+            </div>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row">
+                    <div class="col-md-12 form-report">
+                        <div class="field-form">
+                            <label class="form-label">Nombre Sistema:</label>
+                            <input id="sistem_name" type="text" class="form-control">
+                        </div>
+                    </div>                        
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+            <button class="btn btn-danger" onclick="agregarSistema();" type="button">Guardar</button>
+        </div>
+    </div>
+</div>

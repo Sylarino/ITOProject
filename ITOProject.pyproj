@@ -229,6 +229,7 @@
     <Content Include="walkreport\templates\walkreport\observation.html" />
     <Content Include="walkreport\templates\walkreport\registerwalkreport.html" />
     <Content Include="walkreport\templates\walkreport\searchwalkreport.html" />
+    <Content Include="walkreport\templates\walkreport\sistemregister.html" />
     <Content Include="walkreport\templates\walkreport\userregister.html" />
   </ItemGroup>
   <ItemGroup>
