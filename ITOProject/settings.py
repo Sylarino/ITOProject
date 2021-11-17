@@ -73,9 +73,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            #'file_charset': [
-            #    'utf-8'
-            #    ],
         },
     },
 ]
@@ -83,21 +80,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ITOProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-"""
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'itoprojectmtpjsa',
-        'USER': 'root',
-        'PASSWORD': ''
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'itoproject',
+        'USER': 'sylar',
+        'PASSWORD': 'finally98',
+        'HOST': '5CD014CMQV',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 13 for SQL Server',
+            'isolation_level': 'READ UNCOMMITTED'
+        },
      }
 }
 
