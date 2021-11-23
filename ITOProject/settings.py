@@ -86,11 +86,11 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'itoproject',
         'USER': 'sylar',
-        'PASSWORD': 'finally98',
-        'HOST': '5CD014CMQV',
+        'PASSWORD': 'Inf.2021',
+        'HOST': 'DESKTOP-702BVPL',
         'PORT': '',
         'OPTIONS': {
-            'driver': 'ODBC Driver 13 for SQL Server',
+            'driver': 'ODBC Driver 17 for SQL Server',
             'isolation_level': 'READ UNCOMMITTED'
         },
      }

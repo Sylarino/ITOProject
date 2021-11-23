@@ -1,5 +1,9 @@
 django~=2.2
-mysqlclient
 reportlab
 openpyxl
 numpy
+django-ckeditor
+pillow
+pandas
+pyodbc
+django-pyodbc-azure-2019
