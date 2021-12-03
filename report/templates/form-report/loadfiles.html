@@ -1,25 +1,20 @@
 {% extends "app/layout.html" %}
 {% load staticfiles %}
 {% block content %}
-<form enctype="multipart/form-data" class="form-load" >
-
-
+<form method="post" enctype="multipart/form-data" class="form-load">
     {% csrf_token %}
-    {{form.as_p}}
     <div class="container">
         <h2 class="title-page">{{ title }}</h2>
 
         <h5>Para cargar datos, subir el excel que los contiene. <br />
             Antes de cargar, verificar que los datos subidos esten correctamente estructurados.</h5>
 
-
-
-        <div id="wrapper" class="btn-save load">
-            <input type="file" name="file" class="btn btn-danger" value="Adjuntar Excel"/> 
+        <div class="btn-save load">
+            <input id="file" type="file" name="file" class="btn btn-danger" value="Adjuntar Excel"/> 
         </div>
 
-        <div id="wrapper" class="btn-save load">
-            <input class="btn btn-danger" value="Leer Excel" type="submit"/> 
+        <div class="btn-save load">
+            <input class="btn btn-danger"type="submit" value="Leer Excel"/>
         </div>
 
         <section class="info-load--container">
@@ -49,32 +44,31 @@
                 </article>
             </section>
         </section>
+
+        <div class="col-md-12 d-none d-flex justify-content-center" id="divTabla">
+            <table id="table-load" class="table table-load">
+                <thead>
+                    <tr>
+                        <th>Contrato</th>
+                        <th>Empresa</th>
+                        <th>Actividad</th>
+                        <th>Sub Actividad</th>
+                        <th>Dias programado</th>
+                        <th>Fecha inicio programada</th>
+                        <th>Fecha termino Programado</th>
+                        <th>Dias proyectado</th>
+                        <th>Fecha inicio proyectado</th>
+                        <th>Fecha termino proyectado</th>
+                        <th>Total estimado</th>
+                        <th>Referencia diaria</th>
+                        <th>Medida</th>
+                        <th>Observación</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="btn-save" id="button_cont">
     </div>
-
-    <div class="col-md-12 hidden table-load-cont table-container--load" id="divTabla">
-        <table id="table-load" class="table table-load">
-            <thead>
-                <tr>
-                    <th>Contrato</th>
-                    <th>Actividad</th>
-                    <th>Sub Actividad</th>
-                    <th>Dias programado</th>
-                    <th>Fecha inicio programada</th>
-                    <th>Fecha termino Programado</th>
-                    <th>Dias proyectado</th>
-                    <th>Fecha inicio proyectado</th>
-                    <th>Fecha termino proyectado</th>
-                    <th>Total estimado</th>
-                    <th>Referencia diaria</th>
-                    <th>Medida</th>
-                    <th>Observación</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-
-    <div class="btn-save" id="button_cont">
-
     </div>
    <script src="{% static 'app/scripts/itoreport-scripts/loadfiles.js' %}"></script>
 

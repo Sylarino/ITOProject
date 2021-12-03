@@ -10,7 +10,7 @@
             "name": "Python: Django",
             "type": "python",
             "request": "launch",
-            "pythonPath": "D:/Proyectos/ITOProject/ITOProject/env-ito/Scripts/python.exe",
+            "python": "D:/Proyectos/ITOProject/ITOProject/env-ito/Scripts/python.exe",
             "program": "${workspaceFolder}\\manage.py",
             "args": [
                 "runserver"

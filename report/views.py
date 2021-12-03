@@ -29,7 +29,7 @@ from reportlab.lib import utils
 import io
 from django.core.files.base import ContentFile
 from report.models import Image as ImgReport
-from report.forms import UploadFileForm, HistoricalForm
+from report.forms import UploadFileForm as UpFileForm
 from reportlab.lib.units import cm
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER
@@ -918,8 +918,8 @@ def verifydata(data, name, val, valnum):
 def readexcel(request):
     try:
         if request.method == 'POST':
-            form = UploadFileForm(request.POST, request.FILES)
-            rd = form.is_valid() 
+            form = UpFileForm(request.POST, request.FILES)
+            print(form.errors)
             if form.is_valid():
 
                 wb = load_workbook(filename=request.FILES['file'].file, data_only=True)
@@ -942,37 +942,37 @@ def readexcel(request):
                         con_val = ""
                         act_val = ""
                         sub_val = ""
+                        ent_val = ""
 
                         numero_api = sheet_obj.cell(row = i, column = 1)
+                        empresa = sheet_obj.cell(row = i, column = 2)
                         #nombre_proyecto = sheet_obj.cell(row = i, column = 2)
-                        inicio_api = sheet_obj.cell(row = i, column = 2)
-                        termino_api = sheet_obj.cell(row = i, column = 3)
+                        inicio_api = sheet_obj.cell(row = i, column = 3)
+                        termino_api = sheet_obj.cell(row = i, column = 4)
                         #contrato = sheet_obj.cell(row = i, column = 5)
-                        numero_contrato = sheet_obj.cell(row = i, column = 4)
-                        #empresa = sheet_obj.cell(row = i, column = 6)
+                        numero_contrato = sheet_obj.cell(row = i, column = 5)
                         #jefe = sheet_obj.cell(row = i, column = 7)
                         #correo = sheet_obj.cell(row = i, column = 8)
                         #tel_contacto = sheet_obj.cell(row = i, column = 9)
                         #rut_empresa = sheet_obj.cell(row = i, column = 10)
-                        inicio_contrato = sheet_obj.cell(row = i, column = 5)
-                        termino_contrato = sheet_obj.cell(row = i, column = 6)
-                        actividad = sheet_obj.cell(row = i, column = 7)
-                        inicio_actividad = sheet_obj.cell(row = i, column = 8)
-                        termino_actividad = sheet_obj.cell(row = i, column = 9)
-                        subactividad = sheet_obj.cell(row = i, column = 10)
+                        inicio_contrato = sheet_obj.cell(row = i, column = 6)
+                        termino_contrato = sheet_obj.cell(row = i, column = 7)
+                        actividad = sheet_obj.cell(row = i, column = 8)
+                        inicio_actividad = sheet_obj.cell(row = i, column = 9)
+                        termino_actividad = sheet_obj.cell(row = i, column = 10)
+                        subactividad = sheet_obj.cell(row = i, column = 11)
 
-                        dias_programado = sheet_obj.cell(row = i, column = 11)
-                        fecha_inicio_promagado = sheet_obj.cell(row = i, column = 12)
-                        fecha_termino_promagado = sheet_obj.cell(row = i, column = 13)
+                        dias_programado = sheet_obj.cell(row = i, column = 12)
+                        fecha_inicio_promagado = sheet_obj.cell(row = i, column = 13)
+                        fecha_termino_promagado = sheet_obj.cell(row = i, column = 14)
 
-                        dias_proyectado = sheet_obj.cell(row = i, column = 14)
-                        fecha_inicio_proyectado = sheet_obj.cell(row = i, column = 15)
-                        fecha_termino_proyectado = sheet_obj.cell(row = i, column = 16)
+                        dias_proyectado = sheet_obj.cell(row = i, column = 15)
+                        fecha_inicio_proyectado = sheet_obj.cell(row = i, column = 16)
+                        fecha_termino_proyectado = sheet_obj.cell(row = i, column = 17)
 
-                        total = sheet_obj.cell(row = i, column = 17)
-                        diaria = sheet_obj.cell(row = i, column = 18)
-                        unidad = sheet_obj.cell(row = i, column = 19)
-
+                        total = sheet_obj.cell(row = i, column = 18)
+                        diaria = sheet_obj.cell(row = i, column = 19)
+                        unidad = sheet_obj.cell(row = i, column = 20)
 
                         #Validaciones primarias (Verificación si existen aquellos datos)
 
@@ -998,43 +998,60 @@ def readexcel(request):
 
                                         num_save = 2
 
-                                        if actividad.value is not None:
+                                        if (empresa.value is not None):
 
-                                            act_val = Activity.objects.filter(activity_name=actividad.value.strip())
-                                        
-                                            if len(act_val) != 0:
+                                            ent_val = Enterprise.objects.filter(enterprise_name=empresa.value.strip())
+
+                                            if len(ent_val) != 0:
 
                                                 num_save = 3
 
-                                                if subactividad is not None:
+                                                if actividad.value is not None:
 
-                                                    sub_val = SubActivity.objects.filter(subactivity_name=subactividad.value.strip())
+                                                    act_val = Activity.objects.filter(activity_name=actividad.value.strip())
+                                                
+                                                    if len(act_val) != 0:
 
-                                                    if len(sub_val) != 0:
+                                                        num_save = 3
 
-                                                        num_save = 4
+                                                        if subactividad is not None:
 
-                                                        val_num = 1
-                                                        validacion = "SubActividad encontrada, se actualizara su total programado."
-     
+                                                            sub_val = SubActivity.objects.filter(subactivity_name=subactividad.value.strip())
+
+                                                            if len(sub_val) != 0:
+
+                                                                num_save = 4
+
+                                                                val_num = 1
+                                                                validacion = "SubActividad encontrada, se actualizara su total programado."
+            
+                                                            else:
+
+                                                                validacion = "SubActividad no existe, por lo tanto se agregara la subactividad."
+                                                                val_num = 1
+
+                                                        else:
+                                                            
+                                                            validacion = "SubActividad se encuentra vacía."
+                                                            val_num = 2
+
                                                     else:
 
-                                                        validacion = "SubActividad no existe, por lo tanto se agregara la subactividad."
+                                                        validacion = "Actividad no existe, por lo tanto se agregara con todas las subactividades."
                                                         val_num = 1
-
                                                 else:
-                                                    
-                                                    validacion = "SubActividad se encuentra vacía."
+
+                                                    validacion = "Actividad se encuentra vacía."
                                                     val_num = 2
 
                                             else:
 
-                                                validacion = "Actividad no existe, por lo tanto se agregara con todas las subactividades."
+                                                validacion = "Empresa no existe, por lo tanto se agregara la empresa como nuevo campo."
                                                 val_num = 1
 
                                         else:
 
-                                            validacion = "Actividad se encuentra vacía."
+                                            validacion = "Empresa se encuentra vacía."
                                             val_num = 2
 
                                     else:
@@ -1072,7 +1089,7 @@ def readexcel(request):
                             #validacion, val_num = verifydata(contrato.value, "Contrato", validacion, val_num)
                             validacion, val_num = verifydata(termino_contrato.value, "Termino de Contrato", validacion, val_num)
                             validacion, val_num = verifydata(inicio_contrato.value, "Inicio de Contrato", validacion, val_num)
-                            #validacion, val_num = verifydata(empresa.value, "Empresa", validacion, val_num)
+                            validacion, val_num = verifydata(empresa.value, "Empresa", validacion, val_num)
                             #validacion, val_num = verifydata(tel_contacto.value, "Telefono de Contacto", validacion, val_num)
                             #validacion, val_num = verifydata(rut_empresa.value, "RUT Empresa", validacion, val_num)
 
@@ -1120,7 +1137,7 @@ def readexcel(request):
                             'termino_api': termino_api.value,
                             #'contrato': numero_contrato.value,
                             'numero_contrato': numero_contrato.value,
-                            #'empresa': empresa.value,
+                            'empresa': empresa.value,
                             #'tel_contacto': tel_contacto.value,
                             #'rut_empresa': rut_empresa.value,
                             #'jefe_proyecto': jefe.value,
@@ -1155,7 +1172,7 @@ def readexcel(request):
 
         return response
 
-def savecontract(data, a):
+def savecontract(data, a, b):
 
     con = Contract.objects.filter(contract_number = int(data['numero_contrato'])).filter(api = a.id)
 
@@ -1177,7 +1194,8 @@ def savecontract(data, a):
                 start_date = datetime.strptime(data['inicio_contrato'], "%Y-%m-%dT%H:%M:%S"),
                 finish_date = datetime.strptime(data['termino_contrato'], "%Y-%m-%dT%H:%M:%S"),
                 state = 1,
-                api = a
+                api = a,
+                enterprise_contract = b
             )
 
         contr.save()
@@ -1187,6 +1205,30 @@ def savecontract(data, a):
     else:
         contrato = con[0]
         return contrato
+
+def saveenterprise(data):
+    
+    enterprise = Enterprise.objects.filter(enterprise_name = data['empresa'])
+    
+    if len(enterprise) != 0:
+        enters = enterprise[0]
+    else:
+        enters = None
+
+    if enters is None:
+
+        enter = Enterprise(
+                enterprise_name = data['empresa'],
+            )
+
+        enter.save()
+
+        return enter
+
+    else:
+        entereal = enterprise[0]
+        return entereal
+
 
 def saveapi(data):
 
@@ -1333,8 +1375,9 @@ def submitdata(request, *args, **kwargs):
 
             for sub in submit:
 
+                empresa = saveenterprise(sub)
                 proyecto = saveapi(sub)
-                contrato = savecontract(sub, proyecto)
+                contrato = savecontract(sub, proyecto, empresa)
                 actividad = saveactivity(sub, contrato, proyecto)
                 medida = savemeasure(sub)
                 subactividad = savesubactivity(sub, contrato, proyecto, actividad, medida)

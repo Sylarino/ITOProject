@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Enterprise(models.Model):
 
     enterprise_name = models.CharField(max_length=500, verbose_name="Empresa Contratista")
-    enterprise_rut = models.CharField(max_length=16, verbose_name="RUT de Empresa")
+    enterprise_rut = models.CharField(max_length=16, verbose_name="RUT de Empresa", blank=True, null=True)
 
     class Meta:
         verbose_name = 'Empresa contratista'

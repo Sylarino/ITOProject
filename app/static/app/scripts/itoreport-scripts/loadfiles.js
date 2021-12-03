@@ -1,13 +1,16 @@
 var dataload;
 
 function upload(event) {
+    debugger;
     event.preventDefault();
-    var data = new FormData($('form').get(0));
-
+    var filesdata = new FormData();
+    var file = document.getElementById('file').files[0];
+    filesdata.append('file', file);
+    debugger;
     $.ajax({
         url: 'readexcel/',
         type: 'POST',
-        data: data,
+        data: filesdata,
         cache: false,
         processData: false,
         contentType: false,
@@ -33,17 +36,15 @@ function cargarTabla(response) {
         saveexist.removeChild(savebuttonexist);
     }
 
-    $("#divTabla").addClass("hidden");
-
     if (response == null) {
 
         swal("Oops!", "No se encontraron datos, intente nuevamente.", "warning");
         return false;
     }
-    $("#divTabla").removeClass("hidden");
 
+    $("#divTabla").removeClass("d-none");
+    debugger;
     var tablaActividades = "";
-    /*    if (!$.fn.dataTable.fnIsDataTable($('#tableActivities'))) {*/
     tablaActividades = $('#table-load').DataTable({
         paging: true,
         destroy: true,
@@ -58,12 +59,13 @@ function cargarTabla(response) {
                 "previous": "Anterior",
                 "next": "Siguiente",
                 "first": "Primero",
-                "last": "Último"
+                "last": "Ãšltimo"
             }
         },
         data: response,
         "columns": [
             { "data": "numero_contrato", "name": "Contrato" },
+            { "data": "empresa", "name":"Empresa"},
             { "data": "actividad", "name": "Actividad" },
             { "data": "subactividad", "name": "Subactividad" },
             { "data": "dias_programado", "name": "Dias_programado" },
