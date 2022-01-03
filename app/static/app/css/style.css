@@ -17,10 +17,11 @@ body {
     font-family: Lato, Helvetica, sans-serif;
     border-radius: 0;
     border: none;
+    padding-top: 120px;
+    padding-bottom: 30px;
 }
 
 .header-layout h3 {
-    padding-top: 10rem;
     color: #F73434;
     font-weight: bold;
     text-align: center;
@@ -30,10 +31,18 @@ body {
 .header-layout h1 {
     color: #ffffff;
     font-weight: bold;
-    padding-bottom: 10rem;
     text-align: center;
-    font-size: 5rem;
+    font-size: 3rem;
     text-shadow: 2px 6px 5px rgb(56 24 15 / 58%);
+    margin-top: 35px;
+}
+
+.span-ito {
+    color: #F73434;
+}
+
+.span-project {
+    color: #ffffff;
 }
 
 .navbar {
@@ -48,9 +57,11 @@ body {
     left: 2rem;
     max-width: 7rem;
     padding-top: 10px;
-    padding-left: 10px;
     padding-bottom: 10px;
-    padding-right: 10px;
+}
+
+.navbar-brand {
+    margin-right: 0 !important;
 }
 
 .nav, navbar-collapse figure {
@@ -722,4 +733,67 @@ body > .container-fluid {
 
 .row-quality-style {
     max-width: 400px !important;
+}
+
+.dots-mtpj {
+    position: relative;
+    top: 5px;
+    left: -20px;
+    max-width: 200px;
+    min-width: 200px;
+}
+
+.circle {
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background: #F13300;
+}
+
+.first-circle {
+    position: absolute;
+    left: calc(50vw + 50px);
+    top: -90px;
+    width: 20px;
+    height: 20px;
+}
+
+.second-circle {
+    position: absolute;
+    left: calc(50vw + 70px);
+    top: -120px;
+    width: 25px;
+    height: 25px;
+}
+
+.third-circle {
+    position: absolute;
+    left: calc(50vw + 110px);
+    top: -130px;
+    width: 30px;
+    height: 30px;
+}
+
+.fourth-circle {
+    position: absolute;
+    left: calc(50vw + 145px);
+    top: -110px;
+    width: 35px;
+    height: 35px;
+}
+
+.fifth-circle {
+    position: absolute;
+    left: calc(50vw + 145px);
+    top: -65px;
+    width: 32px;
+    height: 32px;
+}
+
+.sixth-circle {
+    position: absolute;
+    left: calc(50vw + 118px);
+    top: -37px;
+    min-width: 28px;
+    min-height: 28px;
 }

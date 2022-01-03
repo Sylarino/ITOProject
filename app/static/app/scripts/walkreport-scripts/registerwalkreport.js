@@ -12,7 +12,6 @@ $(function () {
         var nplano = document.getElementById("con-plane-walk");
         var codigoequipo = document.getElementById("con-equicode-walk");
         var disciplina = document.getElementById("con-disci-walk");
-        var originador = document.getElementById("con-origin-walk");
         var respconstruccion = document.getElementById("con-rescon-walk");
         var lidercaminata = document.getElementById("con-lider-walk");
         var prioridad = document.getElementById("con-priority-walk");
@@ -25,7 +24,6 @@ $(function () {
             '<td class="nplano" id="2">' + nplano.value + '</value>' +
             '<td class="disciplina" id="' + disciplina.options[disciplina.selectedIndex].id +'">' + disciplina.options[disciplina.selectedIndex].textContent + '</td>' +
             '<td class="descripcion" id="2">' + descripcion.value + '</td>' +
-            '<td class="originador" id="' + originador.options[originador.selectedIndex].id +'">' + originador.options[originador.selectedIndex].textContent + '</td>' +
             '<td class="resp_construccion" id="' + respconstruccion.options[respconstruccion.selectedIndex].id +'">' + respconstruccion.options[respconstruccion.selectedIndex].textContent + '</td>' +
             '<td class="lider_caminata" id="' + lidercaminata.options[lidercaminata.selectedIndex].id +'">' + lidercaminata.options[lidercaminata.selectedIndex].textContent + '</td>' +
             '<td class="prioridad" id="' + prioridad.options[prioridad.selectedIndex].id +'">' + prioridad.options[prioridad.selectedIndex].textContent + '</td>' +
@@ -86,8 +84,6 @@ $(function () {
 $(function () {
     $('input[id="btn_save_walk_report"]').on('click', function () {
 
-        debugger;
-        let reporte = [];
         let observacion = [];
 
         var selectapi = document.getElementById("ant-api-walk");
@@ -97,7 +93,6 @@ $(function () {
         var inputcaminata = document.getElementById("ant-numwalk-walk");
         var inputtop = document.getElementById("ant-top-walk");
         var inputsubsistema = document.getElementById("ant-subsistem-walk");
-        var inputfechayhora = document.getElementById("ant-date-walk");
         var inputfiles = document.getElementById('file_walk');
         var data = new FormData();
 
@@ -107,10 +102,8 @@ $(function () {
         }
 
         if (inputfiles.files.length > 0) {
-            var file_val = 1;
             var file_exist = 1;
         } else {
-            var file_val = 0;
             var file_exist = 0;
         }
 
@@ -121,7 +114,6 @@ $(function () {
                 num_plano: e.querySelector('.nplano').innerText,
                 disciplina_id: e.querySelector('.disciplina').id,
                 descripcion: e.querySelector('.descripcion').innerText,
-                originador: e.querySelector('.originador').id,
                 resp_construccion: e.querySelector('.resp_construccion').id,
                 lider_caminata: e.querySelector('.lider_caminata').id,
                 prioridad: e.querySelector('.prioridad').id,
@@ -135,54 +127,32 @@ $(function () {
             api_id: selectapi.options[selectapi.selectedIndex].id,
             contrato_id: selectcontrato.options[selectcontrato.selectedIndex].id,
             area_id: selectarea.options[selectarea.selectedIndex].id,
-            sistema: inputsistema.value,
-            subsistema: inputsubsistema.value,
+            sistema: inputsistema.options[inputsistema.selectedIndex].id,
+            subsistema: inputsubsistema.options[inputsubsistema.selectedIndex].id,
             caminata: inputcaminata.value,
             top: inputtop.value,
-            fecha: inputfechayhora.value,
             exist_file: file_exist
         }
 
-        reporte.push(fila_reporte);
+        data.append('reporte[]',JSON.stringify(fila_reporte));
+        data.append('observaciones[]',JSON.stringify(observacion));
 
         $.ajax({
-            url: 'savewalkreport/',
+            url: 'savefiles/',
             type: 'POST',
-            data: {
-                action: 'save_data_report',
-                'observacion[]': JSON.stringify(observacion), csrfmiddlewaretoken: '{{ csrf_token }}',
-                'reporte[]': JSON.stringify(reporte), csrfmiddlewaretoken: '{{ csrf_token }}',
-            },
-            dataType: 'JSON',
-
+            data: data,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
         }).done(function (data) {
 
-            if (file_val === 0) {
-                messageSuccessPDF(data);
-            }
+            messageSuccessPDF(data);
 
         }).fail(function (data) {
-            Swal.fire("Reporte de Caminata No Agregado", "Verifique los datos a ingresar", "warning");
+            Swal.fire("Reporte No Agregado", "Verifique que los datos esten correctos", "warning");
             return false;
         });
-
-        if (file_val===1) {
-            $.ajax({
-                url: 'savefiles/',
-                type: 'POST',
-                data: data,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-            }).done(function (data) {
-
-                messageSuccessPDF(data);
-
-            }).fail(function (data) {
-                Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
-                return false;
-            });
-        }
+        
 
     });
 });
@@ -206,7 +176,7 @@ function messageSuccessPDF(data) {
 
     if (data.submitted == 1) {
 
-        swal.fire("Guardado", "Reporte N°" + data.id_report + " agregado satisfactoriamente", "success", {
+        swal.fire("Guardado", "Reporte NÂ°" + data.id_report + " agregado satisfactoriamente", "success", {
             confirmButtonText: "Descargar"
         }).then((result) => {
 
@@ -229,21 +199,31 @@ function messageSuccessPDF(data) {
     }
 }
 
-function abrir_modal_registro() {
+$(function () {
+    $('a[name="a-modal"]').on('click', function () {
 
-    var $ = jQuery.noConflict();
-    var id_modal = $(this).attr("id");
+        var $ = jQuery.noConflict();
+        var id_modal = $(this).attr("id");
+        debugger;    
+        if (id_modal == "modal-user") {
+            var link_modal = 'registeruser';
+        } 
+        
+        if (id_modal == "modal-sistem"){
+            var link_modal = 'registersistem';
+        }
+
+        if (id_modal == "modal-subsistem"){
+            var link_modal = 'registersubsistem';
+        }
     
-    if (id_modal == "modal-user") {
-        var link_modal = 'registeruser';
-    } else {
-        var link_modal = 'registersistem';
-    }
-
-    $('#registro').load(link_modal+'/', function () {
-        $(this).modal('show');
+        $('#registro').load(link_modal+'/', function () {
+            $(this).modal('show');
+        });
+        
     });
-}
+});
+
 
 
 function agregarUsuario() {
@@ -293,17 +273,72 @@ function agregarSistema() {
         type: 'POST',
         data: {
             action: 'save_sistem',
-            sistem_name: sistema.value,
+            data_name: sistema.value,
+            column_data: 'sistem'
         },
         dataType: 'JSON',
 
     }).done(function (data) {
-
+        reloadSistem('sistem', 'Sistema');
         messageSuccesData(data, "Sistema");
-
     }).fail(function (data) {
         Swal.fire("Sistema No Agregado", "Verifique los datos a ingresar", "warning");
         return false;
+    });
+
+}
+
+function agregarSubSistema() {
+
+    var subsistema = document.getElementById("subsistem_name");
+    var sistema = document.getElementById("ant-sistem-walk");
+
+    $.ajax({
+        url: 'registernewsistem/',
+        type: 'POST',
+        data: {
+            action: 'save_sistem',
+            data_name: subsistema.value,
+            column_data: 'subsistem',
+            id_sistem: sistema.options[sistema.selectedIndex].id,
+        },
+        dataType: 'JSON',
+
+    }).done(function (data) {
+        reloadSistem('subsistem', 'SubSistema', sistema.options[sistema.selectedIndex].id);
+        messageSuccesData(data, "SubSistema");
+    }).fail(function (data) {
+        Swal.fire("SubSistema No Agregado", "Verifique los datos a ingresar", "warning");
+        return false;
+    });
+
+}
+
+function reloadSistem(id, nombre, id_sistem=0) {
+    var select_sistem = $('select[name="'+id+'"]');
+    var options = '<option id="0" disabled selected>Seleccione '+nombre+'</option>';
+
+    $.ajax({
+        type: 'GET',
+        data: { action: 'search_sistem', Id: id, sistem_id: id_sistem },
+        url: "/searchsistems",
+        dataType: 'json',
+    }).done(function (data) {
+        if (!data.hasOwnProperty('error')) {
+            $.each(data, function (key, value) {
+                options += '<option id="' + value.id + '" value="' + value.id + '">' + value.nombre + '</option>';
+            });
+            debugger;
+            return false;
+        }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(textStatus + ': ' + errorThrown);
+    }).always(function (data) {
+        select_sistem.html(options);
+        if (id="sistem") {
+            var select_subsistem = $('select[name="subsistem"]');
+            select_subsistem.html('<option id="0" disabled selected>Seleccione SubSistema</option>');
+        }
     });
 
 }

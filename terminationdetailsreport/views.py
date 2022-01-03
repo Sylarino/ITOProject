@@ -48,7 +48,7 @@ def searchterminationdetails(request):
         request,
         'terminationdetailsreport/searchterminationdetail.html',
         {
-            'title':'Reporte de Detalles de Terminacion',
+            'title':'Reporte de Detalles de Terminación',
             'year': datetime.now().year,
             'apis': apis,
             'disciplines': disciplines,
@@ -60,3 +60,18 @@ def searchterminationdetails(request):
             'subsistem': subsistem
         })
 
+def viewobservation(request, id):
+
+    wo = WalkObservation.objects.get(pk=int(id))
+    wr = WalkReport.objects.get(pk=int(wo.walk_report_id))
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'terminationdetailsreport/terminationdetail.html',
+        {
+            'title':'Observación de Caminata',
+            'year': datetime.now().year,
+            'reporte': wr,
+            'observacion': wo
+        })

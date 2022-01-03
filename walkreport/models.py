@@ -59,8 +59,6 @@ class WalkReport(models.Model):
     #Agregar fecha 
     historic_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro")
     top = models.CharField(max_length=200, verbose_name="TOP")
-    sistem = models.CharField(max_length=200, verbose_name="Sistema")
-    subsistem = models.CharField(max_length=200, verbose_name="Sub Sistema")
     walk_number = models.IntegerField(verbose_name="Número de Caminata")
     #Llaves
     sistem_subsistem = models.ForeignKey(SistemSubSistem, verbose_name="Sistema", on_delete=models.CASCADE, default=1)
@@ -97,7 +95,7 @@ class WalkObservation(models.Model):
         verbose_name_plural = 'Observaciones de Caminata'
 
     def __str__(self):
-        return self.id    
+        return str(self.id)    
 
 class FileWalkReport(models.Model):
 

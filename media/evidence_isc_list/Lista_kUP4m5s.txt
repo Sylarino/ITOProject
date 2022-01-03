@@ -1,8 +1,0 @@
-Checklist: PEC
-- Diseños: - Reporte PEC
-	   - Reporte No Conformidad en Terreno
-- Reporte de Determinacion de 
-- LOG DE PEC
-- Reporte de Cambio de Turno
-- LOG de Contratos
-

@@ -1,11 +1,161 @@
-<!DOCTYPE html>
+{% load staticfiles %}
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="col-md-12 form-report">
+                <h2 class="modal-title title-page">
+                    {{ title }}
+                </h2>
+            </div>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row">
 
-</body>
-</html>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Reporte:</label>
+                            <label class="form-label text-center" id="mod-report" >{{ reporte.id }}</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Fecha de Registro:</label>
+                            <label class="form-label text-center" id="mod-fecha-registro">{{ reporte.historic_date }}</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">TOP:</label>
+                            <label class="form-label text-center" id="mod-top">{{ reporte.top }}</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-repor">
+                        <div class="field-form">
+                            <label class="form-label text-center">Sistema:</label>
+                            <label class="form-label text-center" id="mod-sistem">{{ reporte.sistem }}</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Sub Sistema:</label>
+                            <label class="form-label text-center" id="mod-subsistem">{{ reporte.subsistem}}</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">N de Caminata:</label>
+                            <label class="form-label text-center" id="mod-num-caminata">{{ reporte.walk_number }}</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">WBS:</label>
+                            <label class="form-label text-center" id="mod-area">{{ reporte.wbs.area }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Lider:</label>
+                            <label class="form-label text-center" id="mod-lider">{{ observacion.leader.first_name }} {{ observacion.leader.last_name }}</label>
+                        </div>           
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Prioridad:</label>
+                            <label class="form-label text-center" id="mod-prioridad">{{ observacion.priority.priority_name }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Fecha de Compromiso:</label>
+                            <label class="form-label text-center" id="fecha-compromiso">{{ observacion.stipulated_date }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center" >Contrato:</label>
+                            <label class="form-label text-center" id="mod-contrato">{{reporte.contract.contract_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center" >API:</label>
+                            <label class="form-label text-center" id="mod-api">{{reporte.api.project_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Ubicacion:</label>
+                            <label class="form-label text-center" id="mod-ubicacion">{{observacion.ubication}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">N de Plano:</label>
+                            <label class="form-label text-center" id="mod-num-plano">{{observacion.plane_number}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Codigo Equipo:</label>
+                            <label class="form-label text-center" id="mod-cod-equi">{{observacion.equipment_code}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Descripcion:</label>
+                            <label class="form-label text-center" id="mod-accion">{{observacion.action_description}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Disciplina:</label>
+                            <label class="form-label text-center" id="disciplina">{{observacion.discipline.discipline_name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Responsable:</label>
+                            <label class="form-label text-center" id="responsable">{{ observacion.responsable.first_name }} {{ observacion.responsable.last_name }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-form">
+                            <label class="form-label text-center">Registrado por:</label>
+                            <label class="form-label text-center" id="registrado">{{ observacion.register_by.first_name }} {{ observacion.register_by.last_name }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-report">
+                        <div class="field-for">
+                            <label class="form-label text-center" id="fecha-compromiso-real">Fecha de Compromiso Real:</label>
+                            <label class="form-label text-center" id="fecha-compromiso">{{ observacion.stipulated_date }}</label>
+                        </div>
+                    </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="row">
+
+            </div>
+
+    </div>
+
+</div>

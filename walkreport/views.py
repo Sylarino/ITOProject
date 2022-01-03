@@ -6,8 +6,7 @@ from django.contrib.auth.decorators import login_required
 from walkreport.models import *
 from report.models import *
 from django.views.generic import TemplateView
-from django.http import JsonResponse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from reportlab.pdfgen import canvas
@@ -27,6 +26,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 import os
 from django.contrib.auth.models import User, Group
 from nonconformityreport.views import compareData
+from nonconformityreport.views import principalBanner
 
 # VISTA PARA IR A MODIFICAR REPORTE DE CAMINATAS
 def modifiedwalkreport(request, id):
@@ -52,7 +52,7 @@ def registeruser(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'walkreport/sistemregister.html',
+        'walkreport/userregister.html',
         {
             'title':'Registro de Usuario',
             'year': datetime.now().year
@@ -63,10 +63,50 @@ def registersistem(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'walkreport/userregister.html',
+        'walkreport/sistemregister.html',
         {
             'title':'Registro de Sistema'
         })
+
+def registersubsistem(request):
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'walkreport/subsistemregister.html',
+        {
+            'title':'Registro de SubSistema'
+        })
+
+
+@csrf_exempt
+@login_required(login_url="login")
+def searchsistems(request):
+
+    try:
+        if request.method == 'GET':
+            Id = request.GET['Id']
+            action = request.GET['action']
+            data = []
+
+            if action == 'search_sistem':
+                if Id == 'sistem':
+                    sistem = Sistem.objects.all()
+                    for i in sistem:
+                        data.append({'id': i.id, 
+                        'nombre': i.sistem_name})
+                else:
+                    id_sistem = request.GET['sistem_id']
+
+                    sub_sis = SistemSubSistem.objects.filter(sistem_id=int(id_sistem))
+
+                    for i in sub_sis:
+                        data.append({'id': i.subsistem_id, 
+                        'nombre': i.subsistem.subsistem_name})
+                
+    except Exception as e:
+        data['error'] = str(e)
+    return JsonResponse(data, safe=False)
 
 @csrf_exempt
 @login_required(login_url="login")
@@ -75,25 +115,47 @@ def registernewsistem(request):
     if request.method == 'POST':
 
         action = request.POST.get('action')
+        column_data = request.POST.get('column_data')
         data = {}
 
         if action  == 'save_sistem':
+            
+            data_get = request.POST.get('data_name')
 
-            sistem = request.POST.get('sistem_name')
+            if column_data == 'sistem':
 
-            new_sistem = Sistem(
-                    sistem_name = sistem
+                new_data = Sistem(
+                        sistem_name = data_get
+                    )
+
+                new_data.save()
+
+            else:
+
+                id_sistem = request.POST.get('id_sistem')
+
+                new_data = Subsistem(
+                        subsistem_name = data_get
+                    )
+
+                new_data.save()
+
+                sistema = Sistem.objects.get(id=int(id_sistem))
+
+                sis_sub = SistemSubSistem(
+                    sistem = sistema,
+                    subsistem = new_data
                 )
 
-            new_sistem.save()
-            
-            id_sistem = new_sistem.id
+                sis_sub.save()
+
+            id_new = new_data.id
 
             if int(id_sistem) > 0:
                     
                 data = {
                     'submitted': 1,
-                    'id_sistem': int(id_sistem)
+                    'id_sistem': int(id_new)
                     }
 
             else:
@@ -305,6 +367,28 @@ def searchwbs(request):
         data['error'] = str(e)
     return JsonResponse(data, safe=False)
 
+
+#Vista para buscar el WBS
+def searchsubsistem(request):
+
+    try:
+       if request.method == 'GET':
+           Id = request.GET['id']
+           action = request.GET['action']
+           data = []
+
+           if action == 'search_subsistem_id':
+                subsistem = SistemSubSistem.objects.filter(sistem_id=Id)
+                for i in subsistem:
+                    data.append({'id': i.subsistem.id, 
+                                 'subsistema': i.subsistem.subsistem_name})    
+
+                print(data)    
+                    
+    except Exception as e:
+        data['error'] = str(e)
+    return JsonResponse(data, safe=False)
+
 #Vista para guardar el reporte y observaciones de caminatas
 @csrf_exempt
 @login_required(login_url="login")
@@ -312,88 +396,65 @@ def savewalkreport(request,*args, **kwargs):
 
     if request.method == "POST":
 
-        action = request.POST.get('action')
-        obs = request.POST.getlist('observacion[]')
+        obs = request.POST.getlist('observaciones[]')
         rep = request.POST.getlist('reporte[]')
+        id_rep_walk = 0
 
-        if action == 'save_data_report':
+        data = {}
 
-            data = {}
+        observation_data = json.loads(obs[0])
+        report_data = json.loads(rep[0])
+        caminata_report = WalkReport()
 
-            observation_data = json.loads(obs[0])
-            report_data = json.loads(rep[0])
-            caminata_report = WalkReport()
-            id_rep_walk = 0
+        # Agregar reporte de caminata
+        wbs_data = WBS.objects.get(pk = int(report_data['area_id']))
+        contract_data = Contract.objects.get(pk = int(report_data['contrato_id']))
+        api_data = API.objects.get(pk = int(report_data['api_id']))
+        sis_sub =  SistemSubSistem.objects.filter(sistem_id = int(report_data['sistema'])).get(subsistem_id=int(report_data['subsistema']))
 
-            for rep in report_data:
+        caminata_report = WalkReport(
+                top = report_data['top'],
+                sistem_subsistem = sis_sub,
+                walk_number = int(report_data['caminata']),
+                wbs = wbs_data,
+                contract = contract_data,
+                api = api_data
+            )
 
-                wbs_data = WBS.objects.get(pk = int(rep['area_id']))
-                contract_data = Contract.objects.get(pk = int(rep['contrato_id']))
-                api_data = API.objects.get(pk = int(rep['api_id']))
+        caminata_report.save()
 
-                caminata_report = WalkReport(
-                        top = rep['top'],
-                        sistem = rep['sistema'],
-                        subsistem = rep['subsistema'],
-                        walk_number = int(rep['caminata']),
-                        wbs = wbs_data,
-                        contract = contract_data,
-                        api = api_data
-                    )
+        id_rep_walk = caminata_report.id
 
-                caminata_report.save()
+        # Agregar observaciones de caminatas
+        for ob in observation_data:
 
-                id_rep_Walk = caminata_report.id
+            disci_data = Discipline.objects.get(pk = int(ob['disciplina_id']))
+            responsable_data = User.objects.get(pk = int(ob['resp_construccion']))
+            leader_data = User.objects.get(pk = int(ob['lider_caminata']))
+            prioridad_data = Priority.objects.get(pk = int(ob['prioridad']))
 
-            for ob in observation_data:
+            observacion = WalkObservation(
+                    ubication = ob['ubicacion'],
+                    plane_number = int(ob['num_plano']),
+                    equipment_code = int(ob['codigo_equipo']),
+                    action_description = ob['descripcion'],
+                    stipulated_date = ob['fecha_cierre'],
+                    real_close_date = ob['fecha_cierre_real'],
+                    discipline = disci_data,
+                    walk_report = caminata_report,
+                    register_by = request.user,
+                    responsable = responsable_data,
+                    leader = leader_data,
+                    priority = prioridad_data
+                )
 
-                disci_data = Discipline.objects.get(pk = int(ob['disciplina_id']))
-                register_data = User.objects.get(pk = int(ob['originador']))
-                responsable_data = User.objects.get(pk = int(ob['resp_construccion']))
-                leader_data = User.objects.get(pk = int(ob['lider_caminata']))
-                prioridad_data = Priority.objects.get(pk = int(ob['prioridad']))
+            observacion.save()
 
-                observacion = WalkObservation(
-                        ubication = ob['ubicacion'],
-                        plane_number = int(ob['num_plano']),
-                        equipment_code = int(ob['codigo_equipo']),
-                        action_description = ob['descripcion'],
-                        stipulated_date = ob['fecha_cierre'],
-                        real_close_date = ob['fecha_cierre_real'],
-                        discipline = disci_data,
-                        walk_report = caminata_report,
-                        register_by = register_data,
-                        responsable = responsable_data,
-                        leader = leader_data,
-                        priority = prioridad_data
-                    )
-
-                observacion.save()
-            
-
-            if id_rep_walk > 0:
-                    
-                data = {
-                    'submitted': 1,
-                    'id_report': id_rep_walk
-                    }
-
-                if reportdata[0]['exist_file'] == 0:
-
-                    createwalkpdf(id_rep_walk)
-            else:
-
-                data = {
-                    'submitted': 0
-                    }
-
-            return JsonResponse(data)
-
+        # Agregar archivos, en el caso de adjuntar
         if len(request.FILES.getlist('files')) > 0:
 
             files_report = request.FILES.getlist('files')
-            report_for_id = WalkReport.objects.last()
-            id_rep_walk = report_for_id.id
+            report_for_id = WalkReport.objects.get(id=id_rep_walk)
 
             for file in files_report:
 
@@ -410,23 +471,67 @@ def savewalkreport(request,*args, **kwargs):
 
                 file_rel.save()
 
-            if id_rep_walk > 0:
-                    
-                data = {
-                    'submitted': 1,
-                    'id_report': id_rep_walk
-                    }
+        if id_rep_walk > 0:
+                
+            data = {
+                'submitted': 1,
+                'id_report': id_rep_walk
+                }
 
-                createwalkpdf(id_rep_walk)
+            createwalkpdf(id_rep_walk)
 
 
-            else:
+        else:
 
-                data = {
-                    'submitted': 0
-                    }
+            data = {
+                'submitted': 0
+                }
 
-            return JsonResponse(data)
+        return JsonResponse(data)
+
+def printRowTable(obs ,ob, styleN, c, width, height, height_pdf, header, next_page):
+
+    row_obs = []
+    row_obs = [[Paragraph(ob.ubication , styleN),
+                    Paragraph(str(ob.plane_number), styleN),
+                    Paragraph(str(ob.equipment_code), styleN),
+                    Paragraph(str(ob.discipline.discipline_name), styleN),
+                    Paragraph(ob.action_description, styleN),
+                    Paragraph(ob.register_by.first_name + " " + ob.register_by.last_name, styleN),
+                    Paragraph(ob.responsable.first_name + " " + ob.responsable.last_name, styleN),
+                    Paragraph(ob.leader.first_name + " " + ob.leader.last_name, styleN),
+                    Paragraph(ob.priority.priority_name, styleN),
+                    Paragraph(str(ob.stipulated_date.day) + "/"
+                                    + str(ob.stipulated_date.month) + "/"
+                                    + str(ob.stipulated_date.year), styleN),
+                    Paragraph(str(ob.real_close_date.day) + "/"
+                                    + str(ob.real_close_date.month) + "/"
+                                    + str(ob.real_close_date.year), styleN),
+                    ]]
+    if len(obs) == 0:
+        obs = row_obs
+
+    if next_page == 1 or next_page == 3:
+        obs = []
+        obs += header
+        obs += row_obs
+        
+    t=Table(obs, colWidths= 2.45 * cm)
+    t.setStyle(TableStyle([ ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                            ('FONTSIZE', (0,0), (-1, -1), 8),
+                            ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
+                            ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
+                            ('ALIGN', (0,0), (1,-1), 'LEFT'),
+                            ('ALIGN', (2,0), (-1,-1), 'RIGHT')]))
+
+    t.wrapOn(c, width, height)
+    w, h = t.wrap(100, 100)
+    height_pdf -= h
+    t.drawOn(c, 15, height_pdf, 0)
+
+    return h, height_pdf
+
 
 #Función para crear el pdf del Acta de Observaciones de Caminatas
 def createwalkpdf(id_report):
@@ -434,7 +539,6 @@ def createwalkpdf(id_report):
     #Llamar datos relacionados al reporte a crear
     reportecaminata = WalkReport.objects.filter(id=int(id_report))
     observaciones = WalkObservation.objects.filter(walk_report_id=int(id_report))
-    evidencia_reporte = FileWalkReport.objects.filter(walk_report_id=int(id_report)) 
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename=OBS-CAMINATA N°'+ str(id_report)+'.pdf'
@@ -466,6 +570,7 @@ def createwalkpdf(id_report):
     title_report = stringWidth("ACTA N°"+str(id_report), 'Helvetica', 18)
 
     c.drawString((width/2)-(title_report/2), 570,"ACTA N°"+str(id_report))
+    c.setTitle("Acta de Observación en Caminata N°"+str(id_report))
 
     #Antecedentes Generales
 
@@ -474,13 +579,13 @@ def createwalkpdf(id_report):
     c.drawString((width/2)-(title_report/2), 518,"ANTECEDENTES GENERALES")
 
     c.setFont('Helvetica', 8)
-    c.drawString(25, 500,"Proyecto: " + reportecaminata[0].api.project_name)
+    c.drawString(25, 500,"Proyecto: " + str(reportecaminata[0].api.project_name))
     c.drawString(25, 485,"WBS: " + str(reportecaminata[0].wbs.number))
     c.drawString(25, 470,"Área: " + reportecaminata[0].wbs.wbs_name)
     c.drawString(25, 455,"TOP: " + reportecaminata[0].top)
-    c.drawString(25, 440,"Sistema: " + reportecaminata[0].sistem)
+    c.drawString(25, 440,"Sistema: " + reportecaminata[0].sistem_subsistem.sistem.sistem_name)
 
-    c.drawString(396, 500,"Empresa: " + reportecaminata[0].contract.enterprise)
+    c.drawString(396, 500,"Empresa: " + reportecaminata[0].contract.enterprise_contract.enterprise_name)
     c.drawString(396, 485,"Contrato: " + str(reportecaminata[0].contract.contract_name))
     c.drawString(396, 470,"Fecha Inicio Contrato: " + str(reportecaminata[0].contract.start_date.day) + "/"
                                + str(reportecaminata[0].contract.start_date.month) + "/"
@@ -533,9 +638,9 @@ def createwalkpdf(id_report):
     n_fecha_compromiso = Paragraph('''<b>FECHA DE COMPROMISO DE CIERRE</b>''', styleBH)
     n_fecha_real = Paragraph('''<b>FECHA REAL DE CIERRE</b>''', styleBH)
 
-    obs = []
+    header_obs = []
 
-    obs = [[n_ubicacion, 
+    header_obs = [[n_ubicacion, 
             n_plano, 
             n_equipo, 
             n_disciplina, 
@@ -547,37 +652,27 @@ def createwalkpdf(id_report):
             n_fecha_compromiso,
             n_fecha_real]]
 
-    for ob in observaciones:
-        obs += [[Paragraph(ob.ubication , styleN),
-                     Paragraph(str(ob.plane_number), styleN),
-                     Paragraph(str(ob.equipment_code), styleN),
-                     Paragraph(str(ob.discipline.discipline_name), styleN),
-                     Paragraph(ob.action_description, styleN),
-                     Paragraph(ob.register_by.first_name + " " + ob.register_by.last_name, styleN),
-                     Paragraph(ob.responsable.first_name + " " + ob.responsable.last_name, styleN),
-                     Paragraph(ob.leader.first_name + " " + ob.leader.last_name, styleN),
-                     Paragraph(ob.priority.priority_name, styleN),
-                     Paragraph(str(ob.stipulated_date.day) + "/"
-                                     + str(ob.stipulated_date.month) + "/"
-                                     + str(ob.stipulated_date.year), styleN),
-                     Paragraph(str(ob.real_close_date.day) + "/"
-                                     + str(ob.real_close_date.month) + "/"
-                                     + str(ob.real_close_date.year), styleN),
-                     ]]
-    
-    t=Table(obs, colWidths= 2.45 * cm)
-    t.setStyle(TableStyle([ ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
-                            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                            ('FONTSIZE', (0,0), (-1, -1), 8),
-                            ('LINEABOVE', (0,1), (-1,1), 0.5, colors.black),
-                            ('LINEBEFORE', (2,0), (2,-1), 0.5, colors.black),
-                            ('ALIGN', (0,0), (1,-1), 'LEFT'),
-                            ('ALIGN', (2,0), (-1,-1), 'RIGHT')]))
+    pagina = 1
 
-    t.wrapOn(c, width, height)
-    w, h = t.wrap(100, 100)
-    height_pdf -= h
-    t.drawOn(c, 15, height_pdf, 0)
+    next_page = 3
+
+    for ob in observaciones:
+
+        if h > height_pdf:   
+            next_page = 1
+            c.showPage()
+            height_pdf, next_page, pagina = principalBanner(height_pdf, c, id_report, pagina,next_page, 'walkreport')
+            height_pdf -= 150
+            h, height_pdf = printRowTable(header_obs, ob, styleN, c, width, height, height_pdf, header_obs, next_page)
+        else:
+
+            if next_page == 3:
+                h, height_pdf = printRowTable(header_obs, ob, styleN, c, width, height, height_pdf, header_obs, next_page)
+                next_page = 0
+            else:
+                next_page = 0
+                new_obs = []
+                h, height_pdf = printRowTable(new_obs, ob, styleN, c, width, height, height_pdf, header_obs, next_page)
 
     #Procesar y Guardar Reporte
     c.save()
@@ -598,6 +693,8 @@ def createwalkpdf(id_report):
         )
 
     pdfrelation.save()
+
+    return response
     
 #Vista para buscar los datos requeridos en la consulta de caminatas
 @csrf_exempt
@@ -610,8 +707,6 @@ def searchwalks(request):
                 
             search = []
 
-            search.clear()
-
             listar = request.GET.getlist('listar[]')
             busqueda = json.loads(listar[0])
 
@@ -623,18 +718,32 @@ def searchwalks(request):
 
                 for obs in observaciones:
 
-                    #if(obs.real_close_date == )
+                    if obs.real_close_date < obs.stipulated_date:
+                        day = 0
+                        estado = 'Cerrado'
+                    else:
+                        day = (obs.real_close_date - obs.stipulated_date)
+                        day = day.days
+                        estado = 'Cerrado'
+
+                    if obs.real_close_date is None:
+
+                        estado = 'Abierto' 
+
                     search.append({
                         'id_reporte': report.id,
                         'id_observacion': obs.id,
                         'top':report.top,
-                        'sistema': report.sistem.sistem_name,
-                        'subsistema': report.subsistem.subsistem_name,
+                        'sistema_id': report.sistem_subsistem.sistem_id,
+                        'sistema': report.sistem_subsistem.sistem.sistem_name,
+                        'subsistema': report.sistem_subsistem.subsistem.subsistem_name,
+                        'subsistema_id': report.sistem_subsistem.subsistem_id,
                         'caminata': report.walk_number,
                         'area': report.wbs.wbs_name,
                         'contrato_id': report.contract_id,
                         'api_id': report.api_id,
-                        'empresa': report.contract.enterprise.enterprise_name,
+                        'empresa_id': report.contract.enterprise_contract.enterprise_name,
+                        'empresa': report.contract.enterprise_contract.enterprise_name,
                         'ubicacion': obs.ubication,
                         'plano': obs.plane_number,
                         'equipo': obs.equipment_code,
@@ -652,74 +761,87 @@ def searchwalks(request):
                         'lider_id': obs.leader_id,
                         'prioridad': obs.priority.priority_name,
                         'prioridad_id': obs.priority_id,
+                        'dias_atraso': day,
+                        'estado': estado
                         })
 
             search = compareData('api_id', 'id_api', search, busqueda)
             search = compareData('contrato_id', 'id_contrato', search, busqueda)
-            search = compareData('originador_id', 'id_autor', search, busqueda)
-            search = compareData('disciplina_id', 'id_disciplina', search, busqueda)  
 
-            if int(busqueda[0]['id_lider']) != 0:
-                        
-                large = len(search)  
-                inc = 0
-                while inc < large:
+            if busqueda[0]['tipo_reporte'] == 'details': 
+
+                search = compareData('sistema_id', 'id_sistema', search, busqueda)
+                search = compareData('caminata_id', 'caminata', search, busqueda)
+                search = compareData('empresa_id', 'id_empresa', search, busqueda)
+                search = compareData('subsistema_id', 'id_subsistema', search, busqueda)
+
+            else:
                 
-                    if (search[inc]['lider_id'] != int(busqueda[0]['id_lider'])):
+                search = compareData('originador_id', 'id_autor', search, busqueda)
+                search = compareData('disciplina_id', 'id_disciplina', search, busqueda)  
 
-                        search.pop(inc)
-
-                        inc = inc
-                        large -= 1
-                    else:
-                        inc += 1                     
-
-            if int(busqueda[0]['id_prioridad']) != 0:
-                        
-                large = len(search)  
-                inc = 0
-                while inc < large:
-                
-                    if (search[inc]['prioridad_id'] != int(busqueda[0]['id_prioridad'])):
-
-                        search.pop(inc)
-
-                        inc = inc
-                        large -= 1
-                    else:
-                        inc += 1
-
-            if busqueda[0]['fecha_inicio'] != "" and busqueda[0]['fecha_termino'] != "":
-                        
-                large = len(search)  
-                inc = 0
-
-                startdate = busqueda[inc]['fecha_inicio']
-                fecha_st = datetime.strptime(startdate, '%d/%m/%Y')
-
-                finishdate = busqueda[inc]['fecha_termino']
-                fecha_ed = datetime.strptime(finishdate, '%d/%m/%Y')
-
-                while inc < large:
+                if int(busqueda[0]['id_lider']) != 0:
+                            
+                    large = len(search)  
+                    inc = 0
+                    while inc < large:
                     
-                    report_date = search[inc]['fecha_compromiso']
-                    fecha_rp = datetime.strptime(report_date, '%d/%m/%Y')
+                        if (search[inc]['lider_id'] != int(busqueda[0]['id_lider'])):
 
-                    if fecha_rp < fecha_st or fecha_rp > fecha_ed:
+                            search.pop(inc)
 
-                        search.pop(inc)
+                            inc = inc
+                            large -= 1
+                        else:
+                            inc += 1                     
 
-                        inc = inc
-                        large -= 1
-                    else:
-                        inc += 1
+                if int(busqueda[0]['id_prioridad']) != 0:
+                            
+                    large = len(search)  
+                    inc = 0
+                    while inc < large:
+                    
+                        if (search[inc]['prioridad_id'] != int(busqueda[0]['id_prioridad'])):
 
+                            search.pop(inc)
+
+                            inc = inc
+                            large -= 1
+                        else:
+                            inc += 1
+
+                if busqueda[0]['fecha_inicio'] != "" and busqueda[0]['fecha_termino'] != "":
+                            
+                    large = len(search)  
+                    inc = 0
+
+                    startdate = busqueda[inc]['fecha_inicio']
+                    fecha_st = datetime.strptime(startdate, '%d/%m/%Y')
+
+                    finishdate = busqueda[inc]['fecha_termino']
+                    fecha_ed = datetime.strptime(finishdate, '%d/%m/%Y')
+
+                    while inc < large:
+                        
+                        report_date = search[inc]['fecha_compromiso']
+                        fecha_rp = datetime.strptime(report_date, '%d/%m/%Y')
+
+                        if fecha_rp < fecha_st or fecha_rp > fecha_ed:
+
+                            search.pop(inc)
+
+                            inc = inc
+                            large -= 1
+                        else:
+                            inc += 1
 
     except Exception as e:
 
         respuesta = e
 
     return JsonResponse(search, safe=False)
+
+
 
 # DESCARGA DE PDF AL REGISTRAR UN INFORME DIARIO
 @csrf_exempt

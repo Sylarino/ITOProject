@@ -46,6 +46,18 @@
 
             <div class="col-md-4 form-report">
                 <div class="field-form">
+                    <label class="form-label">Empresa Contratista</label>
+                    <select name="enterprise" class="form-control" id="ent_det_select" required>
+                        <option id="0" disabled selected>Seleccione empresa</option>
+                        {% for enter in enterprise %}
+                        <option id="{{enter.id}}" value="{{enter.id}}">{{ enter.enterprise_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4 form-report">
+                <div class="field-form">
                     <label class="form-label">Sistema</label>
                     <select name="sistem" class="form-control" id="sis_det_select" required>
                         <option id="0" disabled selected>Seleccione Sistema</option>
@@ -56,17 +68,6 @@
                 </div>
             </div>
                 
-            <div class="col-md-4 form-report">
-                <div class="field-form">
-                    <label class="form-label">Empresa Contratista</label>
-                    <select name="enterprise" class="form-control" id="ent_det_select" required>
-                        <option id="0" disabled selected>Seleccione empresa</option>
-                        {% for enter in enterprise %}
-                        <option id="{{enter.id}}" value="{{enter.id}}">{{ enter.enterprise_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
         </div>
 
         <div class="btn-section-container">
@@ -96,14 +97,13 @@
                 <thead class="thead-dark">
                     <tr class="table-dark">
                         <th>Reporte</th>
-                        <th>N Caminata</th>
+                        <th>N° de Caminata</th>
                         <th>Disciplina</th>
-                        <th>Descripcion</th>
                         <th>Prioridad</th>
                         <th>Fecha Compromiso de Cierre</th>
                         <th>Fecha Compromiso de Cierre real</th>
                         <th>Estado</th>
-                        <th>Dias de atraso</th>
+                        <th>Días de atraso</th>
                         <th>Ver</th>
                     </tr>
                 </thead>
@@ -113,7 +113,12 @@
     </div>
 </form>
 
+<div class="modal fade" id="edicion" role="dialog">
+
+</div>
+
 <script src="{% static 'app/scripts/common-scripts/selectprojectapi.js' %}"></script>
 <script src="{% static 'app/scripts/detailstermination-scripts/searchdetailstermination.js' %}"></script>
+<script src="{% static 'app/scripts/common-scripts/modal-obs.js' %}"></script>
 
 {% endblock %}

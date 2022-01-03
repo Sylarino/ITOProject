@@ -205,16 +205,19 @@ def separator(c, height_pdf):
 #FUNCIÓN PARA AGREGAR LA CABEZERA DE CADA PÁGINA DEL PDF
 def principalBanner(height_pdf, c, id_rep, pagina, next_page, type_report):
 
-    width, height = portrait(letter) 
+    if type_report == 'walkreport':
+        width, height = portrait(letter) 
+
+    else: 
+        width, height = landscape(letter) 
+
     archivo_imagen = settings.STATIC_ROOT +'/app/img/logo.jpg'
     im_banner = Image(archivo_imagen, width=76, height=50)
     im_banner.drawOn(c, 15, 735)
 
     pagina += 1
-    c.setFont('Helvetica', 8)
-    c.drawString(300, 20,"Página " + str(pagina))
-
     height_pdf = height
+    c.setFont('Helvetica', 8)
 
     if type_report == 'nonconformity':
         type_banner = 'bannernoconformidad/bannernoconformidad.png'
@@ -222,21 +225,30 @@ def principalBanner(height_pdf, c, id_rep, pagina, next_page, type_report):
     if type_report == 'iscreport':
         type_banner = 'banneriscreport/banneriscreport.png'
 
+    if type_report == 'walkreport':
+        type_banner = 'bannercaminata/banner_cabezera.png'
+
     url_img = settings.STATIC_ROOT + "/app/img/report_banners/" + type_banner 
-    im_banner = Image(url_img, width=600, height=47)
-    im_banner.drawOn(c, 5, 680)
+
+    if type_report == 'walkreport':
+        im_banner = Image(url_img, width=792, height=76)
+        im_banner.drawOn(c, 0, 530)
+        c.drawString(400, 20,"Página " + str(pagina))
+    else:        
+        im_banner = Image(url_img, width=600, height=47)
+        im_banner.drawOn(c, 5, 680)
+        c.drawString(300, 20,"Página " + str(pagina))
+        
     height_pdf -= 115
     c.setFont('Helvetica', 18)
     title_report = stringWidth("REPORTE N°"+str(id_rep), 'Helvetica', 18)
 
     c.drawString((width/2)-(title_report/2), 740,"REPORTE N°"+str(id_rep))
-    print(next_page)
 
     if next_page == 0:
         return height_pdf, pagina
     else:
         return height_pdf, next_page, pagina
-
 
 #FUNCIÓN PARA CREAR EL PDF DE REPORTE DE NO CONFORMIDAD
 def createpdfnonconformity(id_rep):
@@ -498,14 +510,13 @@ def downloadpdfnoncon(request, typereport = 'None', rep_id = 'None'):
 
 #Función para comparar datos y eliminar en las búsquedas de reportes
 def compareData(name_py, name_js, search, busqueda):
-
-    if int(busqueda[0][name_js]) != 0:
+    if int(busqueda[name_js]) != 0:
                         
         large = len(search)  
         inc = 0
         while inc < large:
                 
-            if (search[inc][name_py] != int(busqueda[0][name_js])):
+            if (search[inc][name_py] != int(busqueda[name_js])):
 
                 search.pop(inc)
                 inc = inc

@@ -27,7 +27,7 @@ function cargarTablaNoConformidad(response) {
                 "previous": "Anterior",
                 "next": "Siguiente",
                 "first": "Primero",
-                "last": "Último"
+                "last": "Ãšltimo"
             }
         },
         "data": response,
@@ -35,7 +35,7 @@ function cargarTablaNoConformidad(response) {
             { "data": "id_reporte", "name": "Reporte" },
             { "data": "", "name": "N_caminata" },
             { "data": "", "name": "Disciplina" },
-            { "data": "", "name": "Descripción" },
+            { "data": "", "name": "Descripciï¿½n" },
             { "data": "", "name": "Prioridad" },
             { "data": "", "name": "Fecha_compromiso_cierre" },
             { "data": "", "name": "Fecha_compromiso_cierre" },
@@ -151,7 +151,7 @@ function modificarNoConformidad(id) {
         messageSuccessPDF(data);
 
     }).fail(function (data) {
-        Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
+        Swal.fire("Reporte No Agregado", "Verifique que imagenï¿½s esten correctas", "warning");
         return false;
     });
 
@@ -162,7 +162,7 @@ function messageSuccessPDF(data) {
 
     if (data.submitted == 1) {
 
-        swal.fire("Modificado", "Reporte N°" + data.id_reporte + " modificado satisfactoriamente", "success", {
+        swal.fire("Modificado", "Reporte Nï¿½" + data.id_reporte + " modificado satisfactoriamente", "success", {
             confirmButtonText: "Descargar"
         }).then((result) => {
 

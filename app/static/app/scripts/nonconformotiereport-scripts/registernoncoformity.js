@@ -171,7 +171,7 @@ $(function () {
 
         }).fail(function (data) {
 
-            Swal.fire("Reporte No Agregado", "Verifique que imagenés esten correctas", "warning");
+            Swal.fire("Reporte No Agregado", "Verifique que imagenÃ©s esten correctas", "warning");
             return false;
 
         });

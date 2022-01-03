@@ -116,19 +116,6 @@ function cargarTablaCaminatas(response) {
     return false;
 }
 
-function abrir_modal_edicion(id_report) {
-    debugger;
-    var $ = jQuery.noConflict();
-
-
-    $('#edicion').load('modifiedwalkreport/' + id_report, function () {
-
-        $(this).modal('show');
-
-    });
-
-}
-
 function modificarObservacion(id) {
 
     var fecha_compromiso = document.getElementById("mod-fecha-walk");
