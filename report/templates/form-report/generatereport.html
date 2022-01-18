@@ -4,13 +4,13 @@
     
 <div class="container">
     <form action="">
-            {% csrf_token %}
+        {% csrf_token %}
         <h2 class="title-page">{{ title }}</h2>
 
-        {#Formulario Antecedentes Generales#}
+        <!-- Formulario Antecedentes Generales -->
         <h3 class="section-title"> ANTECEDENTES GENERALES </h3>
         <div class="row">
-            <div class="row g-3">
+             <div class="row g-3">
            
                 <div class="col-md-6">
                     <label class="form-label">N° de API:</label>
@@ -57,51 +57,161 @@
                         {% endfor %}
                     </select>
                 </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Referencia Utilizada:</label>
-                    <select id="select-id" class="form-control" required>
-                        <option disabled selected>Seleccione Referencia</option>
-                        {% for reference in references %}
-                        <option id="{{reference.id}}">{{ reference.reference_name }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="card border-danger mb-3">
+                    <div class="card-header">Añadir Referencias</div>
+                    <div class="card-body row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Referencia Utilizada:</label>
+                            <select id="select-id" class="form-control" required>
+                                <option disabled selected>Seleccione Referencia</option>
+                                {% for reference in references %}
+                                <option id="{{reference.id}}">{{ reference.reference_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre Referencia:</label>
+                            <input id="ref-name" class="form-control" required>
+                        </div>
+        
+                        <div class="col-md-6 text-center">
+                            <input id="btn-reference" class="btn btn-danger btn-ref" type="button" value="Agregar Referencia"/>
+                        </div>
+        
+                        <section class="table-container--load"> 
+                            <table class="table table-load table-bordered border-secundary">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Referencia</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">¿Eliminar?</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-referencia" id="table-body">
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
                 </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Nombre Referencia:</label>
-                    <input id="ref-name" class="form-control" required>
-                </div>
-
-                <div class="col-md-6 text-center">
-                    <input id="btn-reference" class="btn btn-danger btn-ref" type="button" value="Agregar Referencia"/>
-                </div>
-
-                <section class="table-container--load"> 
-                    <table class="table table-load table-bordered border-secundary">
-                        <thead>
-                            <tr>
-                                <th scope="col">Referencia</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">¿Eliminar?</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-referencia" id="table-body">
-                        </tbody>
-                    </table>
-                </section>
-
             </div>
-
             <div class="col-md-6 form-report">
-
-
 
             </div>
         </div>
         <h2 class="title-page">{{ title }}</h2>
 
-        {#Formulario Control de Avance por Actividad (Programada y No Programada)#}
+        <!-- Formulario Control de Avance por Actividad (Programada y No Programada) -->
+        <div class="row">
+
+            <h3 class="section-title"> CONTROL DE AVANCE POR ACTIVIDAD SEGÚN PROGRAMA </h3>
+            <h4 class="subsection-title"> REGISTRO DE AVANCE DE ACTIVIDADES </h4>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Nombre de Actividad:</label>
+                    <select name="select-act" id="select-act" class="form-control" required>
+                        <option disabled selected>Seleccione Actividad</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Tipo de Sub Actividad:</label>
+                    <select name="select-tipo" id="select-tipo" class="form-control" required>
+                        <option disabled selected>Seleccione Tipo</option>
+                        {% for type in types %}
+                        <option id="{{type.id}}">{{ type.activity_type_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div id="select-sub-container" class="col-md-4 d-none" > 
+                    <label class="form-label">Nombre de Sub Actividad:</label>
+                    <select name="select-sub" id="select-sub" class="form-control" required>
+                        <option disabled selected>Seleccione Sub Actividad</option>
+                    </select>
+                </div>
+
+                <div id="input-sub-container" class="col-md-4 d-none">
+                    <label class="form-label">Nombre de Sub Actividad:</label>
+                    <input placeholder="Escriba la subactividad" type="text" class="form-control" id="input-sub" name="input-sub">
+                </div>
+            </div>
+
+            <section class="row-section">
+                <div class="form-section">
+                    <div class="col-lg-2 form-report">
+                        <label>Avance Diario:</label>
+                        <input type="number" id="input-cr" class="form-control" required/>
+                    </div>
+                    <div id="input-u-container" class="col-lg-2 form-report d-none">
+                        <label>Unidad:</label>
+                        <input name="input-u" id="input-u" class="form-control" required readonly="readonly"/>
+                    </div>
+                    <div id="select-u-container" class="col-md-2 form-report d-none">
+                        <label>Unidad:</label>
+                        <select name="select-u" id="select-u" class="form-control">
+                            <option disabled selected>Seleccione Medida</option>
+                            {% for measure in measures %}
+                            <option id="{{measure.id}}" class="{{measure.id}}">{{measure.measure_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-2 form-report">
+                        <label>Total Programado:</label>
+                        <input name="input-te" id="input-te" class="form-control" required readonly="readonly"/>
+                    </div>
+                    <div class="col-lg-2 form-report">
+                        <label>Referencia Diaria: </label>
+                        <input name="input-rd" id="input-rd" class="form-control" required readonly="readonly"/>
+                    </div>
+                    <div class="col-lg-2 form-report">
+                        <label>Avance Real Acumulado:</label>
+                        <input name="input-ta" id="input-ta" class="form-control" required readonly="readonly"/>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-md-field select-section--activities">
+                <div class="row">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Cumplimiento:</label>
+                            <select id="select-cum" class="form-control" required>
+                                <option disabled selected>Si o No</option>
+                                <option>Si</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Causa de NO Cumplimiento:</label>
+                            <select id="select-cau" class="form-control" required disabled>
+                                <option disabled selected>Seleccione Causa</option>
+                                {% for nonconformity in nonconformities %}
+                                <option id="{{nonconformity.id}}" class="{{nonconformity.id}}">{{nonconformity.nonconformity_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                
+                        <div class="col-md-4">
+                            <label class="form-label">Detalle:</label>
+                            <input id="input-det" class="form-control" required readonly="readonly"/>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Pre Requisito:</label>
+                            <select id="select-pre" class="form-control">
+                                <option disabled selected>Seleccione Pre Requisito</option>
+                                {% for precondition in preconditions %}
+                                <option id="{{precondition.id}}" class="{{precondition.id}}">{{precondition.precondition_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
         <div class="row">
 
             <h3 class="section-title"> CONTROL DE AVANCE POR ACTIVIDAD SEGÚN PROGRAMA </h3>
@@ -130,19 +240,19 @@
                     </div>
                     <div class="col-lg-2 form-report">
                         <label>Unidad:</label>
-                        <input name="input-u-ap" id="input-u-ap" class="form-control" required readonly="readonly"/>
+                        <input name="input-u" id="input-u-ap" class="form-control" required readonly="readonly"/>
                     </div>
                     <div class="col-lg-2 form-report">
                         <label>Total Programado:</label>
-                        <input name="input-te-ap" id="input-te-ap" class="form-control" required readonly="readonly"/>
+                        <input name="input-te" id="input-te-ap" class="form-control" required readonly="readonly"/>
                     </div>
                     <div class="col-lg-2 form-report">
                         <label>Referencia Diaria: </label>
-                        <input name="input-rd-ap" id="input-rd-ap" class="form-control" required readonly="readonly"/>
+                        <input name="input-rd" id="input-rd-ap" class="form-control" required readonly="readonly"/>
                     </div>
                     <div class="col-lg-2 form-report">
                         <label>Avance Real Acumulado:</label>
-                        <input name="input-ta-ap" id="input-ta-ap" class="form-control" required readonly="readonly"/>
+                        <input name="input-ta" id="input-ta-ap" class="form-control" required readonly="readonly"/>
                     </div>
                 </div>
             </section>
@@ -186,9 +296,6 @@
                     </div>
                 </div>
             </section>
-
-
-
         </div>
 
         <div class="btn-save">
@@ -314,7 +421,7 @@
             </table>
         </section>
 
-        {#Formulario para realizar registro de Recursos y Observaciones (Desviaciones y Plan)#}
+        <!-- Formulario para realizar registro de Recursos y Observaciones (Desviaciones y Plan) -->
         <h2 class="title-page">{{ title }}</h2>
         <h3 class="section-title"> RECURSOS EECC EN TERRENO </h3>
         <div class="row">
@@ -414,7 +521,7 @@
             </div>
         </div>
 
-        {#Formulario de Registro Fotografico#}
+        <!-- Formulario de Registro Fotografico -->
         <h2 class="title-page">{{ title }}</h2>
         <h3 class="section-title">REGISTRO FOTOGRÁFICO</h3>
         <div class="row">
@@ -447,8 +554,8 @@
         <div class="separator"></div>
         <h4 class="subsection-title">OBSERVACIÓN</h4>
         <textarea id="evidencia" class="form-control large-text"></textarea>
-
-        {#Formulario Final, Vista Previa de la Inspección Diaria#} 
+        <br>
+        <!-- Formulario Final, Vista Previa de la Inspección Diaria -->
         <h2 class="title-page">{{ title }}</h2>
         <h3 class="section-title">GUARDAR INFORME</h3>
 

@@ -67,6 +67,7 @@ def createreport(request):
     followings = Following.objects.all()
     preconditions = Precondition.objects.all()
     measures = Measure.objects.all()
+    types = ActivityType.objects.all()
 
     assert isinstance(request, HttpRequest)
     return render(
@@ -86,6 +87,7 @@ def createreport(request):
             'followings': followings,
             'preconditions': preconditions,
             'measures': measures,
+            'types': types
         })
 
 @login_required(login_url="login")

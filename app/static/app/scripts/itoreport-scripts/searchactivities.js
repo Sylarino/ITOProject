@@ -145,14 +145,14 @@ function cargarTabla(response) {
 
     console.log(response);
 
-    $("#divTabla").addClass("hidden");
+    $("#divTabla").addClass("d-none");
 
     if (response == null) {
 
         swal("Oops!", "No se encontraron datos, intente nuevamente.", "warning");
         return false;
     }
-    $("#divTabla").removeClass("hidden");
+    $("#divTabla").removeClass("d-none");
 
     var tablaActividades = "";
 /*    if (!$.fn.dataTable.fnIsDataTable($('#tableActivities'))) {*/

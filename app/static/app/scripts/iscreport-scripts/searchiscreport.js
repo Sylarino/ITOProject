@@ -67,7 +67,7 @@ function cargarTablaISCReport(response) {
                 "previous": "Anterior",
                 "next": "Siguiente",
                 "first": "Primero",
-                "last": "Último"
+                "last": "Ãšltimo"
             }
         },
         "data": response,
@@ -110,10 +110,8 @@ function abrir_modal_edicion(id_report) {
 
             var data_files = document.querySelector("#file-isc");
             var data = new FormData();
-            debugger;
 
             for (var x = 0; x < data_files.files.length; x++) {
-                debugger;
                 data.append('files', data_files.files[x]);
             }
 

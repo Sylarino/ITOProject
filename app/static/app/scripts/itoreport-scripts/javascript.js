@@ -331,6 +331,150 @@ $(function () {
     };
 });
 
+//Función para agregar actividades (nueva forma)
+$(function () {
+    document.getElementById("act-pro").onclick = function (e) {
+
+        i = i + 1;
+
+        //Variablas elementos de actividades programadas
+        var selectsub = document.getElementById("select-sub");
+        var selectact = document.getElementById("select-act");
+        var inputcr = document.getElementById("input-cr");
+        var inputu = document.getElementById("input-u");
+        var inputte = document.getElementById("input-te");
+        var inputrd = document.getElementById("input-rd");
+        var inputta = document.getElementById("input-ta");
+        var selectcum = document.getElementById("select-cum");
+        var selectcau = document.getElementById("select-cau");
+        var selectdet = document.getElementById("input-det");
+        var tablegen = document.getElementById("table-actividad");
+        var selectpre = document.getElementById("select-pre");
+        var selecttype = document.getElementById("select-tipo");
+        var inputsub = document.getElementById("input-sub");
+
+        largo = acts_id.length;
+
+        for (var j = 0; j < largo; j++) {
+            if (selectsub.options[selectsub.selectedIndex].id === acts_id[j]) {
+                Swal.fire("Error", "Sub Actividad ya agregada.", "warning");
+                return false;
+            }
+        }
+
+        $(function () {
+
+            if (selectact.options[selectact.selectedIndex].disabled ||
+                selectsub.options[selectsub.selectedIndex].disabled) {
+                Swal.fire("Error", "Seleccione una SubActividad o Actividad invalida.", "warning");
+                return false;
+            }
+
+            if (selectcum.options[selectcum.selectedIndex].disabled) {
+                Swal.fire("Error", "Seleccione si cumplío o no.", "warning");
+                return false;
+            } else {
+                if (selectcum.options[selectcum.selectedIndex].textContent === "No") {
+                    if (selectcau.options[selectcau.selectedIndex].disabled) {
+                        Swal.fire("Error", "Seleccione la causa del No Cumplimiento", "warning");
+                        return false;
+                    }
+                }
+            }
+
+            if (inputcr.value === '') {
+                Swal.fire("Error", "Ingrese el avance diario", "warning");
+                return false;
+            } else {
+                if (validateDecimal(inputcr.value) === false) {
+                    Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+                    return false;
+                }
+            }
+
+            if (inputcr.value < 1) {
+                Swal.fire("Error", "Ingrese un avance diario valido", "warning");
+                return false;
+            }
+
+            if (selectpre.options[selectpre.selectedIndex].disabled) {
+                Swal.fire("Error", "Seleccione un pre requisito.", "warning");
+                return false;
+            }
+
+            $.ajax({
+                type: 'GET',
+                data: {
+                    action: 'search_subactivities',
+                    act: selectact.options[selectact.selectedIndex].textContent,
+                    subact: selectsub.options[selectsub.selectedIndex].textContent
+                },
+                url: "/buscarsubactividades",
+                dataType: 'json',
+            }).done(function (data) {
+
+                if (!data.hasOwnProperty('error')) {
+
+                    if (data == 0) {
+                        alert("Seleccione una opción valida y/o Escriba el nombre");
+                    } else {
+
+                        if (selectcum.value != "No") {
+                            td8.id = 1;
+                            var cumplimiento = "Cumplio";
+                        } else {
+                            td8.id = 2;
+                            var cumplimiento = "No Cumplio";
+                        }
+
+                        if (selecttype.options[selecttype.selectedIndex].id==1) {
+                            subactivity = selectsub.options[selectsub.selectedIndex].textContent;
+                            subactivity_id = selectsub.options[selectsub.selectedIndex].id;
+                        } else {
+                            subactivity = inputsub.value;
+                            subactivity_id = 0;
+                        }
+
+                        var button = document.createElement("input")
+                        button.className = "btn btn-danger";
+                        button.type = "button";
+                        button.value = "Eliminar";
+                        
+                        var daily_inspection_tr = `<tr id="tr-ap${i}"> 
+                            <td id="${subactivity_id}">${subactivity}</td>
+                            <td class="cantidad-real">${inputcr.value}</td>
+                            <td id="${inputu.getAttribute("value")}" class="medida">${inputuap.value}</td>
+                            <td id="${selectact.options[selectact.selectedIndex].id}" class="total-acumulado">${inputteap.value}</td>
+                            <td>${inputrd.value}</td>
+                            <td>${inputta.value}</td>
+                            <td id="${selectcum.options[selectcum.selectedIndex].id}">${cumplimiento}</td>
+                            <td id="${selectcau.options[selectcau.selectedIndex].id}" class="causa-no">${selectcauap.options[selectcauap.selectedIndex].value}</td>
+                            <td>${selectdet.value}</td>
+                            <td id="${selecttype.options[selecttype.selectedIndex].id}" class="activity_type">${selecttype.options[selecttype.selectedIndex].textContent}</td>
+                            <td>${button}</td>
+                        </tr>`
+
+                        acts_id.push(selectsub.options[selectsub.selectedIndex].id);
+
+                        button.onclick = function () {
+                            tablegen.removeChild(tr);
+                            i = i - 1;
+                            acts_id.splice(i, 1);
+                            return i, acts_id;
+                        }
+
+                        return acts_id;
+                    }
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }).always(function (data) {
+
+            });
+        });
+    };
+});
+
 //Funcion para el boton de agregar actividades NO programadas
 
 $(function () {
@@ -596,7 +740,7 @@ $(function () {
 
 $(function () {
     $('select[name="api"]').on('change', function () {
-        debugger;
+         
         var id_select = this.id;
 
         var id = $('#' + id_select).val();
@@ -1051,8 +1195,7 @@ $(function () {
             img_val = 1;
             //Recorrido de imagenes
             var form_data = new FormData();
-
-            debugger;
+             
             for (var key in dataimg) {
                 form_data.append('image', dataimg[key]);
             }
@@ -1132,5 +1275,45 @@ $(function () {
         $(this).addClass("active");
     });
 
+});
+
+//Funcion al seleccionar el tipo de sub actividad
+$(function () {
+    $('select[name="select-tipo"]').on('change', function () {
+
+        var select_type = $("#select-tipo");
+        var select_subactivities = $("#select-sub-container");
+        var input_subactivities = $("#input-sub-container");
+        var select_unity = $("#select-u-container");
+        var input_unity = $("#input-u-container");
+
+        if($(this).children(":selected").attr("id")==1){
+            select_subactivities.removeClass("d-none");
+            input_unity.removeClass("d-none");
+
+            input_subactivities.removeClass("d-none");
+            input_subactivities.addClass("d-none");
+            select_unity.removeClass("d-none");
+            select_unity.addClass("d-none");
+            
+            $("#input-cr").attr("readonly", true);
+            $("#input-te").attr("readonly", true);
+            $("#input-rd").attr("readonly", true);
+            $("#input-ta").attr("readonly", true);
+        } else {
+            input_subactivities.removeClass("d-none");
+            select_unity.removeClass("d-none");
+
+            select_subactivities.removeClass("d-none");
+            select_subactivities.addClass("d-none");
+            input_unity.removeClass("d-none");
+            input_unity.addClass("d-none");
+
+            $("#input-cr").attr("readonly", false);
+            $("#input-te").attr("readonly", false);
+            $("#input-rd").attr("readonly", false);
+            $("#input-ta").attr("readonly", false);
+        }
+    });
 });
 

@@ -1,12 +1,12 @@
 var dataload;
 
 function upload(event) {
-    debugger;
+     
     event.preventDefault();
     var filesdata = new FormData();
     var file = document.getElementById('file').files[0];
     filesdata.append('file', file);
-    debugger;
+     
     $.ajax({
         url: 'readexcel/',
         type: 'POST',
@@ -43,7 +43,7 @@ function cargarTabla(response) {
     }
 
     $("#divTabla").removeClass("d-none");
-    debugger;
+     
     var tablaActividades = "";
     tablaActividades = $('#table-load').DataTable({
         paging: true,
@@ -106,7 +106,7 @@ function cargarTabla(response) {
     loadbutton.id = 'save_data';
     //loadbutton.href = 'downloadexcelsearch/excelconfiltro';
     divbutton.appendChild(loadbutton);
-    debugger;
+     
     return false;
 
 }
@@ -115,7 +115,7 @@ function abrir_modal_leer(full) {
 
     var $ = jQuery.noConflict();
     data = JSON.stringify(full);
-    debugger;
+     
     $('#edicion').load('readsubactivityinfo/' + full, function () {
 
         $(this).modal('show');
@@ -126,7 +126,7 @@ function abrir_modal_leer(full) {
 
 function guardarDatos() {
 
-    debugger;
+     
     $.ajax({
         url: 'submitdata/',
         type: 'POST',

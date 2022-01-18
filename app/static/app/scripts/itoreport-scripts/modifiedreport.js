@@ -26,7 +26,7 @@ function agregarHistorico(id_hist, actividad, cantidad, medida, total, refday, s
 
 function modificarHistorico(id) {
 
-    //debugger;
+    // 
     //var tr = getFila($(this));
     //var oseleccionado = */
 
@@ -221,7 +221,7 @@ function agregarReferenciaModificado() {
 
     referencia = document.getElementsByName("select-ref-mod")[0];
     descripcion = document.getElementsByName("input-ref-mod")[0];
-    debugger;
+     
     referencia_td = document.getElementById(id_ref).getElementsByClassName("referencia")[0];
     descripcion_td = document.getElementById(id_ref).getElementsByClassName("descripcion")[0];
 
@@ -390,7 +390,7 @@ function modificarReporte(id_report) {
     });
 
 
-    debugger;
+     
 
     if (img_val === 1) {
 
@@ -412,7 +412,7 @@ function modificarReporte(id_report) {
 
     }
 
-    debugger;
+     
 
 }
 
@@ -431,7 +431,7 @@ function obtenerNuevaImagen(input)  {
     esigual = false;
 
     if (img_mod.length == 0) {
-        debugger;
+         
         img_mod.push([id_img_report, input.files[0], 0, " "]);
 
     } 
@@ -455,7 +455,7 @@ function obtenerNuevaImagen(input)  {
     }
 
     
-    debugger;
+     
 
     reader.onload = function () {
 
@@ -470,7 +470,7 @@ function modificarImagen(id) {
 
     subactividad = document.getElementById(id).getElementsByClassName("subactividad")[0];
     descripcion = document.getElementById(id).getElementsByClassName("lab-img-sub")[0];
-    debugger;
+     
     document.getElementById("select-sub-img").value = subactividad.textContent;
 
     $('textarea[id="det-img"]').val(descripcion.textContent);
@@ -506,7 +506,7 @@ function eliminarImg(id) {
 
     deleteDiv = document.getElementById(id).parentNode;
     imgDiv = document.getElementById(id);
-    debugger;
+     
     deleteDiv.removeChild(imgDiv);
 
     id_img_div = imgDiv.id.replace('div_mod_', '');
@@ -521,7 +521,7 @@ function eliminarImg(id) {
     
     }
 
-    debugger;
+     
 }
 
  function agregarReferencia() {
@@ -574,7 +574,7 @@ function eliminarImg(id) {
 
 $(function () {
     $('select[name="select-sub-ap-mod"]').on('change', function () {
-        debugger;
+         
         var id = $('#select-sub-ap-mod').val();
         var medidaid = document.getElementsByName("input-u-ap-mod");
 
@@ -935,7 +935,7 @@ function agregarHistoricoNoProgramado() {
 
 document.getElementById("id-nombre-equi-mod").onclick = function (e) {
 
-    debugger;
+     
     var select_causa = document.getElementById("id-nombre-equi-mod");
     if ((select_causa.options[select_causa.selectedIndex].textContent != "Seleccione Equipo")
         || (select_causa.options[select_causa.selectedIndex].textContent != "")) {
@@ -1091,7 +1091,7 @@ document.getElementById("file-new").onchange = function (e) {
     reader.readAsDataURL(e.target.files[0]);
 
     pos = img_mod.length;
-    debugger;
+     
     sub = document.getElementById('select-sub-img');
 
     img_mod.push([0, e.target.files[0], sub.options[sub.selectedIndex].id, " "]);

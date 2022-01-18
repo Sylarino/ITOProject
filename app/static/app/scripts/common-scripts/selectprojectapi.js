@@ -3,7 +3,6 @@ $(function () {
     $('select[name="api"]').on('change', function () {
 
         var id_select = this.id;
-        debugger;
         var id = $('#' + id_select).val();
         var select_contracts = $('select[name="contract"]');
         var options = '<option id="0" disabled selected>Seleccione Contrato</option>';

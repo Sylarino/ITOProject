@@ -19,8 +19,6 @@ $(function () {
 
         load_requirement.push(id_requi);
         tabla_requisito.innerHTML += requisito;
-
-        debugger;
     };
 
 });
@@ -120,7 +118,6 @@ $(function () {
     document.getElementById("btn-save-require").onclick = function (e) {
 
         var selectpreanp = document.getElementById("isc_con_id");
-        debugger;
         $.ajax({
             url: 'saverequirements/',
             type: 'POST',

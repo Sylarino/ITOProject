@@ -151,7 +151,7 @@ def registernewsistem(request):
 
             id_new = new_data.id
 
-            if int(id_sistem) > 0:
+            if int(id_new) > 0:
                     
                 data = {
                     'submitted': 1,

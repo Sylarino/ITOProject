@@ -6,7 +6,7 @@
 //        var id_select = this.id;
 //        var requisitos = '';
 //        var id = $('#' + id_select).val();
-//        debugger;
+//         
 //        $.ajax({
 //            type: 'GET',
 //            data: { action: 'search_contract_require', id: id },
@@ -119,7 +119,7 @@ $(function () {
     $('input[type="radio"]').on('change', this, function () {
         var requisitos_grupo = $(this).parent().parent().parent().parent().attr('id');
         requisitos_grupo = requisitos_grupo.replace('tabla-isc-', '');
-        debugger;
+         
         var inc_radio = 0;
         var inc_group = 0;
         document.querySelectorAll('#tabla-isc-' + requisitos_grupo + ' tr').forEach(function (e) {

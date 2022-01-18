@@ -2,8 +2,6 @@ var inc_walk = 0;
 
 $(function () {
     document.getElementById("btn_add_walk").onclick = function (e) {
-        debugger;
-
         inc_walk = inc_walk + 1;
 
         //Variablas elementos de recursos EECC
@@ -33,13 +31,10 @@ $(function () {
                     '</tr>';
 
         tabla_walk.innerHTML += walk_tr;
-
-
     };
 });
 
 function eliminarFila(select_tr) {
-    debugger;
     td_actual = document.getElementById(select_tr.id);
     td_parent = td_actual.parentNode;
     td_parent.removeChild(td_actual);
@@ -51,7 +46,6 @@ $(function () {
         var id_select = this.id;
 
         var id = $('#' + id_select).val();
-        debugger;
         if (id === '') {
             return false;
         }
@@ -63,7 +57,6 @@ $(function () {
         }).done(function (data) {
             if (!data.hasOwnProperty('error')) {
                 $.each(data, function (key, value) {
-                    debugger;
                     $('label[name="wbs"]').text(value.wbs);
                 });
 
@@ -79,6 +72,7 @@ $(function () {
     });
 
 });
+
 
 
 $(function () {
@@ -145,9 +139,7 @@ $(function () {
             processData: false,
             dataType: 'json',
         }).done(function (data) {
-
             messageSuccessPDF(data);
-
         }).fail(function (data) {
             Swal.fire("Reporte No Agregado", "Verifique que los datos esten correctos", "warning");
             return false;
@@ -204,7 +196,6 @@ $(function () {
 
         var $ = jQuery.noConflict();
         var id_modal = $(this).attr("id");
-        debugger;    
         if (id_modal == "modal-user") {
             var link_modal = 'registeruser';
         } 
@@ -317,7 +308,6 @@ function agregarSubSistema() {
 function reloadSistem(id, nombre, id_sistem=0) {
     var select_sistem = $('select[name="'+id+'"]');
     var options = '<option id="0" disabled selected>Seleccione '+nombre+'</option>';
-
     $.ajax({
         type: 'GET',
         data: { action: 'search_sistem', Id: id, sistem_id: id_sistem },
@@ -328,14 +318,13 @@ function reloadSistem(id, nombre, id_sistem=0) {
             $.each(data, function (key, value) {
                 options += '<option id="' + value.id + '" value="' + value.id + '">' + value.nombre + '</option>';
             });
-            debugger;
             return false;
         }
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(textStatus + ': ' + errorThrown);
     }).always(function (data) {
         select_sistem.html(options);
-        if (id="sistem") {
+        if (id == "sistem") {
             var select_subsistem = $('select[name="subsistem"]');
             select_subsistem.html('<option id="0" disabled selected>Seleccione SubSistema</option>');
         }
